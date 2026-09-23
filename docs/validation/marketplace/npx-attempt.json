@@ -1,0 +1,7 @@
+{
+  "status": "failed",
+  "agent": "cursor",
+  "exit_code": 1,
+  "stderr_tail": "npm error code EAI_AGAIN\nnpm error syscall getaddrinfo\nnpm error errno EAI_AGAIN\nnpm error request to https://registry.npmjs.org/skills failed, reason: getaddrinfo EAI_AGAIN registry.npmjs.org\nnpm error A complete log of this run can be found in: /tmp/jev-skills-smoke-soz6dr8d/home/npm-cache/_logs/2026-09-23T04_12_16_998Z-debug-0.log\n",
+  "stdout_tail": ""
+}

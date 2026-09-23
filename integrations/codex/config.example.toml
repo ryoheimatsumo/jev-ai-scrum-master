@@ -1,0 +1,6 @@
+# Example only. Review and substitute paths; never store credentials here.
+[mcp_servers.jev_scrum_master]
+command = "/ABS/jev-ai-scrum-master/.venv/bin/jev-sm"
+args = ["--repo", "/ABS/target-project", "serve"]
+startup_timeout_sec = 20
+tool_timeout_sec = 60

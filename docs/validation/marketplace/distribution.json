@@ -1,0 +1,17 @@
+{
+  "status": "consistent",
+  "version": "0.1.0a3",
+  "wheel_sha256": "fa7a316051ad2afdec623e83b74090f2f72e92e14b4ff13b4f84a1415f1792c9",
+  "checks": [
+    "portable-manifest",
+    "claude-marketplace",
+    "codex-local-marketplace",
+    "skill-mirror",
+    "bundled-wheel-hash",
+    "wheel-source-parity",
+    "no-auto-hooks-or-mcp"
+  ],
+  "official_marketplace_approval": false,
+  "host_runtime_test": false,
+  "remote_publication": false
+}

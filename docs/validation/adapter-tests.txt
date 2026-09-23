@@ -1,0 +1,6 @@
+........sss..............................................                [100%]
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_interfaces.py:89: Official MCP SDK is not installed in this offline environment
+SKIPPED [1] tests/test_interfaces.py:110: Official TypeSafe SDK is not installed in this offline environment
+SKIPPED [1] tests/test_interfaces.py:119: Explicit JEV_SM_RUN_LIVE=1 and an API key are required; never run a paid API by default
+54 passed, 3 skipped in 4.33s

@@ -1,0 +1,617 @@
+{
+  "schema_version": 1,
+  "repository": "ryoheimatsumo/jev-ai-scrum-master",
+  "visibility": "public",
+  "branch": "main",
+  "version": "0.1.0a3",
+  "publication_status": "prepared-not-published",
+  "history_policy": "Fresh initial main snapshot; prior development history is not uploaded.",
+  "integrity_notice": "Checksums detect edits; not a signature or exhaustive secret audit.",
+  "files": [
+    {
+      "path": ".agents/plugins/marketplace.json",
+      "sha256": "87ab49363dc1c945c335940d0a82222570bd4e19c90b497ca8878bf26e88214c",
+      "mode": "0644"
+    },
+    {
+      "path": ".claude-plugin/marketplace.json",
+      "sha256": "19bd9d0c302c95dcef702c3a62572f275b700803d2a2d30952fe2f96779c390b",
+      "mode": "0644"
+    },
+    {
+      "path": ".claude-plugin/plugin.json",
+      "sha256": "5f2172f230c9d61000d6e517daeaf71da44f6b5a4d980491475bf42d71ce2f2b",
+      "mode": "0644"
+    },
+    {
+      "path": ".env.example",
+      "sha256": "0087c92c9b2c01a49b5877e6aa673d09bd8b077124b1458bdac952cdd7395345",
+      "mode": "0644"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "6de85906123f10d6572d07a5fe84b5eebfbacf8995ab776a79b5ab136e015ffc",
+      "mode": "0644"
+    },
+    {
+      "path": ".github/workflows/distribution-smoke.yml",
+      "sha256": "0d3813f0b24d82416fecc49a17228e0d4e9ce41da6261ac12a9f1e9363cf5efd",
+      "mode": "0644"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "9e7c7d8cee3d34e9c915348256d5f32d41722e7744d8443fe3335845e0d99df8",
+      "mode": "0644"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "62d1f1445bf76636c24bede8a8b204204efb61e79ca400f74d34ef0c0f7f989a",
+      "mode": "0644"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha256": "2e52164c1b3f7aec3bfc838ce0ec1dfcf1cfa9673dfd5f0255dd957e3d51ffb5",
+      "mode": "0644"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha256": "8674959b0ff30a6606d9597fbb27e21c3f29c52f27318b9791a7666770d49171",
+      "mode": "0644"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "mode": "0644"
+    },
+    {
+      "path": "README.md",
+      "sha256": "346361988d0e34f1a219a1d72fc15a433c121f5f6db2623c5334f0dbed4b4e91",
+      "mode": "0644"
+    },
+    {
+      "path": "SECURITY.md",
+      "sha256": "49711036b873ad69575b306901b9f5359acbed958f06513ea7911267766ca7b2",
+      "mode": "0644"
+    },
+    {
+      "path": "distribution/agents.json",
+      "sha256": "f3eee857cd51898233f67487d3e8f118502e73061d1f8d210d23c8b103566736",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/BACKLOG.md",
+      "sha256": "411c86a9c5fcf189f91f53f4aa06a0bd119f72aa4ea389d9818c625f513bfcad",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/DISTRIBUTION.ja.md",
+      "sha256": "022b70464f831c5ee230d0e2b2c298809b9420533ba0ea22ffd224e3114670f5",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/IMPLEMENTATION_STATUS.ja.md",
+      "sha256": "c8176ed717a993ef597d353f439fb7a2178b9e9cebac4ea1690c6c07515cb620",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/PUBLISHING.ja.md",
+      "sha256": "b94911d5a13b3f0713a03ae87689a26b664a3747331f265db7b30ee7d0bf00a3",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/PULL_REQUEST.md",
+      "sha256": "249f46e12f4a430a973a3f59fe135101aa5743aa9c10c86024a5f25b105881ec",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/QUICKSTART.ja.md",
+      "sha256": "476792b5a7f72b06d071178c12dac354195be151b0f90d95ac8dbb37853dd61a",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/adr/001-initial-slice-and-jev-efficiency.md",
+      "sha256": "4021b41e021693730a599cc32a56d92d7a02029320ba322f8fefcfbea9e81b4a",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/adr/002-skill-first-cli.md",
+      "sha256": "e8461dc1d46b63e1ddd6fb6c896980438764dac70f325a5ebe30daae658031ed",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/adr/003-marketplace-and-npx.md",
+      "sha256": "4f4fd032002d7b344cc4a01d1e7f44dc7c575876bb2e2615670945b5e41912ad",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/spec/v1.0.ja.md",
+      "sha256": "49b5b8b359f1bd21a8fa40c9c6d256204dc7cc80c22c41d635cdd0f7923a78aa",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/README.md",
+      "sha256": "e8b513e20f2258c84e44524964a57f482e85066bafec3ce12e9275f8280b9cb2",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/adapter-tests.txt",
+      "sha256": "baa7a21534c925c834f72a1cdf41589b891b5c34e8bf71013d84e578794d7460",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/adapter-tests.xml",
+      "sha256": "877c54416b3e0a9253344d045e02251c22dd4f62c7f9e6f255f68d79ed90abfd",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/core-tests.txt",
+      "sha256": "ba8b91dfe95b286a117148cbf4da7ec9efb50191a47ad48fb936752a3883a8d3",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/core-tests.xml",
+      "sha256": "b8e117041c2dc910cd49e4dc388da936a41bf1b3f8c5ea156c4242dd1516806e",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/demo.json",
+      "sha256": "74135c453b48495cdaca80ebe8428288386c443ad4f57149d26fc0e6a12f8a83",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/marketplace/README.md",
+      "sha256": "626c804bbc4ae6b17b42c96eafe12290bc489350b99cbd0c9cbdeab69bfb48ca",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/marketplace/core-demo.json",
+      "sha256": "afb99dcd63ac1224229ff5621c8c9f9ed893dea5d35747d081f98f633de1e7b3",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/marketplace/distribution.json",
+      "sha256": "9e1049ed31ff13e573a4552c7d16085e7028db1c215d7a1a41e93a0833262dd7",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/marketplace/npx-attempt.json",
+      "sha256": "90bc0dba366a37e07a09dc09992874094c7633886e546647701ea3bcab771c95",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/marketplace/offline-runtime-smoke.json",
+      "sha256": "34089240c7c4535790dd1be73aff3386a41b319683875478014bd420516ffcea",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/marketplace/summary.json",
+      "sha256": "94be77ef159945864b9d77b879b789f45127e7848adae1f5b3f74764f5a6eb0d",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/marketplace/tests.txt",
+      "sha256": "e785b6f4947c16cafa413b2f6b685dba856520094808aa37df564411d70a2306",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/marketplace/tests.xml",
+      "sha256": "41761634efc87312fbd56aba15a944d0205c5de55ca818a09ea814c17e664ced",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/publication/README.md",
+      "sha256": "1bad17d21f688b7b2fe422fb623c391d2dd9e00097d0b429c09594e035b678be",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/publication/distribution.json",
+      "sha256": "9e1049ed31ff13e573a4552c7d16085e7028db1c215d7a1a41e93a0833262dd7",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/publication/tests.txt",
+      "sha256": "eb4089ced2e885e93b308150ec0a4ec344754c844eb82ffab0fedaadd1f28023",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/skill-first/README.md",
+      "sha256": "a3ba6d70e86d792d26795183e0e8596ed043e40f4a75ba274d572700c3a72411",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/skill-first/cli-demo.json",
+      "sha256": "fe6b264906d556dce1b614c6011182916601618b675f8f5995751f7e4673567c",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/skill-first/core-demo.json",
+      "sha256": "a7b25fde9fbb9708993fd42ec66e136e06c69337e62c5fea23c1979d54e5ab7c",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/skill-first/summary.json",
+      "sha256": "baa4600aac454bcd9ce331a07c2b917f3d6178af9705bc4e5a5d0dcfe65b0ca8",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/skill-first/test-process.json",
+      "sha256": "5f5fec52065829f253307e46d22bcbb2dd2810ae068b4735bf9a0fd052eadd3c",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/skill-first/tests.txt",
+      "sha256": "2455cf0345946e1f538b26b4259651df8b5f035a7a1ffd86818655452cf753af",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/skill-first/tests.xml",
+      "sha256": "abca1ff78c084d02c266648260c6421c5adb1d60c28af753296954bd44a597ca",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/skill-first/wheel-smoke.json",
+      "sha256": "2285b989b174ed2f0809adade66648460c1ac9b1e8f4c69dfceaded3736de992",
+      "mode": "0644"
+    },
+    {
+      "path": "docs/validation/summary.json",
+      "sha256": "091e8c73fad35c441a64beb334d6e9493f82a7c82dd0bdb507c03b73b4436512",
+      "mode": "0644"
+    },
+    {
+      "path": "examples/demo/app.py",
+      "sha256": "1a2b05f5466a850ed803c7e14e99fd7d656f819eed776a3626e948f470a7ee81",
+      "mode": "0644"
+    },
+    {
+      "path": "examples/demo/check.py",
+      "sha256": "5731b02af41b19eae8d0d1a6e654046e0497de5bf3efdb4d5fdf696a28f938d4",
+      "mode": "0644"
+    },
+    {
+      "path": "examples/plan.json",
+      "sha256": "b8cc94377274a706616b554d066966e65e359bec3dc579860e14856889b509aa",
+      "mode": "0644"
+    },
+    {
+      "path": "integrations/README.md",
+      "sha256": "e4eab9e50e424b5010f3ab37ca9e9f7aa916cb138b15ea362f12da38372384e0",
+      "mode": "0644"
+    },
+    {
+      "path": "integrations/claude-code/mcp.example.json",
+      "sha256": "4d87aa7a1dc1250411b559aa500dcabf43dd35d2c798984d4f2ddd1f20d438f6",
+      "mode": "0644"
+    },
+    {
+      "path": "integrations/codex/config.example.toml",
+      "sha256": "37706039b79c68c3bf66a937c41a89025df8ab28b2b19d507ca52e48d12b85ec",
+      "mode": "0644"
+    },
+    {
+      "path": "plugin.json",
+      "sha256": "73d000685438781e98f4462a30d0ea183bdc4c9f3a03eb0d611b6262ebf76208",
+      "mode": "0644"
+    },
+    {
+      "path": "pyproject.toml",
+      "sha256": "9e7062b1c9968c87b9f1b4948e20a81007fee6c743d824004526057c6e89dbae",
+      "mode": "0644"
+    },
+    {
+      "path": "scripts/build_marketplace.py",
+      "sha256": "68f63f0cafb800e45c1c674f8af751608206a266f1676b1d959d60bec17a71e9",
+      "mode": "0644"
+    },
+    {
+      "path": "scripts/demo.py",
+      "sha256": "f90a39143862b254556ef6be89ae830f97966674953b818406a65966abeb1a35",
+      "mode": "0644"
+    },
+    {
+      "path": "scripts/demo_cli.py",
+      "sha256": "437aa297b66e74e655f848d9551d81aaebf59653ab8090a4a23f8d50fe1d0456",
+      "mode": "0644"
+    },
+    {
+      "path": "scripts/publish-github.sh",
+      "sha256": "6af8d918ba9fab940a2e44cb5aa59d6aa3a7022b2c59e411b5cb677ab3d716d8",
+      "mode": "0755"
+    },
+    {
+      "path": "scripts/publish_public.py",
+      "sha256": "5a1c90e0e25ef3e48ae1677e3d7b6706aab2214c1b44dd6d7ac4c02f1dac13db",
+      "mode": "0755"
+    },
+    {
+      "path": "scripts/smoke_skills_install.py",
+      "sha256": "04f8f30e61fbd9c9bb136c71a165836247f6f5013aa400cae2f9eea568e8e014",
+      "mode": "0644"
+    },
+    {
+      "path": "scripts/sync_skill_assets.py",
+      "sha256": "0e41deb74c3201da8f42d1be9bae2f603aeda910cb116a682b824b11d73e63a7",
+      "mode": "0644"
+    },
+    {
+      "path": "scripts/validate_distribution.py",
+      "sha256": "08ff261f9958297e2714f726d1f3b018ce2ffc4714667b85ec7021bb806e4e21",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/SKILL.md",
+      "sha256": "5ec23694e0e8a1832c9f42e38c3e8a30fcbf24a1f6d5da6fc5787ec1dc06c042",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/agents/openai.yaml",
+      "sha256": "756669b15a1e98b20ccaaf2c87b9e5aacac9a90eb4e50aee63db48a73cd722e9",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/assets/LICENSE.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/assets/context.example.json",
+      "sha256": "574ef37e9e6eae5cd970d82e54314595575f1101030f4f3f7bd81a67206e8dda",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/assets/plan.example.json",
+      "sha256": "b8cc94377274a706616b554d066966e65e359bec3dc579860e14856889b509aa",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/references/cli.md",
+      "sha256": "bfcd99c3ca7f5cc264feb8e4032ee182fe1b7d3fcf5364ae17616e06b462d2c3",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/references/optional-mcp.md",
+      "sha256": "e9833473c9fad4f395250328834cde69a41372c92fbd2c6579ae1df28ba80ce8",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/references/other-agents.md",
+      "sha256": "a869fa6926132fd57b0112b1f8332bee1f15b3f23dac1034e207dd933714f677",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/references/planning.md",
+      "sha256": "dcfa2ff17407d862018095dada1b090ba24a4dce64ad1504ada9c32873a7aede",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/references/retrospective.md",
+      "sha256": "9e6e1d404e5b5e5b1f1a26fb4dbfcdda601782d43cde31a39cad1505f466b28c",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/references/runtime.md",
+      "sha256": "1336006467512f53d7cb5074313a64e69468453b30077ffba97adbea35e2b2ea",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/references/setup.md",
+      "sha256": "bcd1b6a0f2ff2b5548f943c5ff44a162ee9d3d486afb575d677efd746f0fdd98",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/references/verification.md",
+      "sha256": "43fde047f426e5c1c2b37b3012f30da594da6b0be5d92cbf626849e789401e4e",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/runtime/jev_ai_scrum_master-0.1.0a3-py3-none-any.whl",
+      "sha256": "fa7a316051ad2afdec623e83b74090f2f72e92e14b4ff13b4f84a1415f1792c9",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/runtime/manifest.json",
+      "sha256": "20ff7d9935bb03b701486b669baf9d446097cf650cdb991bbb7e5fede3e441c0",
+      "mode": "0644"
+    },
+    {
+      "path": "skills/jev-scrum-master/scripts/runtime.py",
+      "sha256": "fe6e3e7399b0fb674a0e955f6dde3181cebe09d9442fa6093330edcc27895aba",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/__init__.py",
+      "sha256": "edc3d70ae1c1cbf20ab2bae0b95ceb8ba2863d8d3929e0b00fe3f137b2c28905",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/__main__.py",
+      "sha256": "79ee6f134c5c5193377cf9b189cbdcc3e2095e49ba9cec310114441c15a917c4",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/approval.py",
+      "sha256": "e84a6085c066c153d6a6a18e07e535538ee390f3417d116f7ebb1d8ad7b3514e",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/SKILL.md",
+      "sha256": "5ec23694e0e8a1832c9f42e38c3e8a30fcbf24a1f6d5da6fc5787ec1dc06c042",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/agents/openai.yaml",
+      "sha256": "756669b15a1e98b20ccaaf2c87b9e5aacac9a90eb4e50aee63db48a73cd722e9",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/assets/LICENSE.txt",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/assets/context.example.json",
+      "sha256": "574ef37e9e6eae5cd970d82e54314595575f1101030f4f3f7bd81a67206e8dda",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/assets/plan.example.json",
+      "sha256": "b8cc94377274a706616b554d066966e65e359bec3dc579860e14856889b509aa",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/references/cli.md",
+      "sha256": "bfcd99c3ca7f5cc264feb8e4032ee182fe1b7d3fcf5364ae17616e06b462d2c3",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/references/optional-mcp.md",
+      "sha256": "e9833473c9fad4f395250328834cde69a41372c92fbd2c6579ae1df28ba80ce8",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/references/other-agents.md",
+      "sha256": "a869fa6926132fd57b0112b1f8332bee1f15b3f23dac1034e207dd933714f677",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/references/planning.md",
+      "sha256": "dcfa2ff17407d862018095dada1b090ba24a4dce64ad1504ada9c32873a7aede",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/references/retrospective.md",
+      "sha256": "9e6e1d404e5b5e5b1f1a26fb4dbfcdda601782d43cde31a39cad1505f466b28c",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/references/runtime.md",
+      "sha256": "1336006467512f53d7cb5074313a64e69468453b30077ffba97adbea35e2b2ea",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/references/setup.md",
+      "sha256": "bcd1b6a0f2ff2b5548f943c5ff44a162ee9d3d486afb575d677efd746f0fdd98",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/references/verification.md",
+      "sha256": "43fde047f426e5c1c2b37b3012f30da594da6b0be5d92cbf626849e789401e4e",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/scripts/runtime.py",
+      "sha256": "fe6e3e7399b0fb674a0e955f6dde3181cebe09d9442fa6093330edcc27895aba",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/cli.py",
+      "sha256": "56b67eea0e686fb98cf0e18ea25ba8fdbd732df3118b77c9540b1371431deb29",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/common.py",
+      "sha256": "817121d11a2f17588eb68e5f1c6be3c691be70ea4c98e6e13c18d6d7250913da",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/core.py",
+      "sha256": "9a8cb8e41645f55aece099890ed4c451aacdf3d500153812f4a5f0a0b81dc8b5",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/judgment.py",
+      "sha256": "631572f4c1924a8d7746840a9013cc0ddd6324146d03b6f98b75d208cb92356d",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/mcp_server.py",
+      "sha256": "8af9d54bc4a066c5db7c182933c0d2e928f45b08448c4c2f6e26a31597eb31d6",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/models.py",
+      "sha256": "88cb0d3ba768b154d2836a8b5add36c1c32ce6d924bba510076c5057adb7cbbd",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/report.py",
+      "sha256": "a5e15a6a38a72228eb13f09b704e5633b67463cc9606511c6f6490ff33f55ba0",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/runner.py",
+      "sha256": "4c122e17e7a77bb7b6105f462a0fc1a60d49d635bcd0bc9cf0ad6477229365c0",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/skill_install.py",
+      "sha256": "e4b642d6f317a6ffbb5998111c817b38f8f870bf9da12015c14428f8b8c09c6b",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/store.py",
+      "sha256": "95d14b698db7a61cedb5ed37a3380e69414005fc25842919cce0aafca2f83e2e",
+      "mode": "0644"
+    },
+    {
+      "path": "src/jev_sm/workspace.py",
+      "sha256": "d33b6c6efcfb63c8a8f983cf92dba74d569d34e12e08109569261260eb626f6b",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/conftest.py",
+      "sha256": "e9400456b16d4d24faf78e90628e5ebdc42deabd49c03f946b20ca28abfa20a1",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_core.py",
+      "sha256": "64403ea6126fadfc3963738dc37f80e38411ecde976f9cf11fe9c51c39aba562",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_interfaces.py",
+      "sha256": "82c1f3448a81a44ce6f3cd686f3458aa2f66aded0b89804cffffeff70addc7a3",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_judgment.py",
+      "sha256": "a4b28beeaf121929c5c98dbf8c3b6aacf92f237ed62b74e4703e4a47b447fac7",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_marketplace_runtime.py",
+      "sha256": "9bd565b21f3a147717343c0d3b052c77ace69a79dedac593edb5d8f90935b010",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_npx_distribution.py",
+      "sha256": "1c96d8fd569a48e111a754a2c1ba5163f78634b171273a577fff542b25542aa5",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_persistent_cache.py",
+      "sha256": "7379d30a239a41656138836e593e83c33c5030bd102bb425cdda119621db40a1",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_publication.py",
+      "sha256": "7d74461b2bdb58ee4e0e44b3bd524f3725abae7c916cc7e51347394a328d562f",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_runner_security.py",
+      "sha256": "98fdc65d794b6d32262ff79364d8306681cc8afb0b7fa73ba053fe71b3eb223f",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_skill_first_cli.py",
+      "sha256": "c468babb85f8ad0f5247dac22455b36846da07a4a1e2b414c93c6e508238b57e",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_skill_install.py",
+      "sha256": "ee69ff8876b153cdb3151b3621f290f8a5a3b737647d83c08ab7c776c43bcf30",
+      "mode": "0644"
+    }
+  ]
+}

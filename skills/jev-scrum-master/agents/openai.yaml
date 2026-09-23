@@ -1,0 +1,4 @@
+interface:
+  display_name: "Jev AI Scrum Master"
+  short_description: "Plan, verify and learn with an evidence-first CLI"
+  default_prompt: "Use $jev-scrum-master to plan and deliver one verifiable development task."

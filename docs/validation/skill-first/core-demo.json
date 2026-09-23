@@ -1,0 +1,24 @@
+{
+  "approvals": "SIMULATED_DEMO_ONLY",
+  "jev_api_used": false,
+  "host_llm_used": false,
+  "steps": {
+    "broken_persistence": {
+      "AC-1": "NEEDS_REVIEW",
+      "AC-2": "FAIL"
+    },
+    "fixed_but_review_required": [
+      "AC-1:NEEDS_REVIEW",
+      "AC-2:NEEDS_REVIEW",
+      "INDEPENDENT_REVIEW_REQUIRED"
+    ],
+    "completed": "DONE",
+    "after_uncommitted_change": [
+      "AC-1:STALE",
+      "AC-2:STALE",
+      "EVIDENCE_STALE"
+    ]
+  },
+  "report": "# Change a spot and persist it\n\nTask: `task-10acb2f15be640b2` | recorded state: **DONE**\nCurrent completion valid: **true**\n\n| Criterion | Current result |\n|---|---|\n| AC-1 | PASS |\n| AC-2 | PASS |\n\n## Outstanding conditions\n\nNone within the configured verification scope.\n\n## Execution history\n\n### run-162b7b2a10e04859 — FINISHED\n- `unit`: FAIL; evidence `ev-5e91c2aed8a74cab`; 0.603s\n### run-d8469e501c8b4778 — FINISHED\n- `unit`: PASS; evidence `ev-e3215fcd76f948df`; 0.612s\n\n## Measurement limits\n\nRecorded judgment batches: 0\nReported Jev input tokens: unknown\nHost model tokens and total cost: **unknown**.\nPASS means the approved check succeeded, not a proof that no defects exist.\nNo merge, deployment, or Jira update is performed.\n",
+  "note": "Actual subprocess tests in disposable snapshots. Not an AI quality benchmark."
+}

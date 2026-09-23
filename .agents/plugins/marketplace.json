@@ -1,0 +1,20 @@
+{
+  "name": "jev-dev-tools",
+  "interface": {
+    "displayName": "Jev Development Tools"
+  },
+  "plugins": [
+    {
+      "name": "jev-ai-scrum-master",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

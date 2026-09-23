@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "jev-scrum-master": {
+      "command": "/ABS/jev-ai-scrum-master/.venv/bin/jev-sm",
+      "args": ["--repo", "/ABS/target-project", "serve"]
+    }
+  }
+}

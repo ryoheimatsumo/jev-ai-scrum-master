@@ -1,0 +1,224 @@
+{
+  "status": "passed",
+  "platform": "linux",
+  "python": "3.13.5",
+  "dependency_source": "Test-only wheels reconstructed from already-installed environment packages; not official downloaded wheels. Not shipped.",
+  "real_venv_and_pip": true,
+  "real_CLI": true,
+  "npx_installer": false,
+  "live_host": false,
+  "jev_API": false,
+  "online_PyPI_install": false,
+  "steps": [
+    {
+      "step": "status_before_install",
+      "args": [
+        "status"
+      ],
+      "exit_code": 0,
+      "result": {
+        "status": "not_installed",
+        "version": "0.1.0a3",
+        "with_jev": false,
+        "runtime_dir": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
+        "python": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
+        "network_performed": false,
+        "project_changed": false,
+        "jev_calls_enabled": false,
+        "mcp_required": false,
+        "note": "SDK installation is not permission to send project data. Enable Jev separately per project."
+      },
+      "stderr": ""
+    },
+    {
+      "step": "offline_dependency_fixture_setup",
+      "args": [
+        "setup",
+        "--write",
+        "--wheelhouse",
+        "/mnt/data/marketplace-fixtures/wheels"
+      ],
+      "exit_code": 0,
+      "result": {
+        "status": "ready",
+        "version": "0.1.0a3",
+        "with_jev": false,
+        "runtime_dir": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
+        "python": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
+        "network_performed": false,
+        "project_changed": false,
+        "jev_calls_enabled": false,
+        "mcp_required": false,
+        "note": "SDK installation is not permission to send project data. Enable Jev separately per project.",
+        "installed": true,
+        "preview": false
+      },
+      "stderr": ""
+    },
+    {
+      "step": "real_CLI_from_isolated_runtime",
+      "args": [
+        "exec",
+        "--",
+        "--help"
+      ],
+      "exit_code": 0,
+      "result": "usage: jev-sm [-h] [--repo REPO] [--state-dir STATE_DIR] [--version]\n              {init,doctor,serve,schema,skill,tasks,prepare,submit-plan,start,verify,complete,status,gate,report,resume,progress,cancel,approve,rule,propose-improvement,evidence,select-context,advise,cache} ...\n\npositional arguments:\n  {init,doctor,serve,schema,skill,tasks,prepare,submit-plan,start,verify,complete,status,gate,report,resume,progress,cancel,approve,rule,propose-improvement,evidence,select-context,advise,cache}\n    init                Preview config as JSON; writes only with --write\n    serve               Optional stdio MCP adapter; requires the mcp extra\n    schema              Read a schema without creating workspace state\n    skill               Install reviewed Skill resources; no MCP settings\n                        changes\n    tasks               List resumable tasks without logs or manifests\n    status              Compact by default; full state is opt-in\n    approve             Human only; never run or simulate approval on their\n                        behalf\n    evidence            Fetch a registered, hash-verified artifact by ID\n    select-context      Filter before inference; originals must remain\n                        available\n    cache               Workspace-local advisory cache; never acceptance\n                        evidence\n\noptions:\n  -h, --help            show this help message and exit\n  --repo REPO           Git worktree root\n  --state-dir STATE_DIR\n                  ",
+      "stderr": ""
+    },
+    {
+      "step": "repeat_setup_no_write",
+      "args": [
+        "setup",
+        "--write",
+        "--wheelhouse",
+        "/mnt/data/marketplace-fixtures/wheels"
+      ],
+      "exit_code": 0,
+      "result": {
+        "status": "ready",
+        "version": "0.1.0a3",
+        "with_jev": false,
+        "runtime_dir": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
+        "python": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
+        "network_performed": false,
+        "project_changed": false,
+        "jev_calls_enabled": false,
+        "mcp_required": false,
+        "note": "SDK installation is not permission to send project data. Enable Jev separately per project.",
+        "installed": false,
+        "preview": false
+      },
+      "stderr": ""
+    },
+    {
+      "step": "init_target",
+      "args": [
+        "exec",
+        "--",
+        "--repo",
+        "/mnt/data/jev-a3-offline-8jtqba34/target project",
+        "init",
+        "--write"
+      ],
+      "exit_code": 0,
+      "result": {
+        "config": {
+          "checks": {},
+          "dod_check_ids": [],
+          "excluded_directories": [
+            ".venv",
+            "venv",
+            "node_modules",
+            "__pycache__",
+            ".pytest_cache",
+            ".ruff_cache"
+          ],
+          "jev_cache_max_entries": 512,
+          "jev_cache_ttl_seconds": 86400,
+          "jev_enabled": false,
+          "jev_max_calls_per_task": 100,
+          "jev_max_payload_chars": 24000,
+          "jev_model": "jev-1.13.0",
+          "max_snapshot_bytes": 104857600,
+          "max_snapshot_files": 20000,
+          "max_unchanged_failures": 3,
+          "max_verification_rounds": 4,
+          "protected_globs": [
+            "tests/*",
+            "**/test_*.py",
+            "test_*.py",
+            "*.test.*",
+            "*.spec.*",
+            ".github/*",
+            ".jev-sm/*",
+            "pyproject.toml",
+            "package.json"
+          ],
+          "schema_version": 1,
+          "strict_globs": [
+            "auth*",
+            "payment*",
+            "billing*",
+            "**/auth*",
+            "**/payment*",
+            "**/billing*",
+            "migrations/*"
+          ]
+        },
+        "next_action": "register_checks_then_approve_plan",
+        "path": "/mnt/data/jev-a3-offline-8jtqba34/target project/.jev-sm/config.yaml",
+        "written": true
+      },
+      "stderr": ""
+    },
+    {
+      "step": "doctor_target",
+      "args": [
+        "exec",
+        "--",
+        "--repo",
+        "/mnt/data/jev-a3-offline-8jtqba34/target project",
+        "doctor"
+      ],
+      "exit_code": 0,
+      "result": {
+        "cache": {
+          "backend": "sqlite",
+          "ttl_seconds": 86400
+        },
+        "configured": true,
+        "external_jev_enabled": false,
+        "host_runtime_smoke_tested": false,
+        "jev_key_configured": false,
+        "jev_sdk_installed": false,
+        "mcp_required": false,
+        "mcp_sdk_installed": false,
+        "primary_interface": "skill+cli",
+        "repo": "/mnt/data/jev-a3-offline-8jtqba34/target project",
+        "sandbox": "copy isolation and credential minimization; not an OS sandbox",
+        "state_dir": "/mnt/data/jev-a3-offline-8jtqba34/state/jev-sm/9b17d78be94f5444328ffab4",
+        "version": "0.1.0a3"
+      },
+      "stderr": ""
+    },
+    {
+      "step": "reuse_after_skill_relocation",
+      "args": [
+        "status"
+      ],
+      "exit_code": 0,
+      "result": {
+        "status": "ready",
+        "version": "0.1.0a3",
+        "with_jev": false,
+        "runtime_dir": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
+        "python": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
+        "network_performed": false,
+        "project_changed": false,
+        "jev_calls_enabled": false,
+        "mcp_required": false,
+        "note": "SDK installation is not permission to send project data. Enable Jev separately per project."
+      },
+      "stderr": ""
+    },
+    {
+      "step": "CLI_after_relocation",
+      "args": [
+        "exec",
+        "--",
+        "--repo",
+        "/mnt/data/jev-a3-offline-8jtqba34/target project",
+        "tasks"
+      ],
+      "exit_code": 0,
+      "result": {
+        "next_offset": null,
+        "note": "Historical states only; run status/gate before relying on completion",
+        "tasks": [],
+        "total": 0
+      },
+      "stderr": ""
+    }
+  ]
+}

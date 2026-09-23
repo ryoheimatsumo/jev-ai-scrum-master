@@ -1,0 +1,30 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "jev-ai-scrum-master",
+  "version": "0.1.0-alpha.3",
+  "description": "Plan, verify and learn with an evidence-first Skill and bundled local CLI. Optional Jev; no MCP setup required.",
+  "author": {
+    "name": "Jev AI Scrum Master contributors"
+  },
+  "license": "Apache-2.0",
+  "keywords": [
+    "scrum",
+    "skills",
+    "jev",
+    "testing",
+    "acceptance-criteria"
+  ],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Jev AI Scrum Master",
+        "shortDescription": "Plan, verify and learn with a bundled local CLI",
+        "developerName": "Jev AI Scrum Master contributors",
+        "category": "Productivity",
+        "defaultPrompt": [
+          "Use Jev AI Scrum Master to set up this project and deliver one verifiable task."
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "jev-dev-tools",
+  "owner": {
+    "name": "Jev AI Scrum Master contributors"
+  },
+  "plugins": [
+    {
+      "name": "jev-ai-scrum-master",
+      "source": "./",
+      "description": "Plan, verify and learn with an evidence-first Skill and bundled local CLI. Optional Jev; no MCP setup required."
+    }
+  ]
+}

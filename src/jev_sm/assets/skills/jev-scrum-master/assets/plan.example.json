@@ -1,0 +1,46 @@
+{
+  "title": "Change a spot and persist it",
+  "kind": "feature",
+  "goal": "Change exactly one spot and read the saved result independently",
+  "in_scope": [
+    "single-spot update",
+    "persistence and independent reload"
+  ],
+  "out_of_scope": [
+    "UI",
+    "booking changes"
+  ],
+  "review_profile": "standard",
+  "criteria": [
+    {
+      "id": "AC-1",
+      "given": "Two existing spots",
+      "when": "One is replaced",
+      "then": "Only the requested spot changes and the original input is unmodified",
+      "method": "test",
+      "check_ids": [
+        "unit"
+      ],
+      "case_ids": {
+        "unit": [
+          "change::target-only"
+        ]
+      }
+    },
+    {
+      "id": "AC-2",
+      "given": "An updated itinerary",
+      "when": "It is saved and independently loaded",
+      "then": "The updated spot remains in the newly loaded result",
+      "method": "test",
+      "check_ids": [
+        "unit"
+      ],
+      "case_ids": {
+        "unit": [
+          "persistence::reload"
+        ]
+      }
+    }
+  ]
+}

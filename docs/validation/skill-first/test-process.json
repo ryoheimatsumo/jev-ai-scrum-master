@@ -1,0 +1,15 @@
+{
+  "command": [
+    "/opt/pyvenv/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "-o",
+    "faulthandler_timeout=30",
+    "--junitxml=/mnt/data/skill-first-work/jev-ai-scrum-master/docs/validation/skill-first/tests.xml"
+  ],
+  "exit_code": 0,
+  "seconds": 67.26524587300014,
+  "external_pytest_plugins_disabled": true,
+  "live_api_opt_in_disabled": true
+}

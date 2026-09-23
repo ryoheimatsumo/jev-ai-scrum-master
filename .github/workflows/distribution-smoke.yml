@@ -1,0 +1,39 @@
+name: Opt-in npx distribution smoke
+on:
+  workflow_dispatch:
+    inputs:
+      skills_version:
+        description: 'Reviewed exact npm skills version (verify it exists before running)'
+        required: true
+        default: '1.7.0'
+permissions:
+  contents: read
+jobs:
+  distribution:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        agent: [cursor, windsurf, github-copilot, gemini-cli, opencode, cline, roo, antigravity, kilo, grok, codex, claude-code]
+        mode: [copy, symlink]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install this local Skill via reviewed npx CLI in a temporary HOME
+        env:
+          SKILLS_VERSION: ${{ inputs.skills_version }}
+          TARGET_AGENT: ${{ matrix.agent }}
+          INSTALL_MODE: ${{ matrix.mode }}
+        run: >-
+          python scripts/smoke_skills_install.py
+          --skills-version "$SKILLS_VERSION" --agent "$TARGET_AGENT" --mode "$INSTALL_MODE"
+          --write --allow-downloads
+# No secrets, no Jev calls, no actual coding agents and no publishing.
+# Installer placement != Skill execution by the target agent.

@@ -1,0 +1,22 @@
+{
+  "version": "0.1.0a2",
+  "installed_module": "/mnt/data/skill-first-wheel-venv/lib/python3.13/site-packages/jev_sm/__init__.py",
+  "wheel_sha256": "49a94aa02dabbe96e9192c68a536ba417eb631e424d1f776bd488a0151ef0d2d",
+  "dependency_setup": "Declared runtime dependencies reused from the preinstalled local environment (offline)",
+  "skill_resource_files": 10,
+  "mcp_installed": false,
+  "typesafe_sdk_installed": false,
+  "checks": [
+    "base wheel install",
+    "resource loading outside source tree",
+    "real console entry point",
+    "Claude project Skill installation",
+    "init",
+    "doctor",
+    "prepare",
+    "compact status"
+  ],
+  "host_application_run": false,
+  "live_jev_run": false,
+  "result": "passed"
+}

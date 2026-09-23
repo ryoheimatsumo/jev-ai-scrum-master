@@ -1,0 +1,143 @@
+{
+  "interface": "skill+cli",
+  "version": "0.1.0a2",
+  "approvals": "SIMULATED_DEMO_ONLY",
+  "cli_process_count": 28,
+  "cli_calls": [
+    {
+      "command": "skill",
+      "exit_code": 0
+    },
+    {
+      "command": "skill",
+      "exit_code": 0
+    },
+    {
+      "command": "doctor",
+      "exit_code": 0
+    },
+    {
+      "command": "schema",
+      "exit_code": 0
+    },
+    {
+      "command": "prepare",
+      "exit_code": 0
+    },
+    {
+      "command": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "submit-plan",
+      "exit_code": 0
+    },
+    {
+      "command": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "start",
+      "exit_code": 0
+    },
+    {
+      "command": "select-context",
+      "exit_code": 0
+    },
+    {
+      "command": "advise",
+      "exit_code": 0
+    },
+    {
+      "command": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "verify",
+      "exit_code": 0
+    },
+    {
+      "command": "gate",
+      "exit_code": 2
+    },
+    {
+      "command": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "verify",
+      "exit_code": 0
+    },
+    {
+      "command": "gate",
+      "exit_code": 2
+    },
+    {
+      "command": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "evidence",
+      "exit_code": 0
+    },
+    {
+      "command": "evidence",
+      "exit_code": 0
+    },
+    {
+      "command": "gate",
+      "exit_code": 0
+    },
+    {
+      "command": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "complete",
+      "exit_code": 0
+    },
+    {
+      "command": "status",
+      "exit_code": 0
+    },
+    {
+      "command": "propose-improvement",
+      "exit_code": 0
+    },
+    {
+      "command": "rule",
+      "exit_code": 0
+    },
+    {
+      "command": "rule",
+      "exit_code": 0
+    },
+    {
+      "command": "gate",
+      "exit_code": 3
+    }
+  ],
+  "jev_api_used": false,
+  "mcp_server_used": false,
+  "host_llm_used": false,
+  "steps": {
+    "skill_installed_without_mcp": true,
+    "broken_persistence": {
+      "AC-1": "NEEDS_REVIEW",
+      "AC-2": "FAIL"
+    },
+    "fixed_but_review_required": [
+      "AC-1:NEEDS_REVIEW",
+      "AC-2:NEEDS_REVIEW",
+      "INDEPENDENT_REVIEW_REQUIRED"
+    ],
+    "completed": "DONE",
+    "retrospective": "PROPOSED",
+    "after_uncommitted_change": [
+      "AC-1:STALE",
+      "AC-2:STALE",
+      "EVIDENCE_STALE"
+    ]
+  },
+  "note": "Real CLI/runner subprocesses; approvals explicitly simulated only when opted in. Not a host/Jev quality benchmark."
+}

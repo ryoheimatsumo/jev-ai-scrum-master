@@ -1,0 +1,8 @@
+{
+  "query": "Why does the changed value disappear after a fresh read?",
+  "max_chars": 8000,
+  "snippets": [
+    {"id": "ac-save", "text": "A saved change must survive an independent reload.", "mandatory": true},
+    {"id": "observed-result", "text": "Replace with an actual observed result, not an invented log.", "mandatory": true}
+  ]
+}
