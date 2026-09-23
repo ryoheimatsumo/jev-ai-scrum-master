@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "pairs": [
+    {
+      "en": "README.md",
+      "ja": "README.ja.md"
+    },
+    {
+      "en": "docs/QUICKSTART.md",
+      "ja": "docs/QUICKSTART.ja.md"
+    },
+    {
+      "en": "docs/DISTRIBUTION.md",
+      "ja": "docs/DISTRIBUTION.ja.md"
+    },
+    {
+      "en": "docs/JEV.md",
+      "ja": "docs/JEV.ja.md"
+    },
+    {
+      "en": "SECURITY.md",
+      "ja": "SECURITY.ja.md"
+    },
+    {
+      "en": "docs/ARCHITECTURE.md",
+      "ja": "docs/ARCHITECTURE.ja.md"
+    },
+    {
+      "en": "docs/IMPLEMENTATION_STATUS.md",
+      "ja": "docs/IMPLEMENTATION_STATUS.ja.md"
+    },
+    {
+      "en": "CONTRIBUTING.md",
+      "ja": "CONTRIBUTING.ja.md"
+    },
+    {
+      "en": "docs/PUBLISHING.md",
+      "ja": "docs/PUBLISHING.ja.md"
+    },
+    {
+      "en": "docs/BACKLOG.md",
+      "ja": "docs/BACKLOG.ja.md"
+    },
+    {
+      "en": "CHANGELOG.md",
+      "ja": "CHANGELOG.ja.md"
+    },
+    {
+      "en": "integrations/README.md",
+      "ja": "integrations/README.ja.md"
+    },
+    {
+      "en": "docs/validation/INDEX.md",
+      "ja": "docs/validation/INDEX.ja.md"
+    },
+    {
+      "en": "docs/PUBLICATION_REVIEW.md",
+      "ja": "docs/PUBLICATION_REVIEW.ja.md"
+    },
+    {
+      "en": "docs/PULL_REQUEST.md",
+      "ja": "docs/PULL_REQUEST.ja.md"
+    },
+    {
+      "en": "docs/README.md",
+      "ja": "docs/README.ja.md"
+    }
+  ],
+  "single_source": [
+    "docs/spec/v1.0.ja.md",
+    "docs/adr/001-initial-slice-and-jev-efficiency.md",
+    "docs/adr/002-skill-first-cli.md",
+    "docs/adr/003-marketplace-and-npx.md",
+    "skills/jev-scrum-master/",
+    "src/jev_sm/assets/skills/",
+    "docs/validation/README.md",
+    "docs/validation/skill-first/",
+    "docs/validation/marketplace/",
+    "docs/validation/publication/",
+    "LICENSE"
+  ]
+}

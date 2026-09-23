@@ -1,162 +1,109 @@
-# マーケットプレイス／npx導入 — 0.1.0a3
+# クイックスタート
 
-## 現在地
+[English](QUICKSTART.md)
 
-配布用のファイルと初回起動処理を実装した段階です。**GitHub公開、公式ストア掲載、公開URLからの
-npx導入成功を意味しません。** 自前のマーケットプレイス追加と公式ディレクトリ掲載も別です。
-`OWNER`は公開先アカウントに置き換えます。配布物を含むPRが未マージでdefault branchにない場合、
-リポジトリ短縮URLでは導入できません。
+対象は`0.1.0a3`です。信頼できるローカルGitリポジトリ、Git、Python 3.12以上を用意します。
+Linuxはローカルテスト済みですが、macOSと実際のエージェントセッションは未検証です。ネイティブWindowsは対象外です。
 
-基本体験は **追加 → ホストでセットアップを依頼 → 初回の準備を確認 → 利用**。
-追加コマンドだけでPython・APIキー・プロジェクトのテスト環境が自動的にそろうわけではありません。
+## 1. Skillを導入する
 
-## 1. 他のコーディングエージェント: npx（標準）
-
-独自npmパッケージではなく、Vercelの既存の`skills` CLIを使います。こちらのnpm/PyPI公開は不要。
-Node.js/npmが必要です。ホストの選択、配置先、更新・削除は上流CLIが担当します。
-
-**公開後、対象プロジェクトのルートで実行するコマンド：**
+開発したいプロジェクトのGitルートで実行します。
 
 ```sh
-npx skills add OWNER/jev-ai-scrum-master --skill jev-scrum-master
+npx skills add ryoheimatsumo/jev-ai-scrum-master --skill jev-scrum-master
 ```
 
-対象エージェントを対話的に選びます。指定して追加する場合：
+導入先ホストを選択します。インストーラーにはNode/npmとレジストリへの接続が必要です。
+1ホストに複数経路で重複導入しないでください。[導入方法の詳細](DISTRIBUTION.ja.md)。
+
+## 2. セットアップを依頼する
+
+必要に応じてホストを再読み込みし、次のように依頼します。
+
+> jev-scrum-masterを、このリポジトリで使えるようにセットアップして。
+
+Skillが自分のランチャーを見つけ、準備内容を表示し、依存関係のダウンロード前に確認します。
+CLI専用の環境はプロジェクト外に作成します。CoreにはPython 3.12以上が必要です。
+ランチャーはPython 3.9以上で開始でき、導入済みのuvがある場合は、ダウンロードへの同意後に
+新しいPythonを取得する経路も使えます。システムツールの導入やホスト権限の変更は黙って行いません。
+
+Jevは別途設定するまで無効です。APIキーをチャットやGitへ貼らないでください。
+セットアップへの同意と、開発タスクの承認は別です。
+
+## 3. 実際の検証コマンドを登録する
+
+`.jev-sm/config.yaml`を確認します。既にpytestを使っているプロジェクトの例です。
+
+```yaml
+schema_version: 1
+checks:
+  unit:
+    argv: [python, -m, pytest, -q, --junitxml=.jev-sm-output/unit.xml]
+    kind: test
+    parser: junit
+    report_path: .jev-sm-output/unit.xml
+    timeout_seconds: 600
+    min_tests: 1
+    output_limit_bytes: 262144
+dod_check_ids: []
+jev_enabled: false
+```
+
+すべてのリポジトリに適したコマンドではありません。実際に使うPython実行ファイルと、導入済みの
+テスト依存関係を使ってください。Runnerがテスト依存関係をインストールすることはありません。
+受け入れ基準にはチェックと正確なケースIDを対応付けます。チェックを定義しただけでは、
+全基準の証拠にはなりません。共通の必須チェックは`dod_check_ids`に登録します。
+
+## 4. 一つの確認可能な成果を依頼する
+
+> jev-scrum-masterを使って、項目を変更して保存し、開き直しても保存した値が表示されるようにして。
+
+エージェントが計画を作り、未解決の製品判断を確認します。対象範囲、基準、チェック、副作用を確認し、
+CLIの案内に従って、自分のターミナルで計画を承認します。
+エージェントに代理承認をさせたり、人間のターミナルを偽装させたりしないでください。
+
+実装後はチェックを実行し、不足する証拠を確認します。このα版のstandardタスクには、
+人間による代替レビューも必要です。エージェントの申告だけでなく、assertionと証拠を確認してください。
+自動の独立AIレビューは未実装です。
+
+## 5. 完了の確認・再開
+
+以下はCLIの書式であり、そのまま実行する一連の手順ではありません。TASKは実際に返されたIDに置き換え、
+セットアップで選んだランチャーまたはCLI実行ファイルを使います。
 
 ```sh
-# Cursor
-npx skills add OWNER/jev-ai-scrum-master --skill jev-scrum-master -a cursor
-# Windsurf
-npx skills add OWNER/jev-ai-scrum-master --skill jev-scrum-master -a windsurf
-# GitHub Copilot
-npx skills add OWNER/jev-ai-scrum-master --skill jev-scrum-master -a github-copilot
-# Gemini CLI
-npx skills add OWNER/jev-ai-scrum-master --skill jev-scrum-master -a gemini-cli
-# 複数へ追加
-npx skills add OWNER/jev-ai-scrum-master --skill jev-scrum-master -a opencode -a cline
+jev-sm --repo /ABS/PROJECT status TASK
+jev-sm --repo /ABS/PROJECT gate TASK
+jev-sm --repo /ABS/PROJECT report TASK
 ```
 
-| 対象 | `--agent`の値 |
-|---|---|
-| Cursor | `cursor` |
-| Windsurf | `windsurf` |
-| GitHub Copilot | `github-copilot` |
-| Gemini CLI | `gemini-cli` |
-| OpenCode | `opencode` |
-| Cline | `cline` |
-| Roo Code | `roo` |
-| Antigravity | `antigravity` |
-| Kilo Code | `kilo` |
-| Grok Build | `grok` |
-| Codex | `codex` |
-| Claude Code | `claude-code` |
+`gate`の終了コードは、0＝条件充足、2＝未充足・確認待ち、3＝証拠失効、4＝エラーです。
+一般のコマンドの終了コード0は「結果を返した」だけで、テスト合格を意味しません。
+DONEは現行タスク契約に対するローカルの検証状態であり、マージ・デプロイ・正しさの保証ではありません。
+コード・設定・基準を変更した後は状態を再確認し、必要な再承認・再検証を行います。
 
-上流CLIの配置対象として確認した識別子です。**本製品を各ホストで実行検証した一覧ではありません。**
-ホストがローカルのSkillを読み、シェルからPython/Gitを実行できることが必要です。
-既定はプロジェクト単位。全プロジェクトで使うユーザー単位の配置には`-g`を追加します。
-コピーを選ぶ場合は`--copy`。`--all`や`--yes`は既定例にしません。
-上流の匿名インストール統計を停止する場合は先頭に`DISABLE_TELEMETRY=1`を指定します。
+過去のIDは`tasks`で調べます。検証中にプロセスが強制終了した場合は記録を保全し、
+完了扱いにするためにDBや回数を直接変更しないでください。[既知の制限](IMPLEMENTATION_STATUS.ja.md)。
 
-## 2. GitHub公開前のローカル導入
+## 任意：ソースからCLIを導入する
 
-ZIPを展開し、**利用したいプロジェクトのルート**で次を実行します。
-初回の`skills` CLI取得にnpm接続が必要ですが、GitHub公開は不要です。
+開発者やCLIを手動管理する場合は、ソースを取得して仮想環境へ導入できます。
 
 ```sh
-npx skills add /ABS/EXTRACTED/jev-ai-scrum-master --skill jev-scrum-master -a cursor
+git clone https://github.com/ryoheimatsumo/jev-ai-scrum-master.git
+cd jev-ai-scrum-master
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e .
+jev-sm --repo /ABS/PROJECT skill install --host codex
+jev-sm --repo /ABS/PROJECT skill install --host codex --write
+jev-sm --repo /ABS/PROJECT init --write
+jev-sm --repo /ABS/PROJECT doctor
 ```
 
-SkillだけのZIPは、展開した`skills/`を含むディレクトリを指定できます。
-`SKILL.md`単体のコピーは不可。`runtime/`、`scripts/`、`references/`も必要です。
+ローカルインストーラーでClaude Codeを指定する値は`--host claude`です。上流インストーラーの
+`-a claude-code`とは異なります。最初のSkillコマンドはプレビュー、`--write`は反映です。
+エージェントが環境を引き継げない場合はCLIの絶対パスを使います。skills管理の配置先へ重ねて導入しないでください。
+ユーザー単位の配置は`--scope user`、未編集の管理対象の更新は`--update --write`を使います。
 
-## 3. Claude Codeマーケットプレイス
-
-公開後はClaude Code内で：
-
-```text
-/plugin marketplace add OWNER/jev-ai-scrum-master
-/plugin install jev-ai-scrum-master@jev-dev-tools
-```
-
-公開前の1行目は`/plugin marketplace add /ABS/EXTRACTED/jev-ai-scrum-master`。
-`.claude-plugin/marketplace.json`が一覧、`.claude-plugin/plugin.json`が製品定義です。
-ホストの案内に従って再読み込み。Hook・MCP・権限設定は同梱しません。
-公式Anthropic一覧への審査掲載はしていません。
-
-## 4. Codexのローカル／リポジトリマーケットプレイス
-
-```sh
-codex plugin marketplace add /ABS/EXTRACTED/jev-ai-scrum-master
-# 公開後: codex plugin marketplace add OWNER/jev-ai-scrum-master
-```
-
-対応するプラグイン画面で「Jev Development Tools」→「Jev AI Scrum Master」を追加。
-`.agents/plugins/marketplace.json`とportable `plugin.json`を同梱しています。
-利用中の版でこの機能が使えなければ、`npx skills ... -a codex`を利用します。
-公式のuniversal public directoryへの掲載は別の公開手続きです。
-
-## 5. 追加後の初回セットアップ
-
-ホストを再読み込みし、次のように依頼します。
-
-> jev-scrum-masterを使いたい。このプロジェクトで使えるようにセットアップして。
-
-Skillは自分のインストール先を見つけ、ランチャーで準備内容を確認します。本人の了承後に
-専用Python環境へ同梱CLIと依存関係を導入。手動clone・venv有効化・pip入力・MCP設定は標準導線では不要です。
-
-**前提**：GitとPython 3.12以上。ランチャーはPython 3.9以上で動く構文です。
-適したPythonがない場合、導入済みのuvと明示的な同意で新しいPythonを用意できます。
-Python/uv/Nodeがなければ別途導入が必要。OSのパッケージマネージャを無断実行しません。
-Linuxローカルで確認。macOS実機未確認、ネイティブWindows/Coreは非対応のalphaです。
-
-初回に確認するのは、依存関係取得、プロジェクト設定の初期化、実際のテストコマンド、Jevの利用有無です。
-Jev APIキーは`TYPESAFE_API_KEY`へ本人が設定し、チャット・Skill・Gitへ貼りません。
-コード／ログの送信範囲を説明し、SDK導入だけでは外部送信を有効にしません。初期状態は無効。
-セットアップ同意はタスクの計画承認とは別です。自動の独立AIレビューは引き続き未実装です。
-
-## 6. 初回起動の内部処理
-
-Skill内部にCLI wheelを入れ、SHA-256と版をmanifestに記録。不一致なら停止します。
-ハッシュは不一致検出であり発行者署名ではありません。信頼する配布元から導入してください。
-`status`、`setup`（`--write`なし）は読み取り専用。`exec`は導入・更新をしません。
-ネットワーク導入は`setup --write --allow-downloads`、オフライン導入は`--wheelhouse`を使います。
-依存パッケージは範囲指定であり、完全固定・署名済みの供給経路ではありません。
-実行環境はプロジェクト外で、版・wheel内容・SDK有無ごとに分離します。
-更新で配布物が変われば新環境の準備確認を行います。古い環境・タスク状態は自動削除しません。
-
-## 7. 更新・削除
-
-導入と同じ経路を使います。1ホストにmarketplace版とskills.sh版を二重導入しないでください。
-
-```sh
-npx skills list
-npx skills update jev-scrum-master
-npx skills remove jev-scrum-master
-```
-
-上流更新はSkillファイルを置き換えることがあります。個別編集は事前に退避し、独自変更はforkで管理します。
-旧`jev-sm skill install`をskills.sh管理の配置先へ重ねません。Skill削除はタスク履歴・証拠・
-Python環境・資格情報の削除ではありません。
-
-## 8. 公開・検証
-
-`python scripts/build_marketplace.py`でwheelを同梱、`python scripts/validate_distribution.py`で整合性を確認。
-`python scripts/smoke_skills_install.py`は実npx試験のプレビュー。npm取得は明示実行します。
-
-```sh
-python scripts/smoke_skills_install.py --skills-version 1.7.0 --agent cursor --write --allow-downloads
-```
-
-`1.7.0`は調査時の上流ソースの版。今回npm取得は未確認のため実試験前に公開状況を確認します。
-試験は一時プロジェクト・一時HOMEを使い、配置・wheel保持・ランチャープレビューを確認します。
-実ホスト・Jev・品質改善までは測りません。手動起動のCIにも同じ試験を用意しています。
-GitHub公開用スクリプトはリポジトリ作成と未マージPRまでです。配布前にPRを確認・反映し、
-別環境で公開URLの導入を確認します。skills.shの検索掲載を保証・偽装しません。
-
-## 一次資料（2026-09-23確認）
-
-- https://skills.sh/docs/cli
-- https://github.com/vercel-labs/skills
-- https://github.com/vercel-labs/skills/blob/main/src/installer.ts
-- https://code.claude.com/docs/en/plugin-marketplaces
-- https://developers.openai.com/plugins/build/plugins
+[Jevの設定](JEV.ja.md) · [CLI契約・英語原本](../skills/jev-scrum-master/references/cli.md) · [安全性](../SECURITY.ja.md)。
