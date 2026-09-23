@@ -1,106 +1,81 @@
-# GitHubへ公開する — 0.1.0a3
+# Maintainer publishing / release guide
 
-公開先は `ryoheimatsumo/jev-ai-scrum-master`、可視性は **Public**、初期ブランチは **main**。
-この文書・配布ZIPがあるだけでは公開済みではありません。実際の公開操作は利用者の端末で行います。
+このGitHubリポジトリは **すでにPublicで公開済み** です。
 
-## 手順
+通常の更新では、初回公開用の`scripts/publish-github.sh` / `scripts/publish_public.py`を使いません。これらは「存在しない新規リポジトリを安全に初回公開する」ために作られたbootstrap-eraの補助コードで、既存リポジトリへの更新を拒否する設計です。
 
-新しい公開用ZIPを展開してください。通常の開発用ZIPとは異なり、過去のhistory.bundleは含めません。
-公開用スクリプトはPython 3.9以上とGit、GitHub CLIを使い、Coreや追加Pythonパッケージの導入は不要です。
+## 通常の更新フロー
 
-MacでHomebrewを利用している場合、GitHub CLIがなければ導入します。
+1. feature/docsブランチを作る
+2. 変更を実装する
+3. ローカルテストと配布整合性チェックを実行する
+4. PRを作成する
+5. CIと差分を確認する
+6. mainへマージする
+7. 必要に応じてtag / GitHub Releaseを作る
 
-```sh
-brew install gh
-```
-
-GitHub CLIを `ryoheimatsumo` で認証します。ブラウザーの本人確認を使い、トークンをチャットに貼らないでください。
-GitHub Actions設定もpushするため、ブラウザー認証の追加スコープにworkflowを指定します。
-
-```sh
-gh auth login --hostname github.com --git-protocol https --web --scopes workflow
-```
-
-展開した `jev-ai-scrum-master-github-public` フォルダへ移動し、公開します。
+## リリース前チェック
 
 ```sh
-cd /実際の展開先/jev-ai-scrum-master-github-public
-bash scripts/publish-github.sh --public
+python -m pytest -q
+python scripts/sync_skill_assets.py --check
+python scripts/build_marketplace.py
+python scripts/validate_distribution.py
 ```
 
-対象が一致するか確認したい場合、`--public`の代わりに`--preview`を指定します。
-プレビューはネットワークアクセスもアップロードも行いません。
+Agent Skills経由の配布を変更した場合は、使い捨てのテストプロジェクトで実`npx`導入も確認します。
 
-## 実行する内容
+```sh
+python scripts/smoke_skills_install.py --skills-version 1.7.0 --agent cursor --write --allow-downloads
+```
 
-宣言済みファイルのハッシュ、Skill本体とCLI wheel、配布設定を照合します。
-GitHubのログイン先がryoheimatsumoであること、新規作成先が存在しないことを確認します。
-最新のソース・Skill・マーケットプレイス設定・テスト・文書を別の一時フォルダにコピーし、
-新しいmainの初期コミットを作成します。過去の開発Git履歴は公開しません。
-Publicリポジトリを作成してmainをpushし、公開状態・既定ブランチ・コミットSHAを読み返して確認します。
-READMEだけをmainに置いて実装を未マージPRへ残す方式ではありません。
+実ホスト、Jev API、品質改善ベンチマークはそれぞれ別の検証です。
 
-公開対象の一覧は`PUBLICATION_MANIFEST.json`です。リスト外の追加ファイルは送信しません。
-記載済みファイルが変わった場合も停止します。.git、.env、秘密鍵、ローカルDBは含めません。
-同梱.env.exampleの値はプレースホルダーです。ハッシュは署名ではなく、秘密情報検出も完全な監査ではありません。
+## バージョン更新
 
-認証情報をスクリプトに直書きしません。Gitの認証ヘルパー・コミット設定は新しいコピー内のみで設定します。
-元の作業フォルダやグローバルのGit設定は変更しません。
-コミットメールはGitHubのnoreply形式です。
+ユーザーに見える変更では、必要に応じて以下を更新します。
 
-## 公開後の導入
+- package / Skill version
+- `CHANGELOG.md`
+- bundled wheel / integrity manifest
+- marketplace metadata
+- documentation
 
-公開成功の表示を確認してから、次をユーザーへ案内します。
+生成ミラーがあるファイルは手編集と生成物を混在させず、既存の同期スクリプトを使います。
+
+## 公開済み導入元
+
+標準のAgent Skills導入：
 
 ```sh
 npx skills add ryoheimatsumo/jev-ai-scrum-master --skill jev-scrum-master
 ```
 
-Cursorへの指定例：
-
-```sh
-npx skills add ryoheimatsumo/jev-ai-scrum-master --skill jev-scrum-master --agent cursor
-```
-
-Claude Codeの会話入力欄では：
+Claude Code：
 
 ```text
 /plugin marketplace add ryoheimatsumo/jev-ai-scrum-master
 /plugin install jev-ai-scrum-master@jev-dev-tools
 ```
 
-これはリポジトリを導入元として共有する方法です。公式ストアの審査・掲載ではありません。
-同じホストへnpx版とプラグイン版を両方入れないでください。
-Skill配置後のPython環境・テストコマンドの設定、任意のJev APIキーと外部送信同意は別です。
-
-## 途中で止まった場合
-
-既存リポジトリの内容・公開設定を自動で上書きすることはありません。
-作成後にpushが失敗した場合、空のリポジトリが残ることがあります。スクリプトが表示する
-一時フォルダを保存し、GitHub側の状態を確認してください。スクリプトを再実行しても、既存リポジトリは変更しません。
-
-workflowスコープ不足でpushが拒否された場合：
+Codex：
 
 ```sh
-gh auth refresh --hostname github.com --scopes workflow
-# スクリプトが表示した、mainを持つローカルコピーでのみ再試行
-git -C /表示された一時フォルダ/jev-ai-scrum-master push --set-upstream origin main
-gh repo edit ryoheimatsumo/jev-ai-scrum-master --default-branch main
+codex plugin marketplace add ryoheimatsumo/jev-ai-scrum-master
 ```
 
-ネットワーク・権限・既存ブランチを確認せず、force-pushや削除を実行しないでください。
+詳細は [DISTRIBUTION.ja.md](DISTRIBUTION.ja.md) を参照してください。
 
-## 公開後の確認
+## 初回公開用スクリプトについて
 
-GitHub Actionsが成功したかを確認し、失敗を隠さず修正します。
-未使用プロジェクトで実際のnpx導入を試し、ホストでSkillが認識されるか確認します。
-実Jev API、各ホスト実機、macOS動作、速度・精度・トークン削減は、この公開処理で実証されません。
-ラベルはexperimental alphaのままです。公開用処理はnpm/PyPI登録、リリース作成、公式ストア申請を行いません。
+`scripts/publish-github.sh`、`scripts/publish_public.py`、`PUBLICATION_MANIFEST.json`、関連テストは初回公開時の安全確認用として現在も履歴的に残っています。
 
-## 確認した公式資料
+これらは **通常リリースには使用しません**。削除する場合は、関連テスト・validation docs・参照箇所も同じPRで整理してください。
 
-- GitHub CLI repo create: https://cli.github.com/manual/gh_repo_create
-- GitHub CLI auth login: https://cli.github.com/manual/gh_auth_login
-- Vercel Agent Skills CLI: https://github.com/vercel-labs/skills
+## セキュリティ
 
-この公開補助コードは外部接続を置き換えたローカルテストで確認します。実GitHubへの書き込みは未実施です。
+- APIキーやGitHub tokenをファイルへ直書きしない
+- `.env`、秘密鍵、ローカルDB、実行状態をcommitしない
+- 配布wheelやmanifestの差分をレビューする
+- 外部送信対象や権限変更を、リリースノートなしで広げない
+- force-pushや既存公開履歴の書き換えを通常のリリース手順にしない
