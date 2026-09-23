@@ -1,6 +1,6 @@
 # Jev AI Scrum Master
 
-[English](README.md)
+[English](README.md) | **日本語**
 
 **完成条件を決め、証拠で確かめ、次の開発に生かす。**
 
