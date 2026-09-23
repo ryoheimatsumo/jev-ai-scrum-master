@@ -1,6 +1,6 @@
 # Jev AI Scrum Master
 
-[日本語](README.ja.md)
+**English** | [日本語](README.ja.md)
 
 **Define what done means. Verify it with evidence. Learn from the task.**
 
