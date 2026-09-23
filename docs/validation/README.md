@@ -1,3 +1,26 @@
+# Validation records and provenance
+
+These are **historical, version-scoped test records**, not a statement of current
+publication status. Counts and failures/skips describe their original execution.
+A record saying “not published” or “SDK unavailable” is not changed retroactively
+when GitHub publication or another environment's CI later succeeds.
+
+Current status is in [IMPLEMENTATION_STATUS.ja.md](../IMPLEMENTATION_STATUS.ja.md).
+Linux CI for commit `fbf81592248216bcc7e1fc2f4f81d3773b96e4cb` succeeded in
+[run #3](https://github.com/ryoheimatsumo/jev-ai-scrum-master/actions/runs/35822543177).
+This is not a live Jev, coding-agent, or performance benchmark.
+
+## Public-copy sanitization — 2026-09-23
+
+Selected records have machine-specific directory prefixes and temporary hostnames
+replaced with visible placeholders. Test counts, outcomes, skipped reasons, durations,
+versions, and original timestamps are preserved. These are no longer byte-identical
+raw captures and must not be presented as signed evidence.
+See [sanitization.json](sanitization.json) for affected files and content digests.
+Old commits retain the original copies; this cleanup does not rewrite Git history.
+
+## Original a1 validation note
+
 # Actual local validation
 
 Report date: 2026-09-23. Version: 0.1.0a1.

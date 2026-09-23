@@ -1,7 +1,7 @@
 # Security model and alpha limitations
 
-This software prevents accidental stale approvals, unsupported completion claims, and common
-workflow mistakes. It is **not a hostile-code execution sandbox or tamper-proof audit system**.
+This software is designed to reduce accidental stale approvals, unsupported completion claims,
+and common workflow mistakes; it does not guarantee their absence. It is **not a hostile-code execution sandbox or tamper-proof audit system**.
 
 - Use only trusted repositories. Commands run in disposable copies with minimized environment,
   isolated HOME, no inherited model/cloud keys, output/time limits, and process-group cleanup.
@@ -37,15 +37,47 @@ workflow mistakes. It is **not a hostile-code execution sandbox or tamper-proof 
 Do not upload secrets in public bug reports. Share only a minimal redacted reproducer with the
 repository owner through an agreed private channel; no security inbox is provisioned by this code.
 
-## Skill-first additions (a2)
+## Installer boundaries
 
-The installer writes only the selected Skill directory; it does not modify host configuration,
+The first-party `jev-sm skill install` installer writes only the selected Skill directory; it does not modify host configuration,
 MCP registration, user instruction files or permissions. Updates require unchanged installer-owned
 files, an explicit update flag and explicit write. A cooperative lock prevents overlapping installers;
 hard power loss during the replacement can leave a hidden backup/lock for manual inspection.
 It rejects symlink paths and refuses custom files. Same-user hostile filesystem races are not isolated.
+These first-party overwrite protections do not describe Vercel `skills` or host marketplace updaters.
+Those third-party installers have their own permissions, update behavior, and telemetry settings.
 
 Persistent Jev cache entries are advisory only, keyed by original-input hash and redacted state,
 contract/config/question/model/backend/task, with TTL and bounded entries. No raw prompt is stored.
 Clearing cache preserves evidence and audit. Concurrent cold misses can still produce duplicate
 provider calls. Never interpret cached advice or confidence as a fresh PASS/approval.
+
+## External services and local storage
+
+“Local” describes task storage and command execution, not a promise of offline inference.
+
+| Component | Possible data movement |
+| --- | --- |
+| Host coding agent | May send repository context, tool output, and conversations to its provider under host settings |
+| Jev (opt-in) | Sends selected plan/code/log inputs to TypeSafe; heuristic masking is not guaranteed secret removal |
+| Skill/runtime installation | Contacts GitHub/npm/PyPI and possibly interpreter-download services after the relevant setup consent |
+| Local state/artifacts | Stores task text, evidence, decisions, and approvals, which may contain confidential project information |
+
+The project does not intentionally send analytics by default. This does not control telemetry
+from installers, SDKs, or coding hosts. Their terms, retention, and training policies are separate.
+Do not assume disabling Jev disables the host's network access or data sharing.
+
+## Reporting a vulnerability
+
+Do not post secrets, customer data, or exploit details in a public issue. If GitHub shows
+**Security → Report a vulnerability**, use that private reporting channel. If it is not
+available, ask the maintainer to establish a private channel without including sensitive details.
+This repository does not currently promise a staffed security inbox or response SLA.
+A leaked credential needs revocation/rotation; removing it from a current file is insufficient.
+
+## What the public-content check does not prove
+
+The offline checker flags selected credential formats, tracked secret-like filenames, and
+machine-specific metadata in committed validation records. It also inspects wheel/ZIP text.
+It is a hygiene regression check, not a full secret scanner, dependency advisory scanner,
+penetration test, license clearance, or complete review of Git history and external artifacts.

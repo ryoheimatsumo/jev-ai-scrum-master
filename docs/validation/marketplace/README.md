@@ -1,5 +1,7 @@
 # 配布・初回起動の検証 — 0.1.0a3
 
+> Historical execution record. Publication and SDK availability statements describe that run only. See [current implementation status](../../IMPLEMENTATION_STATUS.ja.md) and [record provenance](../README.md).
+
 2026-09-23。Linux / Python 3.13.5で実行。
 
 ## 結果

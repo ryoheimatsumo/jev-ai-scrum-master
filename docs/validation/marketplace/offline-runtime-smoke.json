@@ -20,8 +20,8 @@
         "status": "not_installed",
         "version": "0.1.0a3",
         "with_jev": false,
-        "runtime_dir": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
-        "python": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
+        "runtime_dir": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
+        "python": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
         "network_performed": false,
         "project_changed": false,
         "jev_calls_enabled": false,
@@ -36,15 +36,15 @@
         "setup",
         "--write",
         "--wheelhouse",
-        "/mnt/data/marketplace-fixtures/wheels"
+        "[LOCAL_WORKDIR]/marketplace-fixtures/wheels"
       ],
       "exit_code": 0,
       "result": {
         "status": "ready",
         "version": "0.1.0a3",
         "with_jev": false,
-        "runtime_dir": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
-        "python": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
+        "runtime_dir": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
+        "python": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
         "network_performed": false,
         "project_changed": false,
         "jev_calls_enabled": false,
@@ -72,15 +72,15 @@
         "setup",
         "--write",
         "--wheelhouse",
-        "/mnt/data/marketplace-fixtures/wheels"
+        "[LOCAL_WORKDIR]/marketplace-fixtures/wheels"
       ],
       "exit_code": 0,
       "result": {
         "status": "ready",
         "version": "0.1.0a3",
         "with_jev": false,
-        "runtime_dir": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
-        "python": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
+        "runtime_dir": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
+        "python": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
         "network_performed": false,
         "project_changed": false,
         "jev_calls_enabled": false,
@@ -97,7 +97,7 @@
         "exec",
         "--",
         "--repo",
-        "/mnt/data/jev-a3-offline-8jtqba34/target project",
+        "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/target project",
         "init",
         "--write"
       ],
@@ -147,7 +147,7 @@
           ]
         },
         "next_action": "register_checks_then_approve_plan",
-        "path": "/mnt/data/jev-a3-offline-8jtqba34/target project/.jev-sm/config.yaml",
+        "path": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/target project/.jev-sm/config.yaml",
         "written": true
       },
       "stderr": ""
@@ -158,7 +158,7 @@
         "exec",
         "--",
         "--repo",
-        "/mnt/data/jev-a3-offline-8jtqba34/target project",
+        "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/target project",
         "doctor"
       ],
       "exit_code": 0,
@@ -175,9 +175,9 @@
         "mcp_required": false,
         "mcp_sdk_installed": false,
         "primary_interface": "skill+cli",
-        "repo": "/mnt/data/jev-a3-offline-8jtqba34/target project",
+        "repo": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/target project",
         "sandbox": "copy isolation and credential minimization; not an OS sandbox",
-        "state_dir": "/mnt/data/jev-a3-offline-8jtqba34/state/jev-sm/9b17d78be94f5444328ffab4",
+        "state_dir": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/state/jev-sm/9b17d78be94f5444328ffab4",
         "version": "0.1.0a3"
       },
       "stderr": ""
@@ -192,8 +192,8 @@
         "status": "ready",
         "version": "0.1.0a3",
         "with_jev": false,
-        "runtime_dir": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
-        "python": "/mnt/data/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
+        "runtime_dir": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base",
+        "python": "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/runtimes/0.1.0a3-fa7a316051ad2afd-base/bin/python",
         "network_performed": false,
         "project_changed": false,
         "jev_calls_enabled": false,
@@ -208,7 +208,7 @@
         "exec",
         "--",
         "--repo",
-        "/mnt/data/jev-a3-offline-8jtqba34/target project",
+        "[LOCAL_WORKDIR]/jev-a3-offline-8jtqba34/target project",
         "tasks"
       ],
       "exit_code": 0,

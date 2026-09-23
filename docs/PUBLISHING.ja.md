@@ -1,81 +1,48 @@
-# Maintainer publishing / release guide
+# Maintainer release guide
 
-このGitHubリポジトリは **すでにPublicで公開済み** です。
+このリポジトリは公開済みです。通常の変更はブランチとPRでレビューし、CIの結果を確認してからmainへ反映します。
+ユーザー向けの導入方法は[クイックスタート](QUICKSTART.ja.md)を参照してください。
 
-通常の更新では、初回公開用の`scripts/publish-github.sh` / `scripts/publish_public.py`を使いません。これらは「存在しない新規リポジトリを安全に初回公開する」ために作られたbootstrap-eraの補助コードで、既存リポジトリへの更新を拒否する設計です。
-
-## 通常の更新フロー
-
-1. feature/docsブランチを作る
-2. 変更を実装する
-3. ローカルテストと配布整合性チェックを実行する
-4. PRを作成する
-5. CIと差分を確認する
-6. mainへマージする
-7. 必要に応じてtag / GitHub Releaseを作る
-
-## リリース前チェック
+## 公開前の確認
 
 ```sh
 python -m pytest -q
 python scripts/sync_skill_assets.py --check
+python scripts/validate_distribution.py
+python scripts/check_public_content.py
+```
+
+文書だけの変更で固定配布済みwheelを同じ版のまま再生成しないでください。
+次の配布版を作る際は、package・CLI・pluginの版を揃え、変更履歴を更新してから生成します。
+
+```sh
 python scripts/build_marketplace.py
 python scripts/validate_distribution.py
+python scripts/check_public_content.py
 ```
 
-Agent Skills経由の配布を変更した場合は、使い捨てのテストプロジェクトで実`npx`導入も確認します。
+生成したwheel、manifest、Skillミラーの差分もレビューします。導入経路を変えた場合は、
+使い捨て環境で実npx導入と対象ホストのスモークテストを実施します。実APIの利用と費用には別途許可が必要です。
 
-```sh
-python scripts/smoke_skills_install.py --skills-version 1.7.0 --agent cursor --write --allow-downloads
-```
+## 表示する検証範囲
 
-実ホスト、Jev API、品質改善ベンチマークはそれぞれ別の検証です。
+ローカルfixture、SDK契約テスト、実API、実ホスト、性能比較は別々に記録します。
+未実行を成功と表現せず、古いログには対象revision/版と採取条件を残します。
+公開用ログは秘密値・個人情報・実環境のパスを点検し、匿名化した場合はその旨を残してください。
 
-## バージョン更新
+## 初回公開用の履歴
 
-ユーザーに見える変更では、必要に応じて以下を更新します。
+`scripts/publish-github.sh`、`scripts/publish_public.py`、`PUBLICATION_MANIFEST.json` と関連テストは
+初回公開のための固定スナップショットを扱う履歴的な補助物です。**通常更新には使いません。**
+manifestのハッシュは初回アーカイブ用で、現行mainの整合性証明ではありません。
+現在のドキュメント変更後に旧manifestの確認が失敗するのは意図した挙動です。
+初回公開履歴やテスト結果を後から現在の状態に書き換えないでください。
 
-- package / Skill version
-- `CHANGELOG.md`
-- bundled wheel / integrity manifest
-- marketplace metadata
-- documentation
+## 継続的な安全確認
 
-生成ミラーがあるファイルは手編集と生成物を混在させず、既存の同期スクリプトを使います。
+GitHubのsecret scanning / push protectionとprivate vulnerability reportingを設定画面で確認してください。
+このPRやファイルの追加だけで、そのリポジトリ設定が有効になるわけではありません。
+認証情報が見つかった場合は公開Issueや通常PRへ値を載せず、まず失効・再発行を行い、
+必要な履歴の扱いを別途確認します。通常の文書整理のためにforce-pushしません。
 
-## 公開済み導入元
-
-標準のAgent Skills導入：
-
-```sh
-npx skills add ryoheimatsumo/jev-ai-scrum-master --skill jev-scrum-master
-```
-
-Claude Code：
-
-```text
-/plugin marketplace add ryoheimatsumo/jev-ai-scrum-master
-/plugin install jev-ai-scrum-master@jev-dev-tools
-```
-
-Codex：
-
-```sh
-codex plugin marketplace add ryoheimatsumo/jev-ai-scrum-master
-```
-
-詳細は [DISTRIBUTION.ja.md](DISTRIBUTION.ja.md) を参照してください。
-
-## 初回公開用スクリプトについて
-
-`scripts/publish-github.sh`、`scripts/publish_public.py`、`PUBLICATION_MANIFEST.json`、関連テストは初回公開時の安全確認用として現在も履歴的に残っています。
-
-これらは **通常リリースには使用しません**。削除する場合は、関連テスト・validation docs・参照箇所も同じPRで整理してください。
-
-## セキュリティ
-
-- APIキーやGitHub tokenをファイルへ直書きしない
-- `.env`、秘密鍵、ローカルDB、実行状態をcommitしない
-- 配布wheelやmanifestの差分をレビューする
-- 外部送信対象や権限変更を、リリースノートなしで広げない
-- force-pushや既存公開履歴の書き換えを通常のリリース手順にしない
+[Security](../SECURITY.md) · [Contributing](../CONTRIBUTING.md)

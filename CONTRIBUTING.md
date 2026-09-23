@@ -1,23 +1,42 @@
 # Contributing
 
-Use Python 3.12+ and a virtual environment. Install editable source with `pip install -e '.[dev,mcp,jev]'`.
-Run `python -m compileall -q src tests`, `python -m pytest -q`, and
-`python scripts/demo.py --simulate-approvals`. CI additionally installs the optional official SDKs
-and tests their contracts and stdio handshake. Live model tests require explicit paid API opt-in.
+This is an experimental alpha. Improvements to reliability, honest documentation,
+and reproducible tests take priority over new autonomous behavior.
 
-The release is an initial alpha. Security/reliability fixes and host adapter tests take priority
-over adding autonomous behavior. Include tests, threat-model implications, and a truthful update
-to implementation status. Do not merge unvalidated generated rules into runtime policy.
+Use Python 3.12+ in a virtual environment:
 
-Proposed next work is in docs/BACKLOG.md. Open a separate branch/PR. Do not auto-merge the initial
-implementation PR or create public releases from this scaffold without completing the beta gates.
+```sh
+python -m pip install -e '.[dev]'
+python -m pytest -q
+python scripts/sync_skill_assets.py --check
+python scripts/validate_distribution.py
+python scripts/check_public_content.py
+```
 
-## Skill-first changes
+MCP and TypeSafe extras are optional. Their contract tests require `.[mcp,jev]`;
+live Jev tests also require explicit permission and credentials. Do not enable paid
+API tests or paste credentials into issues/PRs. Fixture tests are not live-model benchmarks.
 
-The primary setup is `python -m pip install -e '.[dev]'`; MCP/TypeSafe extras are optional.
-Edit canonical Skill resources in `src/jev_sm/assets/skills/jev-scrum-master`, then run
-`python scripts/sync_skill_assets.py`. CI tests the discoverable mirror and wheel resources.
-Do not duplicate domain/approval logic between CLI and MCP. Read ADR-002 before changing
-response defaults or installer behavior. Reproduce the CLI flow with
-`python scripts/demo_cli.py --simulate-approvals`; simulated approvals must remain confined
-to tests and disposable demos. No production fake-human switch may be introduced.
+## Changes and releases
+
+Open a focused branch and PR with test results and limitations. Use the
+[maintainer guide](docs/PUBLISHING.ja.md) for versioned distribution changes.
+Do not re-run the historical first-publication helper to update this repository.
+
+Edit canonical Skill resources under `src/jev_sm/assets/skills/jev-scrum-master`,
+then synchronize the discoverable mirror. Runtime/Skill changes require a new
+versioned wheel and integrity checks; do not silently replace an existing release.
+Do not duplicate approval or completion logic between CLI and MCP.
+
+## Reporting and claims
+
+Public examples must be synthetic. Review logs for credentials, customer data,
+email addresses, machine paths, and hostnames before sharing. Sanitized reports
+must say what was changed without altering test outcomes. Keep failed/skipped tests visible.
+
+Security reports follow [SECURITY.md](SECURITY.md), not a public exploit report.
+Claims about correctness, speed, cost, and tokens need matched end-to-end measurements.
+Distribution support is not proof of host compatibility. A test copy is not a security sandbox.
+
+The approved v1.0 specification is a design target, not a feature-completeness claim.
+Preserve the current completion/approval gates and include regressions for changes to them.

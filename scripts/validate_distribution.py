@@ -58,7 +58,7 @@ def validate(root=ROOT):
             'checks': ['portable-manifest', 'claude-marketplace', 'codex-local-marketplace',
                        'skill-mirror', 'bundled-wheel-hash', 'wheel-source-parity', 'no-auto-hooks-or-mcp'],
             'official_marketplace_approval': False, 'host_runtime_test': False,
-            'remote_publication': False}
+            'remote_publication': None, 'remote_publication_checked': False}
 
 
 if __name__ == '__main__':

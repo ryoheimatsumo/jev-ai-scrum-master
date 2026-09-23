@@ -1,105 +1,55 @@
 # 実装状態 — 0.1.0a3
 
-更新日: 2026-09-23
+確認日: 2026-09-23。**Experimental alpha / quality improvement unverified**。
+GitHubで公開済み。標準入口はSkill＋CLIで、MCPとJevは任意、Jevは既定無効です。
 
-## 現在地
+## 実装と検証を分ける
 
-- GitHubリポジトリ: **Publicで公開済み**
-- 標準入口: **Skill + CLI**
-- MCP: 任意アダプター
-- Jev: 任意・既定無効
-- 製品ラベル: **experimental alpha / quality improvement unverified**
+| 項目 | 状態 |
+| --- | --- |
+| 計画・承認・状態・登録済みチェック・証拠・完了条件 | 実装済み、ローカルとLinux CIで検証 |
+| CLI経由の一巡 | テストと明示的なシミュレーション付きデモで確認 |
+| MCP/TypeSafe SDKの契約テスト | 下記GitHub CIのsdk-contractsジョブで成功。実Jev呼び出しとは別 |
+| Skill・同梱wheelの内容整合性 | validatorとテストで確認 |
+| 全導入候補ホストでのSkill実行 | 未確認 |
+| 公開URLからの実npx導入 | この監査では未実行。過去のローカル試行はDNSエラー |
+| 自動の独立AIレビュー | 未実装。standardでは実際の人間による代替レビューが必要 |
+| 実Jevの精度・全体速度・料金・トークン削減 | 未測定 |
 
-公開済みであることと、各ホストでのend-to-end互換性や品質改善が実証済みであることは別です。
+確認したCIはcommit `fbf81592248216bcc7e1fc2f4f81d3773b96e4cb` の
+[Tests run #3](https://github.com/ryoheimatsumo/jev-ai-scrum-master/actions/runs/35822543177)です。
+成功はこのrevisionと実行したジョブの範囲であり、将来の変更や実ホスト対応を保証しません。
 
-## 実装済みの主要フロー
+## Jevの現在の役割
 
-```text
-計画
-→ 契約/設定/参照版の固定
-→ 人間の承認
-→ 実装開始
-→ 登録済みcheckの隔離実行
-→ AC別の証拠評価
-→ 必要なレビュー
-→ completion gate
-→ 改善提案
-```
+readiness（計画不足）、playbook（次の調査候補）、context selection（関連情報の選別）、
+evidence relation（ACとテスト結果の関係候補）を補助します。コード生成や最終PASSは担当しません。
+不明・低confidence・API障害は保留し、必須の確認を残します。
+キャッシュは補助判定専用で、承認・テスト結果・完了資格ではありません。
 
-ホストLLMが計画・分割・実装・自由文の説明を担当します。Coreはコード生成エージェントではなく、状態、承認、Runner、証拠、完了条件を管理します。
+## 完了条件と限界
 
-## Jevを使う経路
+未承認の計画、必須AC未確認、ゼロ件テスト、必須skip、失効した証拠、必要なレビュー不足では
+完了しない設計です。未コミット変更も入力の確認対象です。
+実行したテストが要求の意味を十分に検証しているかは、必要なレビューで別に確認します。
+表示するDONEは本ツール内の現行契約への適合で、未知の不具合がない証明ではありません。
 
-現在のJev経路：
+Coreは信頼済みローカルリポジトリを対象とします。別コピーと環境変数の最小化は
+OS/network sandboxではなく、悪意のある同一OSユーザーから承認や証拠を保護する保証もありません。
 
-- **readiness**: 計画不足や観測可能性の補助判定
-- **playbook**: 継続 / 最小再現 / 環境確認 / 保存確認 / 契約確認 / 人間判断などの次手候補
-- **context selection**: 必須・不明情報を残し、強く無関係な候補を退避
-- **evidence relation**: ACとRunner証拠の関係候補を評価
+## 未実装・未確認
 
-Jevの判断だけでPASSやDONEにはしません。低confidence、UNKNOWN、API障害は必要なレビューへフォールバックします。
+自動独立AIレビュー、クラッシュ中jobの完全復旧、強制Hook、完全な外部環境指紋、
+mutation testing、Jev質問の自動最適化、macOS実機、ネイティブWindows対応は未実装または未確認です。
+目的としての品質向上・省トークン化を、検証済みの実績と表現しません。
 
-判定キャッシュは補助判断専用で、承認、テスト結果、完了資格を再利用するものではありません。
+## 配布と履歴
 
-## 完了条件の主要ガード
+公式ストア掲載、npm/PyPI公開はGitHub公開とは別で、本プロジェクトでは実施していません。
+同梱a3 wheelは当時のソースと説明を含む固定配布物です。Core/Skillソースは現行ファイルと一致しますが、
+wheelのパッケージ説明には公開前時点のREADMEが残っています。現行案内はリポジトリのREADMEを参照してください。
+同一版のwheelを黙って作り直さず、次の配布版で説明も更新します。
 
-ローカルCoreでは、少なくとも次を扱います。
-
-- 未承認計画から開始しない
-- agent claimだけでACをPASSにしない
-- 必須AC未検証ならDONEにしない
-- zero tests / 必須skip / レポート欠損を行動ACの成功にしない
-- relevant input変更後は古い証拠をSTALEにする
-- 契約変更後は古い承認を再利用しない
-- 未承認checkを実行しない
-- 同一失敗・無進捗や修正ラウンドに上限を持つ
-- strictタスクでは追加の人間確認を要求
-- 改善案は承認されるまで次タスクの必須ルールにしない
-
-詳細な受け入れ条件は [v1.0 specification](spec/v1.0.ja.md) を参照してください。
-
-## 配布状態
-
-公開リポジトリからAgent Skillsとして導入できる構成です。
-
-```sh
-npx skills add ryoheimatsumo/jev-ai-scrum-master --skill jev-scrum-master
-```
-
-Claude Code / Codex向けのmarketplace metadataも含みます。
-
-ただし、上流インストーラーが対応するホストIDと、本製品が実機end-to-end検証済みであることは区別しています。
-
-詳細: [DISTRIBUTION.ja.md](DISTRIBUTION.ja.md)
-
-## 現在の明確な制限
-
-未実装または未実証：
-
-- 自動の独立AIレビュー
-- hard crash中jobの完全自動復旧
-- 強制Hook / CI enforcementの完成版
-- 完全な外部環境fingerprint
-- mutation testing
-- Jev質問の自動最適化
-- 実Jev APIを使った精度改善ベンチマーク
-- end-to-endの速度 / 総コスト / トークン削減効果
-- 全対応候補ホストでの実機smoke test
-- macOS実機検証
-- ネイティブWindows Core対応
-
-ローカルRunnerは信頼済みコードを前提としており、OS / network sandboxではありません。
-
-## 検証記録
-
-実際に行ったローカル検証は `docs/validation/` に保存しています。
-
-テストfixtureによる承認は`SIMULATED_DEMO_ONLY`であり、実人間レビューやAI品質の実証として扱いません。
-
-Jev provider fixtureでのテストは、API課金・実精度・実レイテンシを証明しません。
-
-## 履歴
-
-変更履歴は [CHANGELOG.md](../CHANGELOG.md)、主要な設計判断は `docs/adr/` を参照してください。
-
-過去版で「GitHub未公開」と記録されていた文言は、その時点の履歴であり、現在の状態ではありません。
+[検証記録](validation/README.md)は採取当時の結果です。過去の未公開・未実行という値を、
+現在の成功に書き換えません。公開用コピーでは機械固有パス・ホスト名を匿名化した箇所があります。
+[変更履歴](../CHANGELOG.md)・[バックログ](BACKLOG.md)・[仕様](spec/v1.0.ja.md)も参照してください。
