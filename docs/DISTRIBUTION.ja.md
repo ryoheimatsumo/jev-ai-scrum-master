@@ -87,6 +87,18 @@ npx skills list
 npx skills update jev-scrum-master
 ```
 
+Skills CLI 1.7.0は更新時にGitHub checkoutを深い階層まで探索します。`0.1.0a4`のcheckoutには
+パッケージ用ソースと発見用mirrorの同名Skill manifestがあり、曖昧として更新を省略することがあります。
+既存のa4導入は、発見用mirrorだけを指定するtree URLで一度再導入できます。
+
+```sh
+npx skills add https://github.com/ryoheimatsumoto/jev-ai-scrum-master/tree/main/skills/jev-scrum-master --skill jev-scrum-master
+```
+
+この移行後は、元の導入時と同じプロジェクト/ユーザー範囲、ホスト指定、`--skill jev-scrum-master`を
+使って通常のリポジトリ更新を実行できます。この回避策は公開済みa4 tree向けで、現在のtreeには
+発見可能な`SKILL.md`を1つだけ置きます。
+
 ユーザー単位の導入では更新コマンドに`-g`を付けます。元と同じ導入経路とホスト指定を使ってください。
 古い導入や手動コピーでは自動更新に必要なロック情報がなく、更新が拒否される場合があります。
 その場合はローカル編集を退避し、同じホスト・配置範囲でリポジトリからSkill一式を再導入します。

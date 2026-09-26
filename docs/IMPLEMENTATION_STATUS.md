@@ -2,7 +2,7 @@
 
 [日本語](IMPLEMENTATION_STATUS.ja.md)
 
-Reviewed: 2026-09-26. Runtime: `0.1.0a4`, **experimental alpha / quality improvement unverified**.
+Reviewed: 2026-09-26. Runtime: `0.1.0a5`, **experimental alpha / quality improvement unverified**.
 The repository is public. Skill + CLI is the primary path; MCP and Jev are optional.
 
 ## Implemented

@@ -8,7 +8,7 @@ A Skill for your existing coding agent, backed by a local CLI. The agent plans a
 the Core manages approved checks, evidence freshness, and the task's completion conditions.
 **MCP is optional.**
 
-**Experimental alpha — `0.1.0a4`.** This independent community project is intended for trusted
+**Experimental alpha — `0.1.0a5`.** This independent community project is intended for trusted
 local repositories. Live coding-agent compatibility and improvements in quality, speed, cost, or
 token use have not been demonstrated for this project; these are not measured results. Standard
 tasks currently require a person's review; an independent AI reviewer is not implemented. See

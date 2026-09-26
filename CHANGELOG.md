@@ -2,6 +2,13 @@
 
 [日本語](CHANGELOG.ja.md)
 
+## 0.1.0a5 — 2026-09-26
+
+- Keep one discoverable `SKILL.md` in the repository so Skills CLI 1.7.0 can update existing
+  installations without treating the packaged source as an ambiguous duplicate.
+- Preserve the installed Skill name and byte-identical bundled output through template
+  normalization, and document the direct tree URL workaround for a4 installations.
+
 ## 0.1.0a4 — 2026-09-26
 
 - Plan one reviewed delivery goal with grouped user stories and acceptance criteria, then implement

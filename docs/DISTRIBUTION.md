@@ -88,6 +88,19 @@ npx skills list
 npx skills update jev-scrum-master
 ```
 
+Skills CLI 1.7.0 scans a GitHub checkout at full depth when updating. The `0.1.0a4`
+checkout contains the same Skill manifest in the packaged source and discoverable mirror,
+so that version can be reported as ambiguous and skipped. Existing a4 installations can
+use the direct Skill tree URL once to re-add the unambiguous mirror:
+
+```sh
+npx skills add https://github.com/ryoheimatsumo/jev-ai-scrum-master/tree/main/skills/jev-scrum-master --skill jev-scrum-master
+```
+
+After that migration, update from the repository normally, using the same project/user scope,
+host selection, and `--skill jev-scrum-master` choice as the original installation. This workaround
+is for a4's published tree; the current tree keeps only one discoverable `SKILL.md`.
+
 For a user-scope installation, add `-g` to the update command. Use the same channel and host
 selection as the original installation. An older or manually copied installation may lack the
 lock data needed for automatic update; back up local edits and re-add the full Skill from this
