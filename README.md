@@ -1,132 +1,109 @@
 # Jev AI Scrum Master
 
-**Help your coding agent define what “done” means — and check the evidence.**
+**English** | [日本語](README.ja.md)
 
-Plan → Implement → Verify → Improve
+**Define what done means. Verify it with evidence. Learn from the task.**
 
-A Skill for local coding agents, backed by a Python CLI that manages tasks,
-registered checks, approvals, and verification evidence. Your existing agent still
-plans and writes the code. MCP is an optional interface to the same Core.
+A Skill for your existing coding agent, backed by a local CLI. The agent plans and writes code;
+the Core manages approved checks, evidence freshness, and the task's completion conditions.
+**MCP is optional.**
 
-**Experimental alpha (`0.1.0a3`).** Standard tasks currently require a real person
-for the review step; an independent AI reviewer is not implemented. Performance
-improvements are goals, not measured results. This is an independent community
-project, not an official or endorsed product of TypeSafe, OpenAI, Anthropic, or Vercel.
-
-[日本語クイックスタート](docs/QUICKSTART.ja.md) ·
-[Installation details](docs/DISTRIBUTION.ja.md) ·
-[Implementation status](docs/IMPLEMENTATION_STATUS.ja.md)
+**Experimental alpha — `0.1.0a4`.** This independent community project is intended for trusted
+local repositories. Live coding-agent compatibility and improvements in quality, speed, cost, or
+token use have not been demonstrated for this project; these are not measured results. Standard
+tasks currently require a person's review; an independent AI reviewer is not implemented. See
+[current status](docs/IMPLEMENTATION_STATUS.md).
 
 ## What it does
 
-| Stage | Support provided |
-| --- | --- |
-| Plan | Structure one observable outcome, acceptance criteria, and verification methods |
-| Implement | Let the coding agent work within the approved task; offer optional investigation advice |
-| Verify | Run registered checks and associate their results with acceptance criteria |
-| Complete | Keep the task open when required evidence is missing, stale, failed, or awaiting review |
-| Improve | Record evidence-linked improvement proposals for a person to approve |
+| Stage | Support |
+|---|---|
+| Plan | Make the outcome, acceptance criteria, checks, and open decisions explicit. |
+| Implement | Let your coding agent work within the approved scope. |
+| Verify | Run registered checks; keep results tied to the code and criteria being checked. |
+| Complete | Require current evidence and approvals before recording DONE. |
+| Improve | Propose lessons for similar tasks; adoption requires human approval. |
 
-An agent saying “all tests passed” is not execution evidence. A successful command
-exit alone is not proof that a behavior was tested. DONE refers to this tool's
-current task contract — not a merge, deployment, Jira update, or guarantee of bug-free software.
+For example, a task to change an item and persist it should verify both the change and a fresh
+read after saving. A claim that the screen changed is not evidence that persistence works.
+The tool helps track that distinction; it does not prove the absence of bugs.
+
+For a larger change, the agent presents the full set of user stories and acceptance criteria
+as a readable plan card. After you explicitly approve that current card in chat, the agent can
+record a hash-bound plan approval and work through small value slices without asking again for
+each slice. Material changes to the approved scope or criteria require a new review. Standard
+tasks still require a person's final substitute review.
 
 ## Install
 
-From your development project's Git root, use Vercel's Agent Skills installer:
+From the Git root of the project you want to work on:
 
-```sh
+```bash
 npx skills add ryoheimatsumo/jev-ai-scrum-master --skill jev-scrum-master
 ```
 
-To choose a target explicitly, append `-a codex`, `-a claude-code`, or `-a cursor`.
-The [distribution guide](docs/DISTRIBUTION.ja.md) lists other installer targets.
-Installer support does **not** mean this project has been tested end-to-end in that host.
+Select your agent interactively, or append `-a codex`, `-a claude-code`, or `-a cursor`.
+Installation targets are not a tested-host compatibility guarantee.
+[Other agents, marketplaces, and updates](docs/DISTRIBUTION.md).
 
-Alternatively, in Claude Code:
+For Claude Code's repository marketplace:
 
 ```text
 /plugin marketplace add ryoheimatsumo/jev-ai-scrum-master
 /plugin install jev-ai-scrum-master@jev-dev-tools
 ```
 
-This is a repository-hosted marketplace, not an official directory endorsement.
-Use only one installation channel per host. The project itself is not published
-as an npm or PyPI package; `npx` runs the third-party `skills` installer.
+Use one installation channel per host. This is an independent repository marketplace,
+not an official directory listing or endorsement.
 
-## First use
+## Get started
 
-Reload your coding agent if needed, then ask:
+Ask your agent:
 
 > Use jev-scrum-master and help me set it up for this repository.
 
-The Skill guides setup of its bundled CLI after your consent. Register your
-project's actual test commands in `.jev-sm/config.yaml`; the runner does not
-install project dependencies. Then request a small development task, for example:
+Review the proposed setup, register your actual test commands, and then request one task.
+The Skill includes a launcher for a dedicated CLI environment. Setup downloads require consent;
+project test dependencies and task approvals are separate.
 
-> Use jev-scrum-master to add a saved preference and verify that it survives a reload.
+**Requirements:** Git and Python 3.12+ for the Core; Node/npm for `npx`. Linux is locally tested,
+macOS is unverified, and native Windows is unsupported in this alpha.
 
-The agent prepares a plan and verification criteria. You review the plan and run
-the required approval commands yourself. After implementation, the CLI runs checks,
-reports missing evidence, and requires the current review conditions before completion.
-See the [quickstart](docs/QUICKSTART.ja.md) and [CLI reference](skills/jev-scrum-master/references/cli.md).
-
-**Requirements:** Git and Python 3.12+ for the Core; Node/npm for `npx` installation.
-The bundled launcher can run on Python 3.9+ and use an already installed `uv` to
-obtain a suitable Python after download consent. Linux Core/SDK checks have run
-in CI. macOS and live coding-agent workflows remain unverified; native Windows is unsupported.
+Jev is **disabled by default**. Enabling it requires the optional SDK, a `TYPESAFE_API_KEY`
+environment variable, and reviewed configuration. Never paste credentials into chat or commit them.
+[Quickstart](docs/QUICKSTART.md) · [Jev setup and usage](docs/JEV.md).
 
 ## How Jev is used
 
-Jev is optional and disabled by default. When enabled, it supplies bounded advice:
+Jev supplies bounded advice about planning gaps, the next investigation method, relevant context,
+and how evidence relates to an acceptance criterion. It does not write the implementation or
+approve tests, permissions, or completion. Unknown or unavailable advice does not waive review.
+The host must invoke the workflow; the Skill is not an always-on supervisor.
 
-- **Readiness:** classify missing prerequisites in a proposed plan.
-- **Next-step selection:** suggest an investigation playbook, without executing it.
-- **Context selection:** identify clearly unrelated snippets while retaining mandatory or uncertain information.
-- **Evidence relation:** suggest how test results relate to an acceptance criterion, not whether assertions prove it.
+## Safety and limitations
 
-Jev does not generate code, approve a plan, grant PASS, or override completion rules.
-Its cache stores advisory decisions, not fresh test results or approvals. Live Jev
-accuracy, end-to-end speed, and token/cost savings have not been measured for this project.
+Registered tests execute code. A disposable copy and a reduced environment are **not an OS/network sandbox**.
+Use trusted repositories and non-production data. Same-user processes can access
+files outside the copy and can tamper with local state. [Security model](SECURITY.md).
 
-## Data and safety
+DONE applies only to this tool's current task contract. It is not a guarantee of correctness,
+independent certification, merge, deployment, or Jira completion. Automatic independent AI review,
+crash recovery, enforcement hooks, and mutation testing are not yet implemented.
 
-Task state and verification artifacts are stored locally. **This does not mean
-all processing is offline:** your coding agent may send context to its model provider;
-enabling Jev sends selected inputs to TypeSafe. Setup can contact package registries
-and interpreter-download services after consent. Installer telemetry is governed
-by the installer, separately from this project's defaults.
+The Core adds no automatic external telemetry. Your coding host, installer, package registries,
+and an enabled Jev API have separate network behavior and policies. To opt out of the third-party
+Skills installer's telemetry, set `DISABLE_TELEMETRY=1`. See [data handling](SECURITY.md).
 
-Never paste API keys into chat or commit them. Review permitted input before
-setting `TYPESAFE_API_KEY` and enabling Jev. Redaction is best effort, not a guarantee.
+## Documentation and contributing
 
-Use trusted repositories only. Checks run in disposable copies with minimized
-environment variables, **not an OS/network sandbox**. They can access files and
-network resources available to the same OS user. Human approval gates prevent
-workflow mistakes; they do not isolate a hostile same-user process.
+[Documentation index](docs/README.md) · [Contributing](CONTRIBUTING.md) ·
+[Architecture](docs/ARCHITECTURE.md) · [Backlog](docs/BACKLOG.md) · [Changelog](CHANGELOG.md) ·
+[Publication audit](docs/reviews/2026-09-23-publication-audit.md).
 
-See [SECURITY.md](SECURITY.md) for boundaries and vulnerability reporting.
-
-## Development
-
-From a source checkout with Python 3.12+:
-
-```sh
-python3 -m venv .venv
-. .venv/bin/activate
-python -m pip install -e '.[dev]'
-python -m pytest -q
-python scripts/sync_skill_assets.py --check
-python scripts/validate_distribution.py
-python scripts/check_public_content.py
-```
-
-Optional extras are `.[jev]` and `.[mcp]`. To run the MCP interface after installing
-its extra, use `jev-sm --repo /ABS/PROJECT serve`.
-
-[Contributing](CONTRIBUTING.md) · [Changelog](CHANGELOG.md) ·
-[Backlog](docs/BACKLOG.md) · [Validation records](docs/validation/README.md)
+Human-facing guides are available in English and Japanese. Executable Skill instructions,
+CLI identifiers, and raw test reports remain in their original format; see the documentation index.
 
 ## License
 
-[Apache-2.0](LICENSE). External models, services, and dependencies have their own terms.
+[Apache-2.0](LICENSE). Jev and coding hosts are external services, not bundled models.
+This is an independent project; it does not claim endorsement by TypeSafe, OpenAI, Anthropic, or Vercel.

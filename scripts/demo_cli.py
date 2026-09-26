@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 import yaml
+from jev_sm import __version__
 from jev_sm.core import Core
 from jev_sm.models import Check, Settings
 from jev_sm.workspace import Workspace
@@ -26,7 +27,8 @@ from demo import DemoApproval
 
 
 def run(simulated: bool) -> dict:
-    with tempfile.TemporaryDirectory(prefix="jev-sm-cli-demo-") as directory:
+    temp_root = Path(tempfile.gettempdir()).resolve()
+    with tempfile.TemporaryDirectory(prefix="jev-sm-cli-demo-", dir=temp_root) as directory:
         base = Path(directory)
         repo = base / "repo"
         repo.mkdir()
@@ -54,9 +56,11 @@ def run(simulated: bool) -> dict:
             calls.append({"command": args[0], "exit_code": response.returncode})
             return result
 
-        preview = cli("skill", "install", "--host", "codex")
+        # Use the temporary fixture repository so the demo never depends on a user's
+        # home-directory Skill links or managed host installation.
+        preview = cli("skill", "install", "--host", "codex", "--scope", "project")
         assert preview["preview"]
-        installed = cli("skill", "install", "--host", "codex", "--write")
+        installed = cli("skill", "install", "--host", "codex", "--scope", "project", "--write")
         assert installed["written"]
         subprocess.run(["git", "-C", str(repo), "add", "."], check=True)
         subprocess.run(["git", "-C", str(repo), "-c", "user.name=Demo fixture", "-c",
@@ -105,7 +109,7 @@ def run(simulated: bool) -> dict:
         assert cli("rule", "candidates", "--kind", "feature", "--path", "app.py")["candidates"] == []
         (repo / "app.py").write_text(original + "\n# next uncommitted change\n")
         stale = cli("gate", task, expected=3)
-        return {"interface": "skill+cli", "version": "0.1.0a2",
+        return {"interface": "skill+cli", "version": __version__,
                 "approvals": "SIMULATED_DEMO_ONLY" if simulated else "interactive_tty",
                 "cli_process_count": len(calls), "cli_calls": calls,
                 "jev_api_used": False, "mcp_server_used": False, "host_llm_used": False,

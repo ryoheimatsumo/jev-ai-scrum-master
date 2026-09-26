@@ -57,9 +57,11 @@ python3 "<SKILL_ROOT>/scripts/runtime.py" exec --with-jev -- --repo /absolute/pr
 `exec` never installs, upgrades or downloads. It runs the exact runtime matched to this
 Skill's wheel. Reusing it works across sessions and cache relocations. A Skill update with
 a changed bundle requires a new setup confirmation, while old environments remain intact.
-For approval commands shown by Core, show the person the same launcher prefix followed by
-the unchanged approval arguments. The person runs those commands themselves. Setup consent
-is NOT task-plan approval and is NOT authorization to auto-enter TTY approvals.
+For terminal-only approval commands shown by Core, show the person the same launcher prefix
+followed by the unchanged approval arguments; the person runs those commands. For a displayed
+plan explicitly approved in chat, the agent may use the delegated plan approval command in
+[planning](planning.md) with the matching preview hash and task selection. Setup consent is
+NOT task-plan approval and is NOT authorization to auto-enter TTY approvals.
 
 ## Configure the project once
 

@@ -1,79 +1,84 @@
-# Security model and alpha limitations
+# Security model
 
-This software is designed to reduce accidental stale approvals, unsupported completion claims,
-and common workflow mistakes; it does not guarantee their absence. It is **not a hostile-code execution sandbox or tamper-proof audit system**.
+[日本語](SECURITY.ja.md)
 
-- Use only trusted repositories. Commands run in disposable copies with minimized environment,
-  isolated HOME, no inherited model/cloud keys, output/time limits, and process-group cleanup.
-  Copied source can still open network connections and access files available to the same OS user.
-- CLI confirmations are interactive and unavailable over MCP. A same-UID process can emulate a
-  terminal, alter Python/SQLite, or read state. High-assurance deployment needs distinct users,
-  filesystem access controls, containers/VMs and network policy not implemented here.
-- Test reports are Runner-collected, not cryptographic attestations of test honesty. The human
-  substitute reviewer must inspect assertions and tests. A malicious test can forge its output.
-- Paths are confined, symlinks rejected, XML parsed with defusedxml, pre-existing reports removed.
-  File hashes bind source/test/config bytes and artifacts, including dirty/untracked source.
-  The manifest and SQLite transaction are not a filesystem lock against concurrent edits; gate
-  checks current content before/after evaluation, and should be rerun at any downstream boundary.
-- Source references are hashed into a contract and require new approval when changed. All source
-  content changes conservatively invalidate final evidence. Required test edits trigger protection.
-- The environment fingerprint covers OS/runtime and executable content, not every installed
-  dependency, dynamic library, environment variable or external service. Reverify after any such
-  change; reproducible dependency/container fingerprints remain release-blocking follow-up work.
-- `.env*` (except `.env.example`), private-key extensions and explicit cache/dependency directories
-  are not copied. If a check depends on excluded secrets, local editable installs, external files,
-  or production credentials, this alpha cannot claim a complete reproducible verification.
-- Jev calls are opt-in; no secret .env loading or automatic external telemetry. API responses,
-  requested/resolved model IDs, observed usage and hashes are recorded. Free text exceptions from
-  providers are not logged. Redaction is heuristic; review permissible input before enabling.
-- Context filtering is advisory. Mandatory input must be declared by the caller; no summary is
-  allowed to replace the contract, an actual log, the full test result or a required review.
-- A hard-killed parent may leave a RUNNING job or orphan process. Automatic stale-job recovery is
-  not implemented. Stop remaining processes, preserve state, and use an isolated new workspace
-  for experiments. Do not edit the DB to manufacture DONE. This limitation blocks production beta.
-- No automatic mutation execution, code deployment, permission escalation, forced merges,
-  approval override or autonomous executable learning rules are included.
+This alpha manages evidence and workflow checks in **trusted local repositories**.
+It is not a hostile-code execution sandbox, tamper-proof audit system, or certification of correctness.
 
-Do not upload secrets in public bug reports. Share only a minimal redacted reproducer with the
-repository owner through an agreed private channel; no security inbox is provisioned by this code.
+## Execution and approval boundaries
 
-## Installer boundaries
+Registered commands run in disposable copies with a reduced environment, a separate HOME,
+time/output limits, and process-group cleanup. Copied code can still access the network and
+files available to the OS user. It may read credentials from disk even when they are not
+inherited as environment variables. Never use production data or credentials for these checks.
 
-The first-party `jev-sm skill install` installer writes only the selected Skill directory; it does not modify host configuration,
-MCP registration, user instruction files or permissions. Updates require unchanged installer-owned
-files, an explicit update flag and explicit write. A cooperative lock prevents overlapping installers;
-hard power loss during the replacement can leave a hidden backup/lock for manual inspection.
-It rejects symlink paths and refuses custom files. Same-user hostile filesystem races are not isolated.
-These first-party overwrite protections do not describe Vercel `skills` or host marketplace updaters.
-Those third-party installers have their own permissions, update behavior, and telemetry settings.
+Human confirmations are deliberately absent from the MCP surface. For plan approval only, an
+explicit chat instruction about the displayed current plan can authorize the agent to record a
+hash-bound receipt. That receipt records the agent's assertion of the instruction; Core does not
+authenticate the chat speaker. Other approvals still require a local terminal. A same-user
+malicious process can emulate that terminal, alter Python/SQLite, or read state. There is no
+general model-writable approval, PASS, or DONE override.
+Use separately enforced OS users, containers/VMs, filesystem permissions, and network controls
+for stronger isolation; this project does not configure them for you.
 
-Persistent Jev cache entries are advisory only, keyed by original-input hash and redacted state,
-contract/config/question/model/backend/task, with TTL and bounded entries. No raw prompt is stored.
-Clearing cache preserves evidence and audit. Concurrent cold misses can still produce duplicate
-provider calls. Never interpret cached advice or confidence as a fresh PASS/approval.
+The Skill is workflow guidance, not enforcement of every host action. The completion gate controls
+this tool's DONE state, not arbitrary Git merges, deployments, or commands issued elsewhere.
 
-## External services and local storage
+## Evidence and files
 
+Runner-collected reports are not proof that tests are honest. A malicious test can forge output;
+review assertions and the criteria-to-case mapping. Hashes detect changes, not authorship.
+Path checks reject traversal and symlinks, XML uses defusedxml, and stale reports are removed before
+managed runs. These controls do not fully isolate hostile same-user filesystem races.
+
+Snapshots include dirty/untracked inputs and conservatively invalidate evidence after changes.
+Gate checks are not a filesystem lock; recheck at a downstream operation boundary.
+Environment fingerprints do not cover every installed dependency, dynamic library, environment
+variable, or remote service. Reverify after changes outside the tracked fingerprint.
+
+Known secret paths such as `.env` and private-key extensions are excluded from snapshots.
+Exclusions and redaction are best effort, not a complete secret scanner. Tests depending on
+excluded credentials, external files, or local editable packages are not fully reproducible.
+
+## Data leaving the machine
+
+Core does not automatically enable external telemetry or Jev. Enabling Jev sends selected
+state to TypeSafe's service; obtain permission for that data first. Provider responses, model IDs,
+usage, and hashes can be recorded. Provider policies and coding-host data handling are separate.
 “Local” describes task storage and command execution, not a promise of offline inference.
 
-| Component | Possible data movement |
-| --- | --- |
-| Host coding agent | May send repository context, tool output, and conversations to its provider under host settings |
-| Jev (opt-in) | Sends selected plan/code/log inputs to TypeSafe; heuristic masking is not guaranteed secret removal |
-| Skill/runtime installation | Contacts GitHub/npm/PyPI and possibly interpreter-download services after the relevant setup consent |
-| Local state/artifacts | Stores task text, evidence, decisions, and approvals, which may contain confidential project information |
+The third-party Skills installer and package downloads also make network requests.
+See the [installer telemetry documentation](https://skills.sh/docs/cli); `DISABLE_TELEMETRY=1`
+opts out of its telemetry only. Local-first is not a claim of fully offline inference.
 
-The project does not intentionally send analytics by default. This does not control telemetry
-from installers, SDKs, or coding hosts. Their terms, retention, and training policies are separate.
-Do not assume disabling Jev disables the host's network access or data sharing.
+Review logs before sharing them. They may contain source excerpts, personal data, paths, hostnames,
+or secrets that heuristic masking missed. Do not publish raw reports, credentials, customer data,
+internal URLs, or unredacted reproductions. No cross-project lesson sharing is enabled by default.
+
+## Installation, cache, and recovery
+
+The bundled wheel is checked by version/hash, not a publisher signature. Dependencies are not fully
+locked. Install only a reviewed source. The local Skill installer preserves unmanaged/edited files
+and does not change host permissions, instructions, MCP, or hooks. Upstream installers have their
+own update behavior. Do not mix installation channels.
+
+The advisory cache is task/workspace scoped and keyed by input/contract/config/question/model/backend.
+It does not store raw prompts or turn cached advice into PASS, approval, or new test evidence.
+Concurrent cold misses may duplicate API requests. Clearing cache preserves evidence/history.
+
+A hard-killed parent can leave a RUNNING job or orphan process. Automatic crash recovery is not
+implemented. Preserve state, stop remaining processes, and use a separate workspace for experiments;
+do not edit the DB to manufacture DONE. Interrupted Skill updates may require manual inspection.
 
 ## Reporting a vulnerability
 
-Do not post secrets, customer data, or exploit details in a public issue. If GitHub shows
-**Security → Report a vulnerability**, use that private reporting channel. If it is not
-available, ask the maintainer to establish a private channel without including sensitive details.
-This repository does not currently promise a staffed security inbox or response SLA.
-A leaked credential needs revocation/rotation; removing it from a current file is insufficient.
+Do not put exploit details or secrets in a public issue. Use GitHub's private vulnerability reporting
+interface **if the repository has it enabled**. Its availability has not been verified here.
+Otherwise ask the maintainer for a private contact route with only a non-sensitive description.
+No dedicated security inbox or response-time commitment is currently published.
+
+If a real credential was exposed, revoke/rotate it; deleting a file does not remove prior copies
+or Git history. This guidance is not a claim that a credential leak has been found.
 
 ## What the public-content check does not prove
 

@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "jev-ai-scrum-master"
-version = "0.1.0a3"
+version = "0.1.0a4"
 description = "Skill-first evidence-driven development with a CLI core and optional Jev/MCP"
 readme = "README.md"
 requires-python = ">=3.12"
-license = "Apache-2.0"
+license = {file = "LICENSE"}
 authors = [{name = "Jev AI Scrum Master contributors"}]
 dependencies = ["pydantic>=2.10,<3", "PyYAML>=6,<7", "defusedxml>=0.7,<1"]
 

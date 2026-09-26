@@ -1,65 +1,111 @@
-# 日本語クイックスタート
+# クイックスタート
 
-Jev AI Scrum Masterは、既存のコーディングエージェントに計画・検証・振り返りの手順を追加するSkillです。
-実装はホストAIが担当し、CLIがテスト結果・承認・完了条件を管理します。
-**実験的α版です。現在、standardタスクのレビューは実際の人間が行います。**
+[English](QUICKSTART.md)
 
-## 1. Skillを追加する
+対象は`0.1.0a4`です。信頼できるローカルGitリポジトリ、Git、Python 3.12以上を用意します。
+Linuxはローカルテスト済みですが、macOSと実際のエージェントセッションは未検証です。ネイティブWindowsは対象外です。
 
-開発対象プロジェクトのGitルートで実行します。
+## 1. Skillを導入する
+
+開発したいプロジェクトのGitルートで実行します。
 
 ```sh
 npx skills add ryoheimatsumo/jev-ai-scrum-master --skill jev-scrum-master
 ```
 
-対話で導入先を選びます。Codexなら `-a codex`、Claude Codeなら `-a claude-code`、
-Cursorなら `-a cursor` を末尾に付けて指定できます。
-`skills`はVercelの第三者インストーラーです。本プロジェクト独自のnpmパッケージではありません。
-Skill配置と実ホストでの開発動作の確認は別です。詳細は[導入ガイド](DISTRIBUTION.ja.md)を参照してください。
+導入先ホストを選択します。インストーラーにはNode/npmとレジストリへの接続が必要です。
+1ホストに複数経路で重複導入しないでください。[導入方法の詳細](DISTRIBUTION.ja.md)。
 
-必要なものはGit、Core用のPython 3.12以上、npx用のNode.js/npmです。
-ランチャーはPython 3.9以上で動作し、導入済みのuvと本人の許可があれば新しいPythonを取得できます。
-LinuxでCore/SDKのCIを確認しています。macOS・実ホストでの一連の動作は未確認で、ネイティブWindowsは非対応です。
+## 2. セットアップを依頼する
 
-## 2. ホストAIにセットアップを依頼する
+必要に応じてホストを再読み込みし、次のように依頼します。
 
-必要ならエージェントを再読み込みし、次のように伝えます。
+> jev-scrum-masterを、このリポジトリで使えるようにセットアップして。
 
-> jev-scrum-masterを、このプロジェクトで使えるようにセットアップして。
+Skillが自分のランチャーを見つけ、準備内容を表示し、依存関係のダウンロード前に確認します。
+CLI専用の環境はプロジェクト外に作成します。CoreにはPython 3.12以上が必要です。
+ランチャーはPython 3.9以上で開始でき、導入済みのuvがある場合は、ダウンロードへの同意後に
+新しいPythonを取得する経路も使えます。システムツールの導入やホスト権限の変更は黙って行いません。
 
-ホストはインストールされたSkillの案内を読み、同梱CLIの準備内容を提示します。
-依存関係のダウンロードは確認後に行います。MCP設定や広い実行権限は追加しません。
+Jevは別途設定するまで無効です。APIキーをチャットやGitへ貼らないでください。
+セットアップへの同意と、開発タスクの承認は別です。
 
-続いて `.jev-sm/config.yaml` に、このプロジェクトで使う実際のテストコマンドを登録します。
-サンプルのテストを、そのまま検証済みの設定とは扱いません。プロジェクトの依存関係や
-テスト用サービスの準備は別途必要です。本番資格情報・本番データは使わないでください。
+## 3. 実際の検証コマンドを登録する
 
-## 3. Jevを使うか選ぶ
+`.jev-sm/config.yaml`を確認します。既にpytestを使っているプロジェクトの例です。
 
-初期状態は `jev_enabled: false` です。Jevなしでもタスク・テスト・承認の管理は使えます。
-使う場合は任意SDKを準備し、本人が `TYPESAFE_API_KEY` をホストの環境変数へ設定します。
-**キーをチャット、Skill、設定ファイル、Gitに貼り付けないでください。**
+```yaml
+schema_version: 1
+checks:
+  unit:
+    argv: [python, -m, pytest, -q, --junitxml=.jev-sm-output/unit.xml]
+    kind: test
+    parser: junit
+    report_path: .jev-sm-output/unit.xml
+    timeout_seconds: 600
+    min_tests: 1
+    output_limit_bytes: 262144
+dod_check_ids: []
+jev_enabled: false
+```
 
-送信する仕様・コード・ログの範囲を確認してから `jev_enabled: true` に変更します。
-設定を変更した既存タスクには再承認が必要です。Jevを無効にしても、ホストAI自身による
-モデル提供者への送信まで止まるわけではありません。[データの扱い](../SECURITY.md)も確認してください。
+すべてのリポジトリに適したコマンドではありません。実際に使うPython実行ファイルと、導入済みの
+テスト依存関係を使ってください。Runnerがテスト依存関係をインストールすることはありません。
+受け入れ基準にはチェックと正確なケースIDを対応付けます。チェックを定義しただけでは、
+全基準の証拠にはなりません。共通の必須チェックは`dod_check_ids`に登録します。
 
-## 4. 小さな開発タスクを依頼する
+## 4. 依頼全体の成果を伝える
 
-> jev-scrum-masterを使って、設定を保存し、アプリを開き直しても保持される機能を作って。
+> jev-scrum-masterを使って、項目を変更して保存し、開き直しても保存した値が表示されるようにして。
 
-ホストが目的・範囲・受け入れ基準・検証方法を整理します。内容を確認し、表示された
-承認コマンドを本人が自分のターミナルで実行してください。Skill経由の導入では専用ランチャーを
-使うため、`jev-sm` がシェルのPATHに入るとは限りません。案内された接頭辞も含めて実行します。
+エージェントが依頼全体のユーザーストーリー、対象範囲、受け入れ基準、チェック、副作用を
+読みやすい計画カードにまとめます。現行カードを確認してチャットで明示的に承認すると、
+エージェントがプレビューのハッシュを使って計画承認を記録できます。ターミナル承認も選べます。
+その後は価値ごとの小さな単位で進め、単位ごとの計画承認は求めません。範囲や基準の重要な変更は
+再確認します。
 
-実装後は実際のテスト結果を確認します。未検証・不合格・古い証拠・レビュー待ちが残れば完了しません。
-現在は自動の独立AIレビューがないため、必要なテスト内容・証拠を人間がレビューします。
-`DONE` は本ツール内の条件充足であり、マージ・デプロイ・未知の不具合がないことの保証ではありません。
+実装後はチェックを実行し、不足する証拠を確認します。このα版のstandardタスクには、
+人間による代替レビューも必要です。エージェントの申告だけでなく、assertionと証拠を確認してください。
+自動の独立AIレビューは未実装です。
 
-## 困ったとき
+## 5. 完了の確認・再開
 
-API障害や環境不足を、合格や完了として迂回しないでください。設定と現在の状態を確認します。
-Issueにはキー、未加工のログ、顧客情報を載せず、匿名化した最小の再現例を共有してください。
+以下はCLIの書式であり、そのまま実行する一連の手順ではありません。TASKは実際に返されたIDに置き換え、
+セットアップで選んだランチャーまたはCLI実行ファイルを使います。
 
-[CLIリファレンス](../skills/jev-scrum-master/references/cli.md) ·
-[詳細な導入・更新](DISTRIBUTION.ja.md) · [現在の実装状態](IMPLEMENTATION_STATUS.ja.md)
+```sh
+jev-sm --repo /ABS/PROJECT status TASK
+jev-sm --repo /ABS/PROJECT gate TASK
+jev-sm --repo /ABS/PROJECT report TASK
+```
+
+`gate`の終了コードは、0＝条件充足、2＝未充足・確認待ち、3＝証拠失効、4＝エラーです。
+一般のコマンドの終了コード0は「結果を返した」だけで、テスト合格を意味しません。
+DONEは現行タスク契約に対するローカルの検証状態であり、マージ・デプロイ・正しさの保証ではありません。
+コード・設定・基準を変更した後は状態を再確認し、必要な再承認・再検証を行います。
+
+過去のIDは`tasks`で調べます。検証中にプロセスが強制終了した場合は記録を保全し、
+完了扱いにするためにDBや回数を直接変更しないでください。[既知の制限](IMPLEMENTATION_STATUS.ja.md)。
+
+## 任意：ソースからCLIを導入する
+
+開発者やCLIを手動管理する場合は、ソースを取得して仮想環境へ導入できます。
+
+```sh
+git clone https://github.com/ryoheimatsumo/jev-ai-scrum-master.git
+cd jev-ai-scrum-master
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install -e .
+jev-sm --repo /ABS/PROJECT skill install --host codex
+jev-sm --repo /ABS/PROJECT skill install --host codex --write
+jev-sm --repo /ABS/PROJECT init --write
+jev-sm --repo /ABS/PROJECT doctor
+```
+
+ローカルインストーラーでClaude Codeを指定する値は`--host claude`です。上流インストーラーの
+`-a claude-code`とは異なります。最初のSkillコマンドはプレビュー、`--write`は反映です。
+エージェントが環境を引き継げない場合はCLIの絶対パスを使います。skills管理の配置先へ重ねて導入しないでください。
+ユーザー単位の配置は`--scope user`、未編集の管理対象の更新は`--update --write`を使います。
+
+[Jevの設定](JEV.ja.md) · [CLI契約・英語原本](../skills/jev-scrum-master/references/cli.md) · [安全性](../SECURITY.ja.md)。

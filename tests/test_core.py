@@ -32,6 +32,143 @@ def test_no_approval_no_start(core):
         core.start(task, rev(core, task), "start")
 
 
+def test_delegated_plan_approval_requires_exact_preview_and_records_provenance(core):
+    task = new_task(core)
+    preview = core.plan_approval_preview(task)
+    result = core.approve_plan_delegated(task, [task], preview["approval_hash"])
+    approval = core.store.get(task)["approval"]
+    assert result["group_hash"] == preview["approval_hash"]
+    assert approval["source"] == "agent-mediated-chat-authorization"
+    assert approval["authorization"] == "agent_asserted_user_chat_instruction"
+    assert approval["actor"] == "agent"
+
+
+def test_delegated_plan_rejects_stale_preview_and_changed_selection(core):
+    first = new_task(core)
+    second = new_task(core)
+    preview = core.plan_approval_preview(first, [first])
+    with pytest.raises(DomainError, match="stale"):
+        core.approve_plan_delegated(first, [first, second], preview["approval_hash"])
+    core.workspace.config_path.write_text(core.workspace.config_path.read_text() + "\n")
+    with pytest.raises(DomainError, match="stale"):
+        core.approve_plan_delegated(first, [first], preview["approval_hash"])
+
+
+def test_delegated_plan_does_not_record_human_receipt(core):
+    task = new_task(core)
+    preview = core.plan_approval_preview(task)
+    core.approve_plan_delegated(task, [task], preview["approval_hash"])
+    assert core.store.get(task)["approval"]["source"] != "local_tty"
+
+
+def test_delegated_reapproval_cannot_bless_changed_protected_inputs(core):
+    task = new_task(core)
+    first = core.plan_approval_preview(task)
+    core.approve_plan_delegated(task, [task], first["approval_hash"])
+    (core.workspace.root / "check.py").write_text("# protected change\n")
+    current = core.plan_approval_preview(task)
+    with pytest.raises(DomainError, match="protected"):
+        core.approve_plan_delegated(task, [task], current["approval_hash"])
+
+
+def test_plan_reapproval_preserves_original_delivery_baseline_and_protected_receipt(core):
+    task = new_task(core)
+    core.approve_plan(task)
+    original = core.store.get(task)
+    baseline = original["baseline_manifest"]
+    protected = original["protected_approval"]
+    revised = plan(goal="Revised goal")
+    core.submit_plan(task, revised, rev(core, task), "revise-plan")
+    core.approve_plan(task)
+    current = core.store.get(task)
+    assert current["baseline_manifest"] == baseline
+    assert current["protected_approval"] == protected
+
+
+def test_reapproval_keeps_strict_scope_changes_visible_to_gate(core):
+    task = new_task(core)
+    core.approve_plan(task)
+    (core.workspace.root / "auth.py").write_text("changed\n")
+    core.submit_plan(task, plan(goal="Revised goal"), rev(core, task), "strict-scope-revise")
+    core.approve_plan(task)
+    assert "STRICT_PROFILE_REQUIRED" in core.gate(task)["issues"]
+
+
+def test_reapproval_keeps_light_scope_changes_visible_to_gate(core):
+    settings_update(core, checks={"unit": {**core.workspace.settings().checks["unit"].model_dump(mode="json"), "kind": "process"}})
+    light = plan(kind="docs", review_profile="light", in_scope=["documentation"],
+                 out_of_scope=["application behavior"])
+    light["criteria"][0]["method"] = "process"
+    light["criteria"][0]["case_ids"] = {}
+    task = new_task(core, light)
+    core.approve_plan(task)
+    (core.workspace.root / "app.py").write_text("VALUE = 2\n")
+    revised = dict(light)
+    revised["goal"] = "Revised goal"
+    core.submit_plan(task, revised, rev(core, task), "light-scope-revise")
+    core.approve_plan(task)
+    assert "LIGHT_SCOPE_EXCEEDED" in core.gate(task)["issues"]
+
+
+def test_reapproval_rejects_missing_protected_receipt_after_plan_revision(core):
+    task = new_task(core)
+    core.approve_plan(task)
+    core.submit_plan(task, plan(goal="Revised goal"), rev(core, task), "missing-protected-revise")
+    core.store.mutate(task, rev(core, task), "drop-protected", "test", {},
+                      lambda current, _con: (current.update(protected_approval=None) or {}))
+    preview = core.plan_approval_preview(task)
+    with pytest.raises(DomainError, match="protected"):
+        core.approve_plan_delegated(task, [task], preview["approval_hash"])
+
+
+def test_explicit_group_approval_covers_only_selected_tasks(core):
+    first = new_task(core)
+    second = new_task(core)
+    outside = new_task(core)
+    result = core.approve_plan(first, [first, second])
+    assert result["selected_task_ids"] == [first, second]
+    core.start(first, rev(core, first), "group-start-first")
+    with pytest.raises(DomainError, match="approval"):
+        core.start(outside, rev(core, outside), "group-start-outside")
+    core.cancel(first, "switch task", rev(core, first), "group-cancel-first")
+    core.start(second, rev(core, second), "group-start-second")
+
+
+def test_group_approval_is_invalidated_when_selected_plan_changes(core):
+    first = new_task(core)
+    second = new_task(core)
+    core.approve_plan(first, [first, second])
+    core.submit_plan(second, plan(goal="Changed selected goal"), rev(core, second), "group-revise")
+    with pytest.raises(DomainError, match="approval"):
+        core.start(first, rev(core, first), "group-stale")
+
+
+def test_group_approval_is_invalidated_when_selected_source_changes(core):
+    source = core.workspace.root / "spec.md"
+    source.write_text("original")
+    first = new_task(core, plan(source_refs=["spec.md"]))
+    second = new_task(core)
+    core.approve_plan(first, [first, second])
+    source.write_text("changed")
+    with pytest.raises(DomainError, match="approval"):
+        core.start(first, rev(core, first), "group-source-stale")
+
+
+def test_group_review_approval_covers_selected_verified_tasks(core):
+    first = start(core)
+    second = start(core) if False else new_task(core)
+    verify(core, first)
+    core.cancel(first, "switch", rev(core, first), "group-review-cancel-first")
+    core.approve_plan(second)
+    core.start(second, rev(core, second), "group-review-start-second")
+    verify(core, second)
+    core.cancel(second, "switch", rev(core, second), "group-review-cancel-second")
+    result = core.human_attest(first, "review", selected_task_ids=[first, second])
+    assert result["kind"] == "review"
+    assert len(core.store.get(first)["reviews"]) == 1
+    assert len(core.store.get(second)["reviews"]) == 1
+
+
 def test_approved_start(core):
     task = start(core)
     assert core.store.get(task)["state"] == "IN_PROGRESS"

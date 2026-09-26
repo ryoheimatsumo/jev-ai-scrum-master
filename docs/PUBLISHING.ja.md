@@ -1,48 +1,55 @@
-# Maintainer release guide
+# メンテナー向けリリース手順
 
-このリポジトリは公開済みです。通常の変更はブランチとPRでレビューし、CIの結果を確認してからmainへ反映します。
-ユーザー向けの導入方法は[クイックスタート](QUICKSTART.ja.md)を参照してください。
+[English](PUBLISHING.md)
 
-## 公開前の確認
+リポジトリは公開済みです。通常の変更は別ブランチ、PR、チェックの成功、差分確認を経て、明示的にマージします。
+タグ、リリース、パッケージ公開、マーケットプレイス掲載は別の操作であり、README更新の副作用として実施しません。
+
+## リリース前
+
+ソースcheckoutでテストと文書チェックを実行します。
 
 ```sh
 python -m pytest -q
+python scripts/check_public_docs.py
 python scripts/sync_skill_assets.py --check
 python scripts/validate_distribution.py
-python scripts/check_public_content.py
 ```
 
-文書だけの変更で固定配布済みwheelを同じ版のまま再生成しないでください。
-次の配布版を作る際は、package・CLI・pluginの版を揃え、変更履歴を更新してから生成します。
+実行コードや実行用Skill正本を変更した場合は、版を意図的に更新し、最終の配布検証前に再生成します。
 
 ```sh
 python scripts/build_marketplace.py
 python scripts/validate_distribution.py
-python scripts/check_public_content.py
 ```
 
-生成したwheel、manifest、Skillミラーの差分もレビューします。導入経路を変えた場合は、
-使い捨て環境で実npx導入と対象ホストのスモークテストを実施します。実APIの利用と費用には別途許可が必要です。
+パッケージ情報、プラグイン定義、ソースとwheelの一致、ハッシュ、日英の変更履歴を確認します。
+wheelの生成は配布バイト列を変えるため、未確認の生成物を公開しないでください。
+文書だけの変更ではa3のwheel再生成は必須ではありません。同梱メタデータは元のビルド時の説明であり、
+現在のWeb文書や互換性の最新情報ではありません。
 
-## 表示する検証範囲
+確認した入手可能なインストーラー版で、使い捨てプロジェクトへの実導入を試します。
+既存のsmoke補助は`--write --allow-downloads`の明示が必要です。実行前にhelpと対象版を確認してください。
+配置試験、ホスト実行、実Jev評価は別々の試験です。未取得の結果を成功と仮定しないでください。
 
-ローカルfixture、SDK契約テスト、実API、実ホスト、性能比較は別々に記録します。
-未実行を成功と表現せず、古いログには対象revision/版と採取条件を残します。
-公開用ログは秘密値・個人情報・実環境のパスを点検し、匿名化した場合はその旨を残してください。
+## 初回公開スクリプトは履歴用
 
-## 初回公開用の履歴
+`scripts/publish-github.sh`、`scripts/publish_public.py`、`PUBLICATION_MANIFEST.json`は初回公開用です。
+既存リポジトリを拒否するため、通常のリリース・更新経路ではありません。
+manifestのハッシュは元の公開スナップショットを表し、日々変更されるmainを表しません。
+変更後の内容を元のスナップショットに見せるために、ハッシュを再生成しないでください。
+関連テストはローカルfixtureでこの補助処理を検証します。
 
-`scripts/publish-github.sh`、`scripts/publish_public.py`、`PUBLICATION_MANIFEST.json` と関連テストは
-初回公開のための固定スナップショットを扱う履歴的な補助物です。**通常更新には使いません。**
-manifestのハッシュは初回アーカイブ用で、現行mainの整合性証明ではありません。
-現在のドキュメント変更後に旧manifestの確認が失敗するのは意図した挙動です。
-初回公開履歴やテスト結果を後から現在の状態に書き換えないでください。
+再現性のために保持しているもので、一般ユーザーがSkill導入に使うものではありません。
+将来削除する場合は、関連テストと過去記録への参照をまとめて整理してください。
 
-## 継続的な安全確認
+## 公開表現とプライバシー
 
-GitHubのsecret scanning / push protectionとprivate vulnerability reportingを設定画面で確認してください。
-このPRやファイルの追加だけで、そのリポジトリ設定が有効になるわけではありません。
-認証情報が見つかった場合は公開Issueや通常PRへ値を載せず、まず失効・再発行を行い、
-必要な履歴の扱いを別途確認します。通常の文書整理のためにforce-pushしません。
+実際のリリース条件を満たすまでα版表記を維持します。CI、配置、ホスト連携、品質・速度・トークン測定を区別します。
+公式マーケットプレイス承認、ベンダー推奨、完全隔離、網羅的なセキュリティ監査済みとは説明しません。
 
-[Security](../SECURITY.md) · [Contributing](../CONTRIBUTING.md)
+APIキー、非公開の顧客例、実行DB、未確認のログを公開しないでください。
+認証情報や個人情報の候補を確認するときも、秘密値そのものをレポートへ転載しません。
+通常リリースとしてforce-pushや公開履歴の書き換えを行わないでください。
+
+[開発への参加](../CONTRIBUTING.ja.md) · [配布](DISTRIBUTION.ja.md) · [安全性](../SECURITY.ja.md)。

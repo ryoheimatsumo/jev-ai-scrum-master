@@ -72,7 +72,8 @@ def test_cli_init_never_overwrites(core, capsys):
 
 
 def test_cli_doctor_is_honest_about_host_testing(core, capsys):
-    assert main(["--repo", str(core.workspace.root), "doctor"]) == 0
+    assert main(["--repo", str(core.workspace.root), "--state-dir",
+                 str(core.workspace.state_dir.parent), "doctor"]) == 0
     data = json.loads(capsys.readouterr().out)
     assert data["host_runtime_smoke_tested"] is False
     assert not data["external_jev_enabled"]

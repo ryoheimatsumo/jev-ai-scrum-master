@@ -31,7 +31,8 @@ class Core:
                 "workspace_id": self.workspace.id, "request": request, "source_refs": refs,
                 "state": Status.PLANNING.value, "created_at": now(), "updated_at": now(),
                 "contract": None, "contract_version": 0, "contract_hash": None,
-                "approval": None, "source_hashes": {}, "baseline_manifest": {}, "protected_approval": None,
+                "approval": None, "source_hashes": {}, "baseline_manifest": {},
+                "baseline_recorded": False, "protected_approval": None,
                 "reviews": [], "manual_acceptances": [], "strict_acceptances": [],
                 "jobs": [], "completions": [], "started": False,
                 "rounds": 0, "unchanged_failures": 0, "last_failure": None,
@@ -98,38 +99,154 @@ class Core:
                     return False
             except (DomainError, OSError):
                 return False
-        return (approval.get("contract_hash") == task["contract_hash"] and
-                approval.get("config_hash") == self.workspace.config_hash())
+        if approval.get("contract_hash") != task["contract_hash"] or approval.get("config_hash") != self.workspace.config_hash():
+            return False
+        selected = approval.get("selected_task_ids", [task["id"]])
+        frozen = approval.get("selected_plans", {})
+        if list(selected) != list(dict.fromkeys(selected)) or task["id"] not in selected:
+            return False
+        for selected_id in selected:
+            try:
+                other = self.store.get(selected_id)
+            except DomainError:
+                return False
+            expected = frozen.get(selected_id)
+            other_approval = other.get("approval") or {}
+            for path, expected_hash in expected.get("source_hashes", {}).items() if expected else []:
+                try:
+                    if file_hash(inside(self.workspace.root, path, must_exist=True)) != expected_hash:
+                        return False
+                except (DomainError, OSError):
+                    return False
+            if (not expected or other_approval.get("group_hash") != approval.get("group_hash") or
+                    other["contract_hash"] != expected.get("contract_hash") or
+                    other["contract_version"] != expected.get("contract_version") or
+                    other.get("source_hashes", {}) != expected.get("source_hashes", {}) or
+                    other_approval.get("selected_task_ids") != selected):
+                return False
+        return True
 
-    def approve_plan(self, task_id: str) -> dict:
+    def approve_plan(self, task_id: str, selected_task_ids: list[str] | None = None) -> dict:
+        details, tasks, config_hash, manifest, protected_hash, group_hash = self._plan_approval_preview(task_id, selected_task_ids)
+        task = self.store.get(task_id)
+        receipt = self.authority.confirm("plan", group_hash, details)
+        return self._record_plan_approval(task_id, task, details, tasks, config_hash, manifest,
+                                           protected_hash, group_hash, receipt)
+
+    def plan_approval_preview(self, task_id: str, selected_task_ids: list[str] | None = None) -> dict:
+        """Return the exact plan card content and hash reviewed by a chat user."""
+        details, _tasks, _config_hash, _manifest, _protected_hash, group_hash = self._plan_approval_preview(
+            task_id, selected_task_ids)
+        return {"approval_hash": group_hash, "details": details,
+                "next_action": "present_plan_card_then_wait_for_explicit_user_chat_authorization"}
+
+    def approve_plan_delegated(self, task_id: str, selected_task_ids: list[str] | None,
+                               expected_hash: str) -> dict:
+        """Record an explicitly user-authorized chat approval bound to a preview hash."""
+        if not expected_hash:
+            raise DomainError("APPROVAL_HASH_REQUIRED", "Delegated approval requires the reviewed preview hash")
+        details, tasks, config_hash, manifest, protected_hash, group_hash = self._plan_approval_preview(
+            task_id, selected_task_ids)
+        if expected_hash != group_hash:
+            raise DomainError("APPROVAL_STALE", "The reviewed plan card is stale; present it again")
+        for item in tasks:
+            previous = item.get("protected_approval") or {}
+            if previous.get("hash") and previous["hash"] != protected_hash:
+                raise DomainError("PROTECTED_APPROVAL_REQUIRED",
+                                  "Protected inputs changed; obtain explicit protected review before delegated plan approval")
+        task = self.store.get(task_id)
+        receipt = {"id": "approval-" + uuid.uuid4().hex, "kind": "plan",
+                   "content_hash": group_hash, "actor": "agent",
+                   "source": "agent-mediated-chat-authorization",
+                   "authorization": "agent_asserted_user_chat_instruction", "at": now()}
+        return self._record_plan_approval(task_id, task, details, tasks, config_hash,
+                                          manifest, protected_hash, group_hash, receipt)
+
+    def _plan_approval_preview(self, task_id: str, selected_task_ids: list[str] | None = None):
         task = self.store.get(task_id)
         if not task["contract"]:
             raise DomainError("NO_PLAN", "Submit a structured plan first")
-        self._check_plan(Contract.model_validate(task["contract"]))
-        for path, expected in task.get("source_hashes", {}).items():
-            if file_hash(inside(self.workspace.root, path, must_exist=True)) != expected:
-                raise DomainError("SOURCE_CHANGED", "Resubmit the plan after specification source changes")
+        selected = list(dict.fromkeys(selected_task_ids or [task_id]))
+        if task_id not in selected:
+            raise DomainError("INVALID_INPUT", "The approving task must be included in the selection")
+        tasks = []
+        for selected_id in selected:
+            current = self.store.get(selected_id)
+            if not current.get("contract"):
+                raise DomainError("NO_PLAN", "Every selected task needs a structured plan")
+            if current["state"] in {Status.VERIFYING, Status.CANCELLED, Status.DONE}:
+                raise DomainError("INVALID_STATE", "Plan approval is not allowed for a selected task")
+            self._check_plan(Contract.model_validate(current["contract"]))
+            for path, expected in current.get("source_hashes", {}).items():
+                if file_hash(inside(self.workspace.root, path, must_exist=True)) != expected:
+                    raise DomainError("SOURCE_CHANGED", "Resubmit the plan after specification source changes")
+            tasks.append(current)
         config_hash = self.workspace.config_hash()
         manifest = self.workspace.manifest()
         protected_hash = digest(self.workspace.protected_manifest(manifest))
-        details = {"contract": task["contract"], "contract_version": task["contract_version"],
+        frozen = {item["id"]: {"contract_hash": item["contract_hash"],
+                                "contract_version": item["contract_version"],
+                                "source_hashes": item.get("source_hashes", {})} for item in tasks}
+        details = {"plans": [{"task_id": item["id"], "contract": item["contract"],
+                              "contract_version": item["contract_version"],
+                              "contract_hash": item["contract_hash"]} for item in tasks],
+                   "selected_task_ids": selected,
                    "settings": self.workspace.settings().model_dump(mode="json"),
                    "contract_hash": task["contract_hash"], "config_hash": config_hash,
                    "input_hash": digest(manifest), "protected_hash": protected_hash}
-        receipt = self.authority.confirm("plan", digest(details), details)
+        group_hash = digest(details)
+        return details, tasks, config_hash, manifest, protected_hash, group_hash
+
+    def _record_plan_approval(self, task_id, task, details, tasks, config_hash, manifest,
+                              protected_hash, group_hash, receipt):
+        frozen = {item["id"]: {"contract_hash": item["contract_hash"],
+                                "contract_version": item["contract_version"],
+                                "source_hashes": item.get("source_hashes", {})} for item in tasks}
         def action(current, con):
-            if current["state"] in {Status.VERIFYING, Status.CANCELLED, Status.DONE}:
-                raise DomainError("INVALID_STATE", "Plan approval is not allowed in this state")
             if self.workspace.config_hash() != config_hash or self.workspace.manifest() != manifest:
                 raise DomainError("APPROVAL_STALE", "Configuration or inputs changed during confirmation")
-            if current["started"]:
-                self._reserve(current, con)
-            current["approval"] = receipt | {"contract_hash": current["contract_hash"],
-                                             "config_hash": config_hash}
-            current["baseline_manifest"] = manifest
-            current["protected_approval"] = {"hash": protected_hash, "receipt": receipt}
-            current["state"] = Status.IN_PROGRESS.value if current["started"] else Status.READY.value
-            return {"approval_id": receipt["id"]}
+            for item in tasks:
+                latest = Store.load(con, item["id"])
+                if latest["contract_hash"] != item["contract_hash"] or latest["contract_version"] != item["contract_version"]:
+                    raise DomainError("APPROVAL_STALE", "A selected plan changed during confirmation")
+                for path, expected in item.get("source_hashes", {}).items():
+                    try:
+                        actual = file_hash(inside(self.workspace.root, path, must_exist=True))
+                    except (DomainError, OSError) as exc:
+                        raise DomainError("APPROVAL_STALE", "A selected source changed during confirmation") from exc
+                    if actual != expected:
+                        raise DomainError("APPROVAL_STALE", "A selected source changed during confirmation")
+                baseline_recorded = latest.get("baseline_recorded")
+                if baseline_recorded is None:
+                    # Older state has no marker. An existing approval means its baseline
+                    # was already recorded; a started task without a marker is unsafe.
+                    baseline_recorded = bool(latest.get("approval") or latest.get("protected_approval"))
+                prior_baseline_recorded = bool(baseline_recorded)
+                if latest["started"]:
+                    if not baseline_recorded:
+                        raise DomainError("BASELINE_REQUIRED", "Started task is missing its original delivery baseline")
+                    self._reserve(latest, con)
+                if not baseline_recorded:
+                    latest["baseline_manifest"] = manifest
+                latest["baseline_recorded"] = True
+                if prior_baseline_recorded or latest.get("approval") or latest["started"]:
+                    if not latest.get("protected_approval"):
+                        raise DomainError("PROTECTED_APPROVAL_REQUIRED", "Existing approval lacks a protected baseline")
+                elif not latest.get("protected_approval"):
+                    latest["protected_approval"] = {"hash": protected_hash, "receipt": receipt}
+                latest["approval"] = receipt | {"contract_hash": latest["contract_hash"],
+                                                 "config_hash": config_hash, "group_hash": group_hash,
+                                                 "selected_task_ids": selected, "selected_plans": frozen}
+                latest["state"] = Status.IN_PROGRESS.value if latest["started"] else Status.READY.value
+                if latest["id"] == current["id"]:
+                    current.update(latest)
+                else:
+                    latest["revision"] += 1
+                    latest["updated_at"] = now()
+                    con.execute("UPDATE tasks SET revision=?,data=? WHERE id=?", (latest["revision"], canonical(latest), latest["id"]))
+                    Store.event(con, latest["id"], "approve_plan", {"approval_id": receipt["id"], "group_hash": group_hash})
+            return {"approval_id": receipt["id"], "selected_task_ids": selected, "group_hash": group_hash}
+        selected = details["selected_task_ids"]
         return self.store.mutate(task_id, task["revision"], receipt["id"], "approve_plan", details, action)
 
     @staticmethod
@@ -372,45 +489,72 @@ class Core:
             return gate
         return self.store.mutate(task_id, revision, key, "request_completion", {}, action)
 
-    def human_attest(self, task_id: str, kind: str, *, ac_id: str | None = None) -> dict:
+    def human_attest(self, task_id: str, kind: str, *, ac_id: str | None = None,
+                     selected_task_ids: list[str] | None = None) -> dict:
         task = self.store.get(task_id)
-        if task["state"] == Status.VERIFYING:
-            raise DomainError("INVALID_STATE", "Wait for verification to finish")
-        gate = self._gate(task)
+        selected = list(dict.fromkeys(selected_task_ids or [task_id]))
+        if task_id not in selected:
+            raise DomainError("INVALID_INPUT", "The approving task must be included in the selection")
+        if kind != "review" and selected != [task_id]:
+            raise DomainError("INVALID_INPUT", "Only review approvals can cover multiple tasks")
+        tasks, gates = [], []
+        for selected_id in selected:
+            current = self.store.get(selected_id)
+            if current["state"] == Status.VERIFYING:
+                raise DomainError("INVALID_STATE", "Wait for verification to finish")
+            current_gate = self._gate(current)
+            if kind != "protected" and (not current_gate["review_binding"] or "EVIDENCE_STALE" in current_gate["issues"]):
+                raise DomainError("EVIDENCE_STALE", "Run verification against the current contract first")
+            tasks.append(current)
+            gates.append(current_gate)
+        gate = gates[0]
         if kind == "protected":
             binding = self.workspace.protected_hash()
             details = {"protected_hash": binding, "files": self.workspace.protected_manifest(),
                        "warning": "Review every protected test/config change, including weakened assertions"}
         else:
             binding = gate["review_binding"]
-            if not binding or "EVIDENCE_STALE" in gate["issues"]:
-                raise DomainError("EVIDENCE_STALE", "Run verification against the current contract first")
             if kind == "criterion":
                 criterion = next((c for c in task["contract"]["criteria"] if c["id"] == ac_id), None)
                 if criterion is None or criterion["method"] != "manual":
                     raise DomainError("INVALID_CRITERION", "Human criterion approval is only for manual criteria")
             elif kind not in {"review", "strict"}:
                 raise DomainError("INVALID_APPROVAL_KIND", "Unsupported confirmation")
-            details = {"kind": kind, "ac_id": ac_id, "contract": task["contract"],
-                       "binding": binding, "gate": gate, "evidence": task["jobs"][-1]["evidence"],
+            details = {"kind": kind, "ac_id": ac_id, "selected_task_ids": selected,
+                       "plans": [{"task_id": item["id"], "contract": item["contract"],
+                                  "contract_version": item["contract_version"],
+                                  "contract_hash": item["contract_hash"]} for item in tasks],
+                       "contract": task["contract"], "binding": binding, "gate": gate,
+                       "gates": gates, "evidence": task["jobs"][-1]["evidence"],
+                       "evidence_sets": [item["jobs"][-1]["evidence"] for item in tasks],
                        "instructions": "Inspect assertions, required cases, and actual behavior; approval cannot waive failed checks"}
-        receipt = self.authority.confirm(kind, digest(details), details)
+        approval_hash = digest(details)
+        receipt = self.authority.confirm(kind, approval_hash, details)
         def action(current, con):
             if kind == "protected":
                 if self.workspace.protected_hash() != binding:
                     raise DomainError("APPROVAL_STALE", "Protected inputs changed during confirmation")
                 current["protected_approval"] = {"hash": binding, "receipt": receipt}
             else:
-                check = self._gate(current)
-                if check["review_binding"] != binding or "EVIDENCE_STALE" in check["issues"]:
-                    raise DomainError("APPROVAL_STALE", "Evidence changed during confirmation")
-                item = {"receipt": receipt, "binding": binding}
-                if kind == "review":
-                    current["reviews"].append(item | {"reviewer": "human_substitute"})
-                elif kind == "strict":
-                    current["strict_acceptances"].append(item)
-                else:
-                    current["manual_acceptances"].append(item | {"ac_id": ac_id})
+                for item_task, expected_gate in zip(tasks, gates):
+                    latest = Store.load(con, item_task["id"])
+                    check = self._gate(latest)
+                    if check["review_binding"] != expected_gate["review_binding"] or "EVIDENCE_STALE" in check["issues"]:
+                        raise DomainError("APPROVAL_STALE", "Evidence changed during confirmation")
+                    item = {"receipt": receipt, "binding": expected_gate["review_binding"]}
+                    if kind == "review":
+                        latest["reviews"].append(item | {"reviewer": "human_substitute"})
+                    elif kind == "strict":
+                        latest["strict_acceptances"].append(item)
+                    else:
+                        latest["manual_acceptances"].append(item | {"ac_id": ac_id})
+                    if latest["id"] == current["id"]:
+                        current.update(latest)
+                    else:
+                        latest["revision"] += 1
+                        latest["updated_at"] = now()
+                        con.execute("UPDATE tasks SET revision=?,data=? WHERE id=?", (latest["revision"], canonical(latest), latest["id"]))
+                        Store.event(con, latest["id"], "human_attestation", {"approval_id": receipt["id"], "kind": kind})
             return {"approval_id": receipt["id"], "kind": kind}
         return self.store.mutate(task_id, task["revision"], receipt["id"], "human_attestation", details, action)
 
