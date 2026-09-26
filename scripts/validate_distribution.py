@@ -34,7 +34,10 @@ def validate(root=ROOT):
     source = root / 'src/jev_sm/assets/skills/jev-scrum-master'
     for p in source.rglob('*'):
         if p.is_file() and '__pycache__' not in p.parts and p.suffix != '.pyc':
-            assert (skill / p.relative_to(source)).read_bytes() == p.read_bytes(), str(p)
+            relative = p.relative_to(source)
+            if relative.name == 'SKILL.template.md':
+                relative = relative.with_name('SKILL.md')
+            assert (skill / relative).read_bytes() == p.read_bytes(), str(p)
     frontmatter = (skill / 'SKILL.md').read_text().split('---', 2)[1]
     assert 'name: jev-scrum-master' in frontmatter
     assert 'description:' in frontmatter

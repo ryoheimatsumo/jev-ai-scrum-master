@@ -1,6 +1,5 @@
 import json
 from pathlib import Path
-
 import pytest
 
 from jev_sm.common import DomainError, canonical
@@ -37,6 +36,15 @@ def test_discoverable_mirror_equals_packaged_source():
     assert bundled_files() == {p.relative_to(mirror).as_posix(): p.read_bytes()
                                for p in mirror.rglob("*") if p.is_file() and "runtime" not in p.relative_to(mirror).parts
                                and "__pycache__" not in p.parts}
+
+
+def test_repository_exposes_one_skill_manifest_name():
+    root = Path(__file__).resolve().parents[1]
+    manifests = list((root / "skills").rglob("SKILL.md"))
+    manifests += list((root / "src/jev_sm/assets").rglob("SKILL.md"))
+    assert manifests == [root / "skills/jev-scrum-master/SKILL.md"]
+    assert not (root / "src/jev_sm/assets/skills/jev-scrum-master/SKILL.md").exists()
+    assert (root / "src/jev_sm/assets/skills/jev-scrum-master/SKILL.template.md").is_file()
 
 
 @pytest.mark.parametrize("host,folder", [("codex", ".agents"), ("claude", ".claude")])

@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "jev-ai-scrum-master",
-  "version": "0.1.0-alpha.4",
+  "version": "0.1.0-alpha.5",
   "description": "Plan, verify and learn with an evidence-first Skill and bundled local CLI. Optional Jev; no MCP setup required.",
   "author": {
     "name": "Jev AI Scrum Master contributors"

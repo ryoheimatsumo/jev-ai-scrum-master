@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
   "package": "jev-ai-scrum-master",
-  "version": "0.1.0a4",
-  "wheel": "jev_ai_scrum_master-0.1.0a4-py3-none-any.whl",
-  "sha256": "17f8348368eb8272ffb0d5d07f1fc348a82edf5e7ccfbbee3b0a3f1defc9011e",
+  "version": "0.1.0a5",
+  "wheel": "jev_ai_scrum_master-0.1.0a5-py3-none-any.whl",
+  "sha256": "1462a482ab8669192f212fe577f89a77268ff66aca6e6d456446342aebff3b68",
   "requires_python": ">=3.12",
   "external_calls_default": false,
   "publication_status": "local-artifact-not-published"

@@ -27,7 +27,7 @@ python scripts/validate_distribution.py
 
 Review package metadata, plugin manifests, source/wheel parity, hashes, and the changelog in both
 languages. Building a wheel changes distribution bytes; do not publish an unreviewed artifact.
-A docs-only change need not rebuild the a3 wheel. Its embedded metadata remains the original
+A docs-only change need not rebuild the current wheel. Its embedded metadata remains the original
 build's description, not the current website or current compatibility claim.
 
 Test actual installation in a disposable project with a reviewed, available installer version.

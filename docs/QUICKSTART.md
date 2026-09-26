@@ -2,7 +2,7 @@
 
 [日本語](QUICKSTART.ja.md)
 
-This guide targets `0.1.0a4`. Use a trusted local Git repository, Git, and Python 3.12+.
+This guide targets `0.1.0a5`. Use a trusted local Git repository, Git, and Python 3.12+.
 Linux has local tests; macOS and actual agent sessions remain unverified. Native Windows is unsupported.
 
 ## 1. Install the Skill

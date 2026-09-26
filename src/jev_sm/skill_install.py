@@ -16,6 +16,12 @@ from .workspace import git
 
 SKILL_NAME = "jev-scrum-master"
 MANIFEST = ".jev-sm-install.json"
+_BUNDLED_SKILL_TEMPLATE = "SKILL.template.md"
+
+
+def _bundle_name(name: str) -> str:
+    """Map the packaged template name to the installed Skill's standard name."""
+    return "SKILL.md" if name == _BUNDLED_SKILL_TEMPLATE else name
 
 
 def bundled_files() -> dict[str, bytes]:
@@ -30,7 +36,10 @@ def bundled_files() -> dict[str, bytes]:
             if entry.is_dir():
                 walk(entry, relative + "/")
             elif entry.is_file():
-                result[relative] = entry.read_bytes()
+                name = _bundle_name(relative)
+                if name in result:
+                    raise DomainError("SKILL_ASSETS_AMBIGUOUS", "Packaged Skill contains duplicate manifest names")
+                result[name] = entry.read_bytes()
     walk(root)
     if "SKILL.md" not in result:
         raise DomainError("SKILL_ASSETS_MISSING", "Reinstall the complete package including Skill resources")
