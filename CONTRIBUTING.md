@@ -50,3 +50,7 @@ historical records are clearly labeled from the [documentation index](docs/READM
 
 Do not publish secrets, personal/customer data, or raw unreviewed logs in issues or PRs.
 Use only redacted minimal examples. See [vulnerability reporting](SECURITY.md).
+If a validation record is sanitized, describe what changed without changing its test outcome;
+keep failed and skipped checks visible. Claims about correctness, speed, cost, or token use
+require matched end-to-end measurements. Distribution support is not proof of host compatibility,
+and a disposable test copy is not a security sandbox.

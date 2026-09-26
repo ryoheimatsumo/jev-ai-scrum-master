@@ -1,0 +1,42 @@
+{
+  "date": "2026-09-23",
+  "scope": "public working-tree copies only; history unchanged",
+  "changes": "machine-specific path prefixes and temporary hostnames only; outcomes preserved",
+  "files": [
+    {
+      "path": "docs/validation/adapter-tests.xml",
+      "original_sha256": "877c54416b3e0a9253344d045e02251c22dd4f62c7f9e6f255f68d79ed90abfd",
+      "sanitized_sha256": "1d6be87627892a108c8ae316e3a75cc066e29032e94a788f74b1c6b0e7cc064d"
+    },
+    {
+      "path": "docs/validation/marketplace/offline-runtime-smoke.json",
+      "original_sha256": "34089240c7c4535790dd1be73aff3386a41b319683875478014bd420516ffcea",
+      "sanitized_sha256": "352e3544d4e2ae8125011512f77fad52ff8339a4ce8311bef5b9572cf162c778"
+    },
+    {
+      "path": "docs/validation/marketplace/npx-attempt.json",
+      "original_sha256": "90bc0dba366a37e07a09dc09992874094c7633886e546647701ea3bcab771c95",
+      "sanitized_sha256": "7d8a534cffdd7d256a413a7ca1d2bf12f5991a4edac30679e58024c268252643"
+    },
+    {
+      "path": "docs/validation/marketplace/tests.xml",
+      "original_sha256": "41761634efc87312fbd56aba15a944d0205c5de55ca818a09ea814c17e664ced",
+      "sanitized_sha256": "ab2e1402a3abd867d423fc9b038dea0471f8c3793f5513e7e89f14b57fb12c43"
+    },
+    {
+      "path": "docs/validation/skill-first/wheel-smoke.json",
+      "original_sha256": "2285b989b174ed2f0809adade66648460c1ac9b1e8f4c69dfceaded3736de992",
+      "sanitized_sha256": "1d07e4ebe92be8634b30e78b7c9b9f482a67f3c049338d0c7f3628b40395bbd3"
+    },
+    {
+      "path": "docs/validation/skill-first/test-process.json",
+      "original_sha256": "5f5fec52065829f253307e46d22bcbb2dd2810ae068b4735bf9a0fd052eadd3c",
+      "sanitized_sha256": "ca8de93cc2d7579d26edbaa96f0dfaf482d3948b09c4d2594a2543fb335244fc"
+    },
+    {
+      "path": "docs/validation/skill-first/tests.xml",
+      "original_sha256": "abca1ff78c084d02c266648260c6421c5adb1d60c28af753296954bd44a597ca",
+      "sanitized_sha256": "d843c31cb38930acb6192389d6cef530c833d5f89610a61be49564064e8c4f30"
+    }
+  ]
+}

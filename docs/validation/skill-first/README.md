@@ -1,5 +1,7 @@
 # Skill-first local validation — 0.1.0a2
 
+> Historical execution record. Publication and SDK availability statements describe that run only. See [current implementation status](../../IMPLEMENTATION_STATUS.ja.md) and [record provenance](../README.md).
+
 2026-09-23 / Linux / Python 3.13.5. **167 passed, 3 skipped (170 total).**
 The original tests remain and 63 new cases cover CLI/Skill/cache changes. Full-suite result is
 in `tests.txt` and `tests.xml`; command/exit status in `test-process.json`. External pytest

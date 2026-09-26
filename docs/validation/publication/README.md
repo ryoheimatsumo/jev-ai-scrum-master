@@ -1,5 +1,7 @@
 # Public snapshot publication helper — 2026-09-23
 
+> Historical execution record. Publication and SDK availability statements describe that run only. See [current implementation status](../../IMPLEMENTATION_STATUS.ja.md) and [record provenance](../README.md).
+
 The runtime remains 0.1.0a3. Only publishing helpers, documentation and helper tests changed.
 
 - Focused publication tests: 18 passed. See tests.txt.

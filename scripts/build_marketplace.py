@@ -48,7 +48,7 @@ def main():
         metadata = {"schema_version": 1, "package": "jev-ai-scrum-master", "version": version,
                     "wheel": wheels[0].name, "sha256": hashlib.sha256(data).hexdigest(),
                     "requires_python": ">=3.12", "external_calls_default": False,
-                    "publication_status": "local-artifact-not-published"}
+                    "publication_status": "not-checked-by-local-build"}
         (target / 'manifest.json').write_text(json.dumps(metadata, indent=2)+'\n')
         print(json.dumps(metadata, indent=2))
 

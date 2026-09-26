@@ -45,6 +45,7 @@ excluded credentials, external files, or local editable packages are not fully r
 Core does not automatically enable external telemetry or Jev. Enabling Jev sends selected
 state to TypeSafe's service; obtain permission for that data first. Provider responses, model IDs,
 usage, and hashes can be recorded. Provider policies and coding-host data handling are separate.
+“Local” describes task storage and command execution, not a promise of offline inference.
 
 The third-party Skills installer and package downloads also make network requests.
 See the [installer telemetry documentation](https://skills.sh/docs/cli); `DISABLE_TELEMETRY=1`
@@ -78,3 +79,10 @@ No dedicated security inbox or response-time commitment is currently published.
 
 If a real credential was exposed, revoke/rotate it; deleting a file does not remove prior copies
 or Git history. This guidance is not a claim that a credential leak has been found.
+
+## What the public-content check does not prove
+
+The offline checker flags selected credential formats, tracked secret-like filenames, and
+machine-specific metadata in committed validation records. It also inspects wheel/ZIP text.
+It is a hygiene regression check, not a full secret scanner, dependency advisory scanner,
+penetration test, license clearance, or complete review of Git history and external artifacts.

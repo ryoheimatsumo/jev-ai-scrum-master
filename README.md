@@ -8,9 +8,11 @@ A Skill for your existing coding agent, backed by a local CLI. The agent plans a
 the Core manages approved checks, evidence freshness, and the task's completion conditions.
 **MCP is optional.**
 
-**Experimental alpha — `0.1.0a4`.** Intended for trusted local repositories. Live coding-agent
-compatibility and improvements in quality, speed, cost, or token use have not been demonstrated
-for this project. Standard tasks currently require a person's review. See [current status](docs/IMPLEMENTATION_STATUS.md).
+**Experimental alpha — `0.1.0a4`.** This independent community project is intended for trusted
+local repositories. Live coding-agent compatibility and improvements in quality, speed, cost, or
+token use have not been demonstrated for this project; these are not measured results. Standard
+tasks currently require a person's review; an independent AI reviewer is not implemented. See
+[current status](docs/IMPLEMENTATION_STATUS.md).
 
 ## What it does
 
@@ -80,8 +82,8 @@ The host must invoke the workflow; the Skill is not an always-on supervisor.
 
 ## Safety and limitations
 
-Registered tests execute code. A disposable copy and a reduced environment are **not an OS or
-network sandbox**. Use trusted repositories and non-production data. Same-user processes can access
+Registered tests execute code. A disposable copy and a reduced environment are **not an OS/network sandbox**.
+Use trusted repositories and non-production data. Same-user processes can access
 files outside the copy and can tamper with local state. [Security model](SECURITY.md).
 
 DONE applies only to this tool's current task contract. It is not a guarantee of correctness,
@@ -95,7 +97,8 @@ Skills installer's telemetry, set `DISABLE_TELEMETRY=1`. See [data handling](SEC
 ## Documentation and contributing
 
 [Documentation index](docs/README.md) · [Contributing](CONTRIBUTING.md) ·
-[Architecture](docs/ARCHITECTURE.md) · [Backlog](docs/BACKLOG.md) · [Changelog](CHANGELOG.md).
+[Architecture](docs/ARCHITECTURE.md) · [Backlog](docs/BACKLOG.md) · [Changelog](CHANGELOG.md) ·
+[Publication audit](docs/reviews/2026-09-23-publication-audit.md).
 
 Human-facing guides are available in English and Japanese. Executable Skill instructions,
 CLI identifiers, and raw test reports remain in their original format; see the documentation index.

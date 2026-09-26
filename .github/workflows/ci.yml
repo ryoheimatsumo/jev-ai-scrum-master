@@ -14,6 +14,8 @@ jobs:
         python: ['3.12', '3.13']
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
@@ -28,6 +30,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -35,4 +39,4 @@ jobs:
       - run: python -m pytest -q -m 'sdk and not live'
       - run: python -m build
 # No API credentials, secrets, automatic publishing, pull_request_target, or deployment.
-# This is a proposed CI workflow; it has not run on GitHub until the repo is published.
+# CI success covers these checks only; it is not a live-agent or model-performance benchmark.
