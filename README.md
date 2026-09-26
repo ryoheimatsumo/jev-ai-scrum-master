@@ -8,7 +8,7 @@ A Skill for your existing coding agent, backed by a local CLI. The agent plans a
 the Core manages approved checks, evidence freshness, and the task's completion conditions.
 **MCP is optional.**
 
-**Experimental alpha — `0.1.0a3`.** Intended for trusted local repositories. Live coding-agent
+**Experimental alpha — `0.1.0a4`.** Intended for trusted local repositories. Live coding-agent
 compatibility and improvements in quality, speed, cost, or token use have not been demonstrated
 for this project. Standard tasks currently require a person's review. See [current status](docs/IMPLEMENTATION_STATUS.md).
 
@@ -25,6 +25,12 @@ for this project. Standard tasks currently require a person's review. See [curre
 For example, a task to change an item and persist it should verify both the change and a fresh
 read after saving. A claim that the screen changed is not evidence that persistence works.
 The tool helps track that distinction; it does not prove the absence of bugs.
+
+For a larger change, the agent presents the full set of user stories and acceptance criteria
+as a readable plan card. After you explicitly approve that current card in chat, the agent can
+record a hash-bound plan approval and work through small value slices without asking again for
+each slice. Material changes to the approved scope or criteria require a new review. Standard
+tasks still require a person's final substitute review.
 
 ## Install
 

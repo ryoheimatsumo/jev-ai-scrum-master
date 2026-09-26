@@ -18,6 +18,20 @@ def test_bundle_is_short_and_contains_all_references():
     assert json.loads(bundle["assets/plan.example.json"])["criteria"]
 
 
+def test_bundled_skill_describes_chat_plan_approval_without_terminal_only_claim():
+    bundle = bundled_files()
+    skill = bundle["SKILL.md"].decode()
+    planning = bundle["references/planning.md"].decode()
+    cli = bundle["references/cli.md"].decode()
+    setup = bundle["references/setup.md"].decode()
+    command = "approve plan TASK [--task SAME_OTHER] --delegated-chat --expected-hash HASH"
+    assert command in skill and command in cli
+    assert "approve plan TASK [--task SAME_OTHER_TASK] --delegated-chat --expected-hash HASH" in planning
+    assert "Do not use raw JSON/YAML as the review artifact" in planning
+    assert "the agent may use the delegated plan approval command" in setup
+    assert "a Core receipt in this version" not in cli
+
+
 def test_discoverable_mirror_equals_packaged_source():
     mirror = Path(__file__).resolve().parents[1] / "skills/jev-scrum-master"
     assert bundled_files() == {p.relative_to(mirror).as_posix(): p.read_bytes()

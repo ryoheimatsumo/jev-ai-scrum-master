@@ -41,6 +41,26 @@ def test_json_plan_can_arrive_on_stdin(core, capsys, monkeypatch):
     assert not core.gate(task["task_id"])["eligible"]
 
 
+def test_cli_delegated_plan_preview_receipt_and_stale_hash(core, capsys):
+    task = new_task(core)
+    code, preview = invoke(core, capsys, "approval-preview", "plan", task)
+    assert code == 0 and preview["approval_hash"]
+    code, result = invoke(core, capsys, "approve", "plan", task, "--delegated-chat",
+                          "--expected-hash", preview["approval_hash"])
+    assert code == 0 and result["selected_task_ids"] == [task]
+    approval = core.store.get(task)["approval"]
+    assert approval["source"] == "agent-mediated-chat-authorization"
+    assert approval["actor"] == "agent"
+    assert approval["authorization"] == "agent_asserted_user_chat_instruction"
+
+    second = new_task(core)
+    _, old_preview = invoke(core, capsys, "approval-preview", "plan", second)
+    core.workspace.config_path.write_text(core.workspace.config_path.read_text() + "\n")
+    code, error = invoke(core, capsys, "approve", "plan", second, "--delegated-chat",
+                         "--expected-hash", old_preview["approval_hash"])
+    assert code == 4 and error["error"]["code"] == "APPROVAL_STALE"
+
+
 def test_prepare_file_and_exclusivity(core, capsys, monkeypatch):
     monkeypatch.setattr(sys, "stdin", io.StringIO("依頼を日本語で整理する"))
     assert invoke(core, capsys, "prepare", "--request-file", "-")[0] == 0

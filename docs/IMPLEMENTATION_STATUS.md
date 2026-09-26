@@ -2,12 +2,13 @@
 
 [日本語](IMPLEMENTATION_STATUS.ja.md)
 
-Reviewed: 2026-09-23. Runtime: `0.1.0a3`, **experimental alpha / quality improvement unverified**.
+Reviewed: 2026-09-26. Runtime: `0.1.0a4`, **experimental alpha / quality improvement unverified**.
 The repository is public. Skill + CLI is the primary path; MCP and Jev are optional.
 
 ## Implemented
 
-Versioned plans, explicit local approvals, a single active task per worktree, registered command
+Versioned plans, a hash-bound agent-mediated plan approval after an explicit chat instruction,
+other explicit local approvals, a single active task per worktree, registered command
 execution, JUnit/JSON reports, evidence freshness, bounded fix cycles, completion checks, and
 improvement proposals. Jev provides readiness/playbook/context/evidence advice and a persistent
 advisory cache. Jev cannot independently approve completion.

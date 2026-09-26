@@ -2,12 +2,14 @@
 
 [日本語](CHANGELOG.ja.md)
 
-## Unreleased — documentation and public-content review
+## 0.1.0a4 — 2026-09-26
 
-- Add matching English/Japanese user and maintainer guides with reciprocal navigation.
-- Replace stale installation placeholders and distinguish initial-upload history from current use.
-- Clarify trusted-code execution, optional external services, human review, and unmeasured benefits.
-- Add repeatable documentation checks. Runtime code, executable Skill payload, and a3 wheel are unchanged.
+- Plan one reviewed delivery goal with grouped user stories and acceptance criteria, then implement
+  and verify small value slices within that approved scope.
+- Allow an explicit chat instruction to authorize one hash-bound, agent-mediated plan approval.
+  Changed plans or inputs invalidate it; independent final review and other human-only gates remain.
+- Rebuild the bundled CLI wheel and document the update path for existing installations.
+- Add matching English/Japanese guides, public-content checks, and clearer safety limits.
 
 ## 0.1.0a3 — 2026-09-23
 

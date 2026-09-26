@@ -30,16 +30,57 @@ case_ids; for pytest JUnit use `classname::name` from the XML. IDs may refer to 
 planned for implementation, but must not be presented as existing/passing until run. Process
 checks prove only their stated deterministic condition. Subjective criteria are manual.
 
-Ask the human to run (do NOT run it yourself):
+Prefer one approval envelope for the user's requested change or milestone when its scope,
+acceptance criteria and check mappings can be stated and frozen. Keep implementation,
+acceptance tests and fixes in small internal value slices without asking for approval for
+every slice. A larger or narrower approval unit is always an explicit human choice. When
+several already submitted tasks should be accepted together, select those exact task IDs
+in one approval.
+
+Keep structured JSON/YAML as the internal submission format. Show the human a concise plan
+card instead: the full delivery goal, grouped user stories/value slices, scope and
+exclusions, Given/When/Then acceptance criteria with verification, and material risks or
+permissions. Do not use raw JSON/YAML as the review artifact.
+
+Obtain the read-only `approval-preview` first and construct the displayed card from its exact
+returned details and hash. Wait for the user's explicit reply approving that current card,
+then invoke delegated plan approval exactly once with the same selected task IDs:
 
 ```sh
-jev-sm approve plan TASK --version VERSION
+jev-sm approval-preview plan TASK [--task OTHER_TASK]
+jev-sm approve plan TASK [--task SAME_OTHER_TASK] --delegated-chat --expected-hash HASH
 ```
 
-Read `status` again, then `start TASK --revision REV --key start-01`. Any goal/scope/AC/check/
-configuration change requires reapproval. Standard is the default. Light is restricted to
-human-approved nonbehavioral docs; strict requires additional human acceptance. A high Jev
-confidence cannot downgrade review or remove checks.
+If the user chooses terminal approval instead, ask them to run one concise command. Do not
+run the terminal approval yourself:
+
+```sh
+jev-sm approve plan TASK --version VERSION [--task OTHER_TASK]
+```
+
+The terminal approval prompt presents each selected title, goal, scope, Given/When/Then
+criteria, checks and case IDs as readable prose, followed by the exact SHA256 challenge.
+The preview hash binds selected task IDs, current contracts and versions, sources, config,
+full input manifest and protected inputs. A later change to any of these invalidates the
+applicable approval. An unselected task still needs its own approval.
+A stale hash must be rejected and the card shown again.
+
+After asking for approval, wait for the user's explicit reply or recorded terminal result.
+Do not poll unchanged approval status or classify an ordinary pending approval as blocked.
+After approval, read `status` once, then `start TASK --revision REV --key start-01`.
+Any goal/scope/AC/check/configuration change requires reapproval. Standard is the default.
+Light is restricted to human-approved nonbehavioral docs; strict requires additional human
+acceptance. A high Jev confidence cannot downgrade review or remove checks.
+
+Review approval is sparse and normally covers the delivery envelope after verification;
+it can use the same explicit selection when the human chooses a larger set:
+
+```sh
+jev-sm approve review TASK-A --task TASK-B
+```
+
+The receipt records agent-mediated chat authorization and never substitutes for protected, strict,
+manual-criterion, rule, resume or ordinary independent review approval.
 
 Optional prior lessons: `jev-sm rule candidates --kind feature --path src/file.py`.
 Present only related approved hints in the plan. A proposed or irrelevant lesson is not a rule.

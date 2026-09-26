@@ -1,4 +1,4 @@
-"""Skill-first CLI. JSON by default; human approval remains a separate TTY action."""
+"""Skill-first CLI with JSON output and explicit approval paths."""
 from __future__ import annotations
 
 import argparse
@@ -121,11 +121,20 @@ def parser() -> argparse.ArgumentParser:
     cancel.add_argument("--reason", required=True)
     cancel.add_argument("--revision", type=int, required=True)
     cancel.add_argument("--key")
-    approve = subs.add_parser("approve", help="Human only; never run or simulate approval on their behalf")
+    preview = subs.add_parser("approval-preview", help="Render the exact approval card and hash; read-only")
+    preview.add_argument("kind", choices=["plan"])
+    preview.add_argument("task_id")
+    preview.add_argument("--task", dest="selected_tasks", action="append", default=[])
+    approve = subs.add_parser("approve", help="Human approval, or explicitly delegated chat plan approval")
     approve.add_argument("kind", choices=["plan", "review", "protected", "criterion", "strict"])
     approve.add_argument("task_id")
     approve.add_argument("--version", type=int)
     approve.add_argument("--ac")
+    approve.add_argument("--task", dest="selected_tasks", action="append", default=[],
+                         help="Additional planned task ID to include in one explicit plan approval")
+    approve.add_argument("--delegated-chat", action="store_true",
+                         help="Use only after explicit user chat authorization for the current preview")
+    approve.add_argument("--expected-hash", help="Hash returned by approval-preview (required for delegated chat)")
     rules = subs.add_parser("rule")
     rule_sub = rules.add_subparsers(dest="rule_action", required=True)
     for name in ("approve", "retire"):
@@ -256,8 +265,21 @@ def main(argv: list[str] | None = None) -> int:
         elif command == "approve":
             if args.version is not None and args.version != core.store.get(args.task_id)["contract_version"]:
                 raise DomainError("APPROVAL_STALE", "Requested version is not current")
-            result = (core.approve_plan(args.task_id) if args.kind == "plan"
-                      else core.human_attest(args.task_id, args.kind, ac_id=args.ac))
+            selected = [args.task_id, *args.selected_tasks]
+            if args.delegated_chat:
+                if args.kind != "plan":
+                    raise DomainError("INVALID_APPROVAL_KIND", "Delegated chat approval is only available for plans")
+                result = core.approve_plan_delegated(args.task_id, selected, args.expected_hash)
+            elif args.expected_hash:
+                raise DomainError("INVALID_INPUT", "--expected-hash requires --delegated-chat")
+            else:
+                result = (core.approve_plan(args.task_id, selected) if args.kind == "plan"
+                          else core.human_attest(args.task_id, args.kind, ac_id=args.ac,
+                                                 selected_task_ids=selected))
+        elif command == "approval-preview":
+            if args.kind != "plan":
+                raise DomainError("INVALID_APPROVAL_KIND", "Only plan previews are supported")
+            result = core.plan_approval_preview(args.task_id, [args.task_id, *args.selected_tasks])
         elif command == "resume":
             result = core.resume(args.task_id)
         elif command == "progress":
