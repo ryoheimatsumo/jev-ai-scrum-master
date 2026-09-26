@@ -27,7 +27,8 @@ from demo import DemoApproval
 
 
 def run(simulated: bool) -> dict:
-    with tempfile.TemporaryDirectory(prefix="jev-sm-cli-demo-", dir="/private/tmp") as directory:
+    with tempfile.TemporaryDirectory(prefix="jev-sm-cli-demo-",
+                                     dir=Path(tempfile.gettempdir()).resolve()) as directory:
         base = Path(directory)
         repo = base / "repo"
         repo.mkdir()
