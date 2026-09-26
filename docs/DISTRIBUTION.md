@@ -81,9 +81,21 @@ with download consent. No system tool, API key, permission, MCP, or hook is sile
 
 Updates use content/version-specific runtimes and preserve prior state. Local modifications
 may be replaced by upstream updates: keep customizations in a fork or back them up first.
-Use the same installer's list/check/update/remove operations and inspect its current help before
-applying updates. Removing a Skill does not remove runtime environments, evidence, task history,
-or separately stored credentials.
+For a project-scope installation made with the Skills CLI, run in that project's Git root:
+
+```sh
+npx skills list
+npx skills update jev-scrum-master
+```
+
+For a user-scope installation, add `-g` to the update command. Use the same channel and host
+selection as the original installation. An older or manually copied installation may lack the
+lock data needed for automatic update; back up local edits and re-add the full Skill from this
+repository with the same host and scope. Marketplace installations use their host's plugin
+update flow instead. Reload the host after updating, then ask it to set up the updated
+`jev-scrum-master` runtime. A changed bundled wheel needs a new dedicated Python environment
+and setup consent. Removing a Skill does not remove runtime environments, evidence, task
+history, or separately stored credentials.
 
 For a local checkout or fork, pass its directory instead of the GitHub shorthand:
 

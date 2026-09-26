@@ -12,8 +12,12 @@ time/output limits, and process-group cleanup. Copied code can still access the 
 files available to the OS user. It may read credentials from disk even when they are not
 inherited as environment variables. Never use production data or credentials for these checks.
 
-Human confirmations are deliberately absent from the MCP surface. They require a local terminal,
-but a same-user malicious process can emulate that terminal, alter Python/SQLite, or read state.
+Human confirmations are deliberately absent from the MCP surface. For plan approval only, an
+explicit chat instruction about the displayed current plan can authorize the agent to record a
+hash-bound receipt. That receipt records the agent's assertion of the instruction; Core does not
+authenticate the chat speaker. Other approvals still require a local terminal. A same-user
+malicious process can emulate that terminal, alter Python/SQLite, or read state. There is no
+general model-writable approval, PASS, or DONE override.
 Use separately enforced OS users, containers/VMs, filesystem permissions, and network controls
 for stronger isolation; this project does not configure them for you.
 

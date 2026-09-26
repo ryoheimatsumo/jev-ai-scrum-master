@@ -2,7 +2,7 @@
 
 [日本語](QUICKSTART.ja.md)
 
-This guide targets `0.1.0a3`. Use a trusted local Git repository, Git, and Python 3.12+.
+This guide targets `0.1.0a4`. Use a trusted local Git repository, Git, and Python 3.12+.
 Linux has local tests; macOS and actual agent sessions remain unverified. Native Windows is unsupported.
 
 ## 1. Install the Skill
@@ -54,13 +54,15 @@ and already-installed project dependencies. The runner does not install test dep
 Assign checks and exact case IDs to the acceptance criteria; defining a check alone does not
 make it evidence for every criterion. Register common required checks in `dod_check_ids`.
 
-## 4. Request one observable outcome
+## 4. Request a delivery goal
 
 > Use jev-scrum-master to let a user update an item, save it, and see the saved value after reopening it.
 
-The agent drafts a plan and asks about unresolved product choices. Inspect the scope, criteria,
-checks, and side effects. Perform plan approval in your own terminal as directed by the CLI.
-Do not ask the agent to approve for you or simulate a human terminal.
+The agent drafts a readable card for the full goal, including user stories, scope, acceptance
+criteria, checks, and side effects. After inspecting the current card, explicitly approve it
+in chat; the agent can record that plan approval with the preview hash. You can choose terminal
+approval instead. Work then proceeds in small value slices without a new plan approval for
+each slice. Material changes to the approved scope or criteria require another review.
 
 The agent implements, runs checks, and examines missing evidence. In this alpha, standard tasks
 also require a real person's substitute review. You must inspect assertions and evidence rather
