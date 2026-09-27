@@ -26,12 +26,13 @@ def git(root: Path, *args: str) -> bytes:
 
 
 class Workspace:
-    def __init__(self, root: Path, state_root: Path | None = None):
+    def __init__(self, root: Path, state_root: Path | None = None, *, create_state: bool = True):
         self.root = root.resolve()
         top = Path(git(self.root, "rev-parse", "--show-toplevel").decode().strip()).resolve()
         if self.root != top:
             raise DomainError("NOT_REPO_ROOT", "Pass the Git worktree root with --repo")
         self.id = digest(str(self.root))[:24]
+        self.state_source = "explicit" if state_root is not None else "default"
         if state_root is None:
             if sys.platform == "darwin":
                 base = Path.home() / "Library/Application Support"
@@ -41,7 +42,27 @@ class Workspace:
         self.state_dir = state_root.resolve() / self.id
         if self.state_dir.is_relative_to(self.root):
             raise DomainError("UNSAFE_STATE_PATH", "State and approval records must live outside the repository")
-        self.state_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+        if create_state:
+            try:
+                self.state_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+            except OSError as exc:
+                raise DomainError(
+                    "STATE_UNAVAILABLE",
+                    f"Cannot create state directory {self.state_dir}; grant access to this path or choose a writable --state-dir, then retry. Existing approval history remains at this selected root.",
+                    retryable=True,
+                ) from exc
+
+    def state_status(self) -> dict:
+        """Describe the selected state location without writing to the filesystem."""
+        try:
+            exists = self.state_dir.exists()
+        except OSError:
+            exists = None
+            access = "unavailable"
+        else:
+            access = "unverified"
+        return {"path": str(self.state_dir), "source": self.state_source,
+                "exists": exists, "access": access, "writability": "unverified"}
 
     @property
     def config_path(self) -> Path:

@@ -2,6 +2,11 @@
 
 [日本語](CHANGELOG.ja.md)
 
+## 0.1.0a6 — 2026-09-27
+
+- Keep doctor and init preview usable when the selected state root is inaccessible, and fail
+  operational commands closed with actionable `STATE_UNAVAILABLE` errors without fallback.
+
 ## 0.1.0a5 — 2026-09-26
 
 - Keep one discoverable `SKILL.md` in the repository so Skills CLI 1.7.0 can update existing

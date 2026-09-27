@@ -189,7 +189,9 @@ def main(argv: list[str] | None = None) -> int:
                              write=getattr(args, "write", False), update=getattr(args, "update", False))
             print(canonical(result))
             return 0
-        workspace = Workspace(args.repo, args.state_dir)
+        # Inspection and init preview must remain usable when selected state is inaccessible.
+        workspace = Workspace(args.repo, args.state_dir,
+                              create_state=command not in {"doctor", "init"})
         if command == "init":
             config = Settings().model_dump(mode="json")
             if workspace.config_path.exists():
@@ -210,6 +212,7 @@ def main(argv: list[str] | None = None) -> int:
             cfg = workspace.settings() if workspace.config_path.exists() else None
             print(canonical({"version": __version__, "repo": str(workspace.root),
                 "state_dir": str(workspace.state_dir), "configured": cfg is not None,
+                "state": workspace.state_status(),
                 "primary_interface": "skill+cli", "mcp_required": False,
                 "mcp_sdk_installed": importlib.util.find_spec("mcp") is not None,
                 "jev_sdk_installed": importlib.util.find_spec("typesafe_sdk") is not None,

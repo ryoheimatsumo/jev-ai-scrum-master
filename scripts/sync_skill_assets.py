@@ -41,5 +41,8 @@ if __name__ == "__main__":
             if TARGET.exists():
                 shutil.rmtree(TARGET)
             shutil.copytree(SOURCE, TARGET, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
+            template = TARGET / TEMPLATE
+            if template.exists():
+                template.rename(TARGET / "SKILL.md")
             if saved:
                 shutil.copytree(saved, TARGET / "runtime")

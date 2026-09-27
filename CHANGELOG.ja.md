@@ -2,6 +2,11 @@
 
 [English](CHANGELOG.md)
 
+## 0.1.0a6 — 2026-09-27
+
+- state rootにアクセスできない場合もdoctorとinit previewを利用可能にし、運用コマンドは
+  fallbackせず、復旧方法を含む`STATE_UNAVAILABLE`で失敗するようにしました。
+
 ## 0.1.0a5 — 2026-09-26
 
 - リポジトリ内の発見可能な`SKILL.md`を1つにし、Skills CLI 1.7.0で既存導入を曖昧な重複として

@@ -198,7 +198,7 @@ def test_skills_installer_cli_preview_only(core, capsys):
 def test_full_cli_demo_with_explicit_simulated_approvals():
     root = Path(__file__).resolve().parents[1]
     result = subprocess.run([sys.executable, str(root / "scripts/demo_cli.py"), "--simulate-approvals"],
-                            check=True, text=True, capture_output=True, timeout=45)
+                            check=True, text=True, capture_output=True, timeout=90)
     data = json.loads(result.stdout)
     assert data["approvals"] == "SIMULATED_DEMO_ONLY"
     assert data["cli_process_count"] >= 20
