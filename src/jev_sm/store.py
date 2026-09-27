@@ -14,9 +14,10 @@ from .common import DomainError, canonical, digest, now
 class Store:
     def __init__(self, path: Path):
         self.path = path
-        path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
-        with self.connect() as con:
-            con.executescript('''
+        try:
+            path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+            with self.connect() as con:
+                con.executescript('''
                 PRAGMA journal_mode=WAL;
                 CREATE TABLE IF NOT EXISTS tasks (
                     id TEXT PRIMARY KEY, revision INTEGER NOT NULL, data TEXT NOT NULL);
@@ -35,15 +36,30 @@ class Store:
                 CREATE INDEX IF NOT EXISTS cache_expiry ON judgment_cache(expires_at);
                 CREATE TABLE IF NOT EXISTS rules (
                     id TEXT PRIMARY KEY, data TEXT NOT NULL);
-            ''')
-        self.path.chmod(0o600)
+                ''')
+            self.path.chmod(0o600)
+        except (OSError, sqlite3.Error) as exc:
+            raise self._state_unavailable(exc) from exc
+
+    def _state_unavailable(self, exc: BaseException) -> DomainError:
+        return DomainError(
+            "STATE_UNAVAILABLE",
+            f"Cannot open state database {self.path}; grant access to this path or choose a writable --state-dir, then retry. Existing approval history remains at this selected root.",
+            retryable=True,
+        )
 
     @contextmanager
     def connect(self):
-        con = sqlite3.connect(self.path, timeout=30, isolation_level=None)
+        try:
+            con = sqlite3.connect(self.path, timeout=30, isolation_level=None)
+        except (OSError, sqlite3.Error) as exc:
+            raise self._state_unavailable(exc) from exc
         con.row_factory = sqlite3.Row
         try:
-            yield con
+            try:
+                yield con
+            except (OSError, sqlite3.Error) as exc:
+                raise self._state_unavailable(exc) from exc
         finally:
             con.close()
 

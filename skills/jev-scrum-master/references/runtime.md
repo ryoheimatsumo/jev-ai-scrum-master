@@ -38,3 +38,10 @@ Respect Core's finite correction rounds and no-progress stops. Do not retry inde
 counters, forge evidence, or relax tests. On a hard interruption, inspect status; this alpha
 cannot automatically recover every orphaned RUNNING job. Tell the human rather than modifying
 SQLite or replaying unknown side effects. Do not run human-only resume confirmations yourself.
+
+If a tool cannot start because its SDK cache or device service is inaccessible, record the exact
+command, exit code and observed error. Use the host's supported permission mechanism for the
+same command and storage location, then retry after access changes. Do not silently change a
+registered check, move its cache, invent a device, or treat a mock as real-device evidence.
+Continue approved implementation and checks that do not depend on the blocked environment.
+Ask for missing device or product facts only when they are needed for the remaining work.

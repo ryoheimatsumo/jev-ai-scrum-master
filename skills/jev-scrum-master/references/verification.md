@@ -27,6 +27,11 @@ real persistence from a mocked call or stable UI. Zero tests, missing reports, r
 wrong case IDs, failed checks or stale snapshots cannot pass. Changes after tests require fresh
 verification, including uncommitted and relevant untracked inputs.
 
+When a required check cannot run because the host denies SDK cache, emulator or device access,
+inspect its diagnostic, restore access through the host and rerun the registered check on fresh
+inputs. Run other independent checks meanwhile. Keep the criterion unverified and the completion
+gate closed if access remains unavailable; report the exact missing runtime evidence.
+
 The alpha has no automatic independent Codex/Claude reviewer. After passing checks, give a
 real person the report, source/assertions and required approval commands returned by gate.
 Examples of human-only commands (NEVER simulate or execute these on their behalf):
