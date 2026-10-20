@@ -139,7 +139,7 @@ def publish(root: Path):
         local_git("config", "--local", "--add", "credential.https://github.com.helper", "!" + shlex.quote(gh) + " auth git-credential")
         local_git("add", "--all")
         local_git("-c", "core.hooksPath=/dev/null", "-c", "commit.gpgsign=false", "commit", "-m",
-                  "Publish experimental 0.1.0a3: Skill-first CLI and marketplace distribution")
+                  "Publish experimental 0.1.0a7: Skill-first CLI and marketplace distribution")
         commit = local_git("rev-parse", "HEAD", capture=True)
         # A race to create this name fails safely. Never retry as an update to an existing repo.
         call([gh, "repo", "create", EXPECTED_REPOSITORY, "--public", "--source", str(staging),

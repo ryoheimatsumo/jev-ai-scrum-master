@@ -30,7 +30,7 @@ def make_snapshot(root):
     script.parent.mkdir()
     script.write_bytes((ROOT / "scripts/publish_public.py").read_bytes())
     doc = {"schema_version": 1, "repository": publisher.EXPECTED_REPOSITORY,
-           "version": "0.1.0a3", "visibility": "public", "branch": "main", "files": []}
+           "version": "0.1.0a7", "visibility": "public", "branch": "main", "files": []}
     for path in sorted(root.rglob("*")):
         if path.is_file():
             doc["files"].append({"path": path.relative_to(root).as_posix(), "mode": "0644",

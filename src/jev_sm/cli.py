@@ -210,6 +210,7 @@ def main(argv: list[str] | None = None) -> int:
             return 0
         if command == "doctor":
             cfg = workspace.settings() if workspace.config_path.exists() else None
+            input_compatibility = workspace.input_diagnostics()
             print(canonical({"version": __version__, "repo": str(workspace.root),
                 "state_dir": str(workspace.state_dir), "configured": cfg is not None,
                 "state": workspace.state_status(),
@@ -219,9 +220,10 @@ def main(argv: list[str] | None = None) -> int:
                 "jev_key_configured": bool(os.environ.get("TYPESAFE_API_KEY")),
                 "external_jev_enabled": bool(cfg and cfg.jev_enabled),
                 "cache": {"backend": "sqlite", "ttl_seconds": cfg.jev_cache_ttl_seconds if cfg else None},
+                "input_compatibility": input_compatibility,
                 "host_runtime_smoke_tested": False,
                 "sandbox": "copy isolation and credential minimization; not an OS sandbox"}))
-            return 0
+            return 0 if input_compatibility["compatible"] else 4
         core = Core(workspace)
         key = getattr(args, "key", None) or "cli-" + uuid.uuid4().hex
         if command == "serve":

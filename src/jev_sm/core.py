@@ -13,6 +13,8 @@ from .runner import ProcessRegistry, Runner
 from .store import Store
 from .workspace import Workspace
 
+INPUT_MODEL_VERSION = 2
+
 
 class Core:
     def __init__(self, workspace: Workspace, *, authority: Authority | None = None):
@@ -93,6 +95,17 @@ class Core:
 
     def _approval_current(self, task: dict) -> bool:
         approval = task.get("approval") or {}
+        # Legacy approvals did not model gitlinks. They remain valid for ordinary
+        # repositories, but must be explicitly renewed when a submodule is present.
+        version = approval.get("input_model_version", 1)
+        if version not in {1, INPUT_MODEL_VERSION}:
+            return False
+        has_typed_inputs = False
+        if version == 1:
+            current_manifest = self.workspace.manifest()
+            has_typed_inputs = any(meta.get("kind") == "submodule" for meta in current_manifest.values())
+            if has_typed_inputs:
+                return False
         for path, expected in task.get("source_hashes", {}).items():
             try:
                 if file_hash(inside(self.workspace.root, path, must_exist=True)) != expected:
@@ -119,6 +132,7 @@ class Core:
                 except (DomainError, OSError):
                     return False
             if (not expected or other_approval.get("group_hash") != approval.get("group_hash") or
+                    other_approval.get("input_model_version", 1) != version or
                     other["contract_hash"] != expected.get("contract_hash") or
                     other["contract_version"] != expected.get("contract_version") or
                     other.get("source_hashes", {}) != expected.get("source_hashes", {}) or
@@ -236,6 +250,7 @@ class Core:
                     latest["protected_approval"] = {"hash": protected_hash, "receipt": receipt}
                 latest["approval"] = receipt | {"contract_hash": latest["contract_hash"],
                                                  "config_hash": config_hash, "group_hash": group_hash,
+                                                 "input_model_version": INPUT_MODEL_VERSION,
                                                  "selected_task_ids": selected, "selected_plans": frozen}
                 latest["state"] = Status.IN_PROGRESS.value if latest["started"] else Status.READY.value
                 if latest["id"] == current["id"]:

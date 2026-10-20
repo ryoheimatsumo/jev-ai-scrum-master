@@ -32,6 +32,77 @@ def test_no_approval_no_start(core):
         core.start(task, rev(core, task), "start")
 
 
+def test_legacy_approval_rejected_for_typed_submodule_input(core, monkeypatch):
+    task = new_task(core)
+    core.approve_plan(task)
+    with core.store.transaction() as con:
+        current = core.store.load(con, task)
+        current["approval"].pop("input_model_version", None)
+        con.execute("UPDATE tasks SET data=? WHERE id=?", (json.dumps(current, sort_keys=True), task))
+    original = core.workspace.manifest
+    monkeypatch.setattr(core.workspace, "manifest", lambda *args, **kwargs: {
+        **original(), "tabic-context": {"kind": "submodule", "mode": 160000,
+        "commit": "deadbeef", "initialized": False, "present": True,
+        "head": None, "dirty": False, "untracked": False}})
+    with pytest.raises(DomainError, match="approval"):
+        core.start(task, rev(core, task), "legacy-start")
+
+
+def _set_approval_version(core, task_id, version):
+    with core.store.transaction() as con:
+        current = core.store.load(con, task_id)
+        if version is None:
+            current["approval"].pop("input_model_version", None)
+        else:
+            current["approval"]["input_model_version"] = version
+        con.execute("UPDATE tasks SET data=? WHERE id=?", (json.dumps(current, sort_keys=True), task_id))
+
+
+def test_file_only_legacy_approval_and_source_edit_remain_compatible(core):
+    task = new_task(core)
+    core.approve_plan(task)
+    _set_approval_version(core, task, None)
+    (core.workspace.root / "app.py").write_text("VALUE = 2\n")
+    assert core.start(task, rev(core, task), "legacy-file-only")["next_action"]
+
+
+def test_unknown_approval_input_version_is_rejected_and_gate_is_ineligible(core):
+    task = new_task(core)
+    core.approve_plan(task)
+    _set_approval_version(core, task, 99)
+    with pytest.raises(DomainError, match="approval"):
+        core.start(task, rev(core, task), "unknown-version")
+    gate = core.gate(task)
+    assert not gate["eligible"] and "APPROVAL_REQUIRED" in gate["issues"]
+
+
+def test_legacy_typed_approval_rejected_by_verify_after_task_started(core, monkeypatch):
+    task = new_task(core)
+    core.approve_plan(task)
+    _set_approval_version(core, task, None)
+    original = core.workspace.manifest
+    monkeypatch.setattr(core.workspace, "manifest", lambda *args, **kwargs: {
+        **original(), "tabic-context": {"kind": "submodule", "mode": 160000,
+        "commit": "deadbeef", "initialized": False, "present": True,
+        "head": None, "dirty": False, "untracked": False}})
+    with core.store.transaction() as con:
+        current = core.store.load(con, task)
+        current.update({"started": True, "state": "IN_PROGRESS"})
+        con.execute("UPDATE tasks SET data=? WHERE id=?", (json.dumps(current, sort_keys=True), task))
+    with pytest.raises(DomainError, match="not approved"):
+        core.verify(task, rev(core, task), "legacy-verify")
+
+
+def test_mixed_group_approval_versions_are_rejected_but_v1_file_only_group_works(core):
+    first, second = new_task(core), new_task(core)
+    core.approve_plan(first, [first, second])
+    _set_approval_version(core, second, 1)
+    with pytest.raises(DomainError, match="approval"):
+        core.start(first, rev(core, first), "mixed-version")
+    _set_approval_version(core, first, 1)
+    assert core.start(first, rev(core, first), "v1-group")["next_action"]
+
+
 def test_delegated_plan_approval_requires_exact_preview_and_records_provenance(core):
     task = new_task(core)
     preview = core.plan_approval_preview(task)

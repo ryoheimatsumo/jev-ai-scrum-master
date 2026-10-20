@@ -1,12 +1,14 @@
 import os
+import subprocess
 import sys
 from pathlib import Path
 
 import pytest
+import yaml
 from pydantic import ValidationError
 
 from jev_sm.common import DomainError, inside, redact
-from jev_sm.models import Check
+from jev_sm.models import Check, Settings
 from jev_sm.runner import bounded_process, clean_environment, parse_report
 from jev_sm.workspace import Workspace
 
@@ -27,12 +29,139 @@ def test_symlink_input_rejected(core, tmp_path):
         core.workspace.manifest()
 
 
+def test_doctor_inventory_reports_multiple_bad_inputs_and_deleted_files(core, tmp_path):
+    outside = tmp_path / "outside"
+    outside.write_text("secret")
+    (core.workspace.root / "bad-one").symlink_to(outside)
+    (core.workspace.root / "bad-two").symlink_to(outside)
+    (core.workspace.root / "gone.py").write_text("deleted")
+    subprocess.run(["git", "-C", str(core.workspace.root), "add", "bad-one", "bad-two", "gone.py"], check=True)
+    (core.workspace.root / "gone.py").unlink()
+    report = core.workspace.input_diagnostics()
+    assert not report["compatible"]
+    assert len(report["errors"]) >= 2
+    assert not any("gone.py" in error["message"] for error in report["errors"])
+
+
 def test_symlink_directory_escape_rejected(tmp_path):
     root, outside = tmp_path / "root", tmp_path / "out"
     root.mkdir(); outside.mkdir()
     (root / "alias").symlink_to(outside, target_is_directory=True)
     with pytest.raises(DomainError):
         inside(root, "alias/report.json")
+
+
+def test_gitlink_manifest_records_uninitialized_submodule(tmp_path):
+    source = tmp_path / "source"
+    repo = tmp_path / "repo"
+    source.mkdir(); repo.mkdir()
+    subprocess.run(["git", "-C", str(source), "init", "-b", "main"], check=True, capture_output=True)
+    (source / "module.py").write_text("VALUE = 1\n")
+    subprocess.run(["git", "-C", str(source), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(source), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-m", "module"], check=True,
+                   capture_output=True)
+    subprocess.run(["git", "-C", str(repo), "init", "-b", "main"], check=True, capture_output=True)
+    (repo / "app.py").write_text("VALUE = 1\n")
+    subprocess.run(["git", "-C", str(repo), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-m", "root"], check=True,
+                   capture_output=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "protocol.file.allow=always", "submodule",
+                    "add", str(source), "tabic-context"], check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-am", "submodule"], check=True,
+                   capture_output=True)
+    (repo / ".jev-sm").mkdir()
+    (repo / ".jev-sm" / "config.yaml").write_text(yaml.safe_dump(Settings().model_dump(mode="json")))
+    subprocess.run(["git", "-C", str(repo), "submodule", "deinit", "-f", "--", "tabic-context"],
+                   check=True, capture_output=True)
+    workspace = Workspace(repo, tmp_path / "state")
+    manifest = workspace.manifest()
+    assert manifest["tabic-context"]["kind"] == "submodule"
+    assert manifest["tabic-context"]["initialized"] is False
+    assert manifest["tabic-context"]["mode"] == 160000
+
+
+def test_initialized_submodule_files_are_hashed_and_snapshot_safe(tmp_path):
+    source = tmp_path / "source"
+    repo = tmp_path / "repo"
+    source.mkdir(); repo.mkdir()
+    for root in (source, repo):
+        subprocess.run(["git", "-C", str(root), "init", "-b", "main"], check=True, capture_output=True)
+    (source / "module.py").write_text("VALUE = 1\n")
+    subprocess.run(["git", "-C", str(source), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(source), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-m", "module"], check=True,
+                   capture_output=True)
+    (repo / "app.py").write_text("VALUE = 1\n")
+    subprocess.run(["git", "-C", str(repo), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-m", "root"], check=True,
+                   capture_output=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "protocol.file.allow=always", "submodule",
+                    "add", str(source), "tabic-context"], check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-am", "submodule"], check=True,
+                   capture_output=True)
+    (repo / ".jev-sm").mkdir()
+    (repo / ".jev-sm" / "config.yaml").write_text(yaml.safe_dump(Settings().model_dump(mode="json")))
+    workspace = Workspace(repo, tmp_path / "state")
+    manifest = workspace.manifest()
+    assert manifest["tabic-context"]["initialized"] is True
+    assert manifest["tabic-context/module.py"]["sha256"]
+    snap = workspace.snapshot("run")
+    assert workspace.snapshot_unchanged(snap)
+    (Path(snap["path"]) / "tabic-context" / "module.py").write_text("tampered\n")
+    assert not workspace.snapshot_unchanged(snap)
+
+
+def test_doctor_lists_multiple_child_errors_and_nested_submodules(tmp_path):
+    nested_source = tmp_path / "nested-source"
+    parent_source = tmp_path / "parent-source"
+    repo = tmp_path / "repo"
+    for root in (nested_source, parent_source, repo):
+        root.mkdir()
+        subprocess.run(["git", "-C", str(root), "init", "-b", "main"], check=True,
+                       capture_output=True)
+
+    (nested_source / "nested.py").write_text("VALUE = 1\n")
+    subprocess.run(["git", "-C", str(nested_source), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(nested_source), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-m", "nested"],
+                   check=True, capture_output=True)
+
+    # Symlinks are tracked by Git but rejected by the managed input boundary.
+    (parent_source / "bad-one").symlink_to("missing-one")
+    (parent_source / "bad-two").symlink_to("missing-two")
+    subprocess.run(["git", "-C", str(parent_source), "-c", "protocol.file.allow=always",
+                    "submodule", "add", str(nested_source), "nested"], check=True,
+                   capture_output=True)
+    subprocess.run(["git", "-C", str(parent_source), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(parent_source), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-m", "parent"],
+                   check=True, capture_output=True)
+
+    (repo / "app.py").write_text("VALUE = 1\n")
+    subprocess.run(["git", "-C", str(repo), "add", "."], check=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-m", "root"],
+                   check=True, capture_output=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "protocol.file.allow=always",
+                    "submodule", "add", str(parent_source), "parent"], check=True,
+                   capture_output=True)
+    subprocess.run(["git", "-C", str(repo), "-c", "user.name=Fixture", "-c",
+                    "user.email=fixture@example.invalid", "commit", "-am", "submodules"],
+                   check=True, capture_output=True)
+    (repo / ".jev-sm").mkdir()
+    (repo / ".jev-sm" / "config.yaml").write_text(yaml.safe_dump(Settings().model_dump(mode="json")))
+
+    report = Workspace(repo, tmp_path / "state").input_diagnostics()
+    assert not report["compatible"]
+    assert sum("bad-one" in error["message"] or "bad-two" in error["message"]
+               for error in report["errors"]) == 2
+    listed = {module["path"] for module in report["submodules"]}
+    assert {"parent", "parent/nested"} <= listed
 
 
 def test_state_directory_cannot_be_inside_repository(core):
