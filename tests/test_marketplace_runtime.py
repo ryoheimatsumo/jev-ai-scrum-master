@@ -37,9 +37,9 @@ def runtime(tmp_path, monkeypatch):
 def wheel(runtime, tmp_path):
     folder = tmp_path / 'bundle/runtime'
     folder.mkdir(parents=True)
-    path = folder / 'jev_ai_scrum_master-0.1.0a3-py3-none-any.whl'
+    path = folder / 'jev_ai_scrum_master-0.1.0a7-py3-none-any.whl'
     path.write_bytes(b'test wheel fixture, not used as a real package')
-    meta = {'schema_version': 1, 'package': 'jev-ai-scrum-master', 'version': '0.1.0a3',
+    meta = {'schema_version': 1, 'package': 'jev-ai-scrum-master', 'version': '0.1.0a7',
             'wheel': path.name, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
     (folder / 'manifest.json').write_text(json.dumps(meta))
     return meta, path

@@ -3,7 +3,7 @@
   "repository": "ryoheimatsumo/jev-ai-scrum-master",
   "visibility": "public",
   "branch": "main",
-  "version": "0.1.0a3",
+  "version": "0.1.0a7",
   "publication_status": "prepared-not-published",
   "history_policy": "Fresh initial main snapshot; prior development history is not uploaded.",
   "integrity_notice": "Checksums detect edits; not a signature or exhaustive secret audit.",
@@ -20,7 +20,7 @@
     },
     {
       "path": ".claude-plugin/plugin.json",
-      "sha256": "5f2172f230c9d61000d6e517daeaf71da44f6b5a4d980491475bf42d71ce2f2b",
+      "sha256": "c20abb69750d1af3c9057aa8677405cd56fc16928a43d19d66e6800fe5713a20",
       "mode": "0644"
     },
     {
@@ -30,7 +30,7 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "sha256": "6de85906123f10d6572d07a5fe84b5eebfbacf8995ab776a79b5ab136e015ffc",
+      "sha256": "302711e3ddac9c3c15038aec99033336fb09e90a4598affbfff3fc6e52536cc8",
       "mode": "0644"
     },
     {
@@ -45,17 +45,17 @@
     },
     {
       "path": "AGENTS.md",
-      "sha256": "62d1f1445bf76636c24bede8a8b204204efb61e79ca400f74d34ef0c0f7f989a",
+      "sha256": "3b7f1fa3abf18f3f520bf7a2ec1addb0dd9f8bd220b52c7884c4c92a56a77a3a",
       "mode": "0644"
     },
     {
       "path": "CHANGELOG.md",
-      "sha256": "2e52164c1b3f7aec3bfc838ce0ec1dfcf1cfa9673dfd5f0255dd957e3d51ffb5",
+      "sha256": "85612681801fbc6f156603e167e4903ff1c3cb6a06b157d36671314eb09a9219",
       "mode": "0644"
     },
     {
       "path": "CONTRIBUTING.md",
-      "sha256": "8674959b0ff30a6606d9597fbb27e21c3f29c52f27318b9791a7666770d49171",
+      "sha256": "f04f5e8d03f4aa7438960d19a481fb4705393967b12ff312b8099effbb3e9124",
       "mode": "0644"
     },
     {
@@ -65,12 +65,12 @@
     },
     {
       "path": "README.md",
-      "sha256": "346361988d0e34f1a219a1d72fc15a433c121f5f6db2623c5334f0dbed4b4e91",
+      "sha256": "228b3e6fff3ea1fd112cf66416a75f0932722f9b8bd26863bc4ff075010aae00",
       "mode": "0644"
     },
     {
       "path": "SECURITY.md",
-      "sha256": "49711036b873ad69575b306901b9f5359acbed958f06513ea7911267766ca7b2",
+      "sha256": "c5744b7e86c5547d75b0a640eb103240f7d7181c674434e30652058c5cc7ffb1",
       "mode": "0644"
     },
     {
@@ -80,32 +80,32 @@
     },
     {
       "path": "docs/BACKLOG.md",
-      "sha256": "411c86a9c5fcf189f91f53f4aa06a0bd119f72aa4ea389d9818c625f513bfcad",
+      "sha256": "60cd0c53fa1454066095db5b795e2a3ea3f8fc60cbc264a240612b8bd2eedf04",
       "mode": "0644"
     },
     {
       "path": "docs/DISTRIBUTION.ja.md",
-      "sha256": "022b70464f831c5ee230d0e2b2c298809b9420533ba0ea22ffd224e3114670f5",
+      "sha256": "d7b9bd70cf1b4363949fafbc3d85686538bab4d61ff30f5456f2c2bdd0b6ed6b",
       "mode": "0644"
     },
     {
       "path": "docs/IMPLEMENTATION_STATUS.ja.md",
-      "sha256": "c8176ed717a993ef597d353f439fb7a2178b9e9cebac4ea1690c6c07515cb620",
+      "sha256": "d69ecdb61ce80d5c51334a001bb61433a08d33e05b226f30139c016468bfbb29",
       "mode": "0644"
     },
     {
       "path": "docs/PUBLISHING.ja.md",
-      "sha256": "b94911d5a13b3f0713a03ae87689a26b664a3747331f265db7b30ee7d0bf00a3",
+      "sha256": "11a3ace7dc571d1d0554c444504a1fa95b7dae1dba8846692d39ba48cd9dcced",
       "mode": "0644"
     },
     {
       "path": "docs/PULL_REQUEST.md",
-      "sha256": "249f46e12f4a430a973a3f59fe135101aa5743aa9c10c86024a5f25b105881ec",
+      "sha256": "bee6a9656fb6ed8c87d32d2088bd36ab1811a2d9243fd511c359ef7a1fe819c6",
       "mode": "0644"
     },
     {
       "path": "docs/QUICKSTART.ja.md",
-      "sha256": "476792b5a7f72b06d071178c12dac354195be151b0f90d95ac8dbb37853dd61a",
+      "sha256": "8f56df6bb9a6b5baade85de10bfc7c5b9a41bc609526b5b321ece8b4e88f6dd3",
       "mode": "0644"
     },
     {
@@ -130,7 +130,7 @@
     },
     {
       "path": "docs/validation/README.md",
-      "sha256": "e8b513e20f2258c84e44524964a57f482e85066bafec3ce12e9275f8280b9cb2",
+      "sha256": "2e49671f01672ce15b4c0d6c14c4edb7e43ac2b5495242e5c3e24fee93d0074f",
       "mode": "0644"
     },
     {
@@ -140,7 +140,7 @@
     },
     {
       "path": "docs/validation/adapter-tests.xml",
-      "sha256": "877c54416b3e0a9253344d045e02251c22dd4f62c7f9e6f255f68d79ed90abfd",
+      "sha256": "1d6be87627892a108c8ae316e3a75cc066e29032e94a788f74b1c6b0e7cc064d",
       "mode": "0644"
     },
     {
@@ -160,7 +160,7 @@
     },
     {
       "path": "docs/validation/marketplace/README.md",
-      "sha256": "626c804bbc4ae6b17b42c96eafe12290bc489350b99cbd0c9cbdeab69bfb48ca",
+      "sha256": "7653ef57cf4699a9c7924b82dcd0651f0bff7cf7fc2618c230b2ce686e433065",
       "mode": "0644"
     },
     {
@@ -175,12 +175,12 @@
     },
     {
       "path": "docs/validation/marketplace/npx-attempt.json",
-      "sha256": "90bc0dba366a37e07a09dc09992874094c7633886e546647701ea3bcab771c95",
+      "sha256": "7d8a534cffdd7d256a413a7ca1d2bf12f5991a4edac30679e58024c268252643",
       "mode": "0644"
     },
     {
       "path": "docs/validation/marketplace/offline-runtime-smoke.json",
-      "sha256": "34089240c7c4535790dd1be73aff3386a41b319683875478014bd420516ffcea",
+      "sha256": "352e3544d4e2ae8125011512f77fad52ff8339a4ce8311bef5b9572cf162c778",
       "mode": "0644"
     },
     {
@@ -195,12 +195,12 @@
     },
     {
       "path": "docs/validation/marketplace/tests.xml",
-      "sha256": "41761634efc87312fbd56aba15a944d0205c5de55ca818a09ea814c17e664ced",
+      "sha256": "ab2e1402a3abd867d423fc9b038dea0471f8c3793f5513e7e89f14b57fb12c43",
       "mode": "0644"
     },
     {
       "path": "docs/validation/publication/README.md",
-      "sha256": "1bad17d21f688b7b2fe422fb623c391d2dd9e00097d0b429c09594e035b678be",
+      "sha256": "8d20d27ac312d30fa67fd69fd1df262c50f37d6d7089273356d02c21ace62fde",
       "mode": "0644"
     },
     {
@@ -215,7 +215,7 @@
     },
     {
       "path": "docs/validation/skill-first/README.md",
-      "sha256": "a3ba6d70e86d792d26795183e0e8596ed043e40f4a75ba274d572700c3a72411",
+      "sha256": "2dd9a5370f2d0188e1f9be9a5f1930d177e720a9b2102ff06865e521c1ca9857",
       "mode": "0644"
     },
     {
@@ -235,7 +235,7 @@
     },
     {
       "path": "docs/validation/skill-first/test-process.json",
-      "sha256": "5f5fec52065829f253307e46d22bcbb2dd2810ae068b4735bf9a0fd052eadd3c",
+      "sha256": "ca8de93cc2d7579d26edbaa96f0dfaf482d3948b09c4d2594a2543fb335244fc",
       "mode": "0644"
     },
     {
@@ -245,12 +245,12 @@
     },
     {
       "path": "docs/validation/skill-first/tests.xml",
-      "sha256": "abca1ff78c084d02c266648260c6421c5adb1d60c28af753296954bd44a597ca",
+      "sha256": "d843c31cb38930acb6192389d6cef530c833d5f89610a61be49564064e8c4f30",
       "mode": "0644"
     },
     {
       "path": "docs/validation/skill-first/wheel-smoke.json",
-      "sha256": "2285b989b174ed2f0809adade66648460c1ac9b1e8f4c69dfceaded3736de992",
+      "sha256": "1d07e4ebe92be8634b30e78b7c9b9f482a67f3c049338d0c7f3628b40395bbd3",
       "mode": "0644"
     },
     {
@@ -275,7 +275,7 @@
     },
     {
       "path": "integrations/README.md",
-      "sha256": "e4eab9e50e424b5010f3ab37ca9e9f7aa916cb138b15ea362f12da38372384e0",
+      "sha256": "79f8d4dec7d87d07fc09e1ea87c70e5dbf24e3dc11ceb0b93c9c10b31d223b53",
       "mode": "0644"
     },
     {
@@ -290,17 +290,17 @@
     },
     {
       "path": "plugin.json",
-      "sha256": "73d000685438781e98f4462a30d0ea183bdc4c9f3a03eb0d611b6262ebf76208",
+      "sha256": "91f5cde5ca18773f91bc11df1fb593f513eeef850c6da8b4d2564ac592158aa8",
       "mode": "0644"
     },
     {
       "path": "pyproject.toml",
-      "sha256": "9e7062b1c9968c87b9f1b4948e20a81007fee6c743d824004526057c6e89dbae",
+      "sha256": "8640399623447ae8a7ce1d75e6e3e40a29b4630e42cbaa8bd1f917bd3b832fc9",
       "mode": "0644"
     },
     {
       "path": "scripts/build_marketplace.py",
-      "sha256": "68f63f0cafb800e45c1c674f8af751608206a266f1676b1d959d60bec17a71e9",
+      "sha256": "7378cd1d9ae37325e7b29c13e4c281647ce171ee5d22b55dcefe572ff43a7c01",
       "mode": "0644"
     },
     {
@@ -310,7 +310,7 @@
     },
     {
       "path": "scripts/demo_cli.py",
-      "sha256": "437aa297b66e74e655f848d9551d81aaebf59653ab8090a4a23f8d50fe1d0456",
+      "sha256": "c29f73dc3ed2d16c44100fb624ddc34b54e3ec8cef3de54999d0314e070b33d6",
       "mode": "0644"
     },
     {
@@ -320,7 +320,7 @@
     },
     {
       "path": "scripts/publish_public.py",
-      "sha256": "5a1c90e0e25ef3e48ae1677e3d7b6706aab2214c1b44dd6d7ac4c02f1dac13db",
+      "sha256": "8963c5a5d8212bac93378651755d022c5cbdbbb283784d11f06d84084193d451",
       "mode": "0755"
     },
     {
@@ -330,17 +330,17 @@
     },
     {
       "path": "scripts/sync_skill_assets.py",
-      "sha256": "0e41deb74c3201da8f42d1be9bae2f603aeda910cb116a682b824b11d73e63a7",
+      "sha256": "3237d9157256fdd49d9999ca891edaadbf82594394f5a2972f30a6338ec33ba6",
       "mode": "0644"
     },
     {
       "path": "scripts/validate_distribution.py",
-      "sha256": "08ff261f9958297e2714f726d1f3b018ce2ffc4714667b85ec7021bb806e4e21",
+      "sha256": "5bffd4e62cffee48602614b7a292c17f5278fec2067fff4b87f161f84def72f8",
       "mode": "0644"
     },
     {
       "path": "skills/jev-scrum-master/SKILL.md",
-      "sha256": "5ec23694e0e8a1832c9f42e38c3e8a30fcbf24a1f6d5da6fc5787ec1dc06c042",
+      "sha256": "6d0cd5ce2f50b2e998399acfa280cf3daf156d543fdca57dc3bae8dfb5f49adb",
       "mode": "0644"
     },
     {
@@ -365,7 +365,7 @@
     },
     {
       "path": "skills/jev-scrum-master/references/cli.md",
-      "sha256": "bfcd99c3ca7f5cc264feb8e4032ee182fe1b7d3fcf5364ae17616e06b462d2c3",
+      "sha256": "99847c6f046c3f18b655e1577440e528783ef1e5baf0376667fbfbef177ad0dd",
       "mode": "0644"
     },
     {
@@ -380,7 +380,7 @@
     },
     {
       "path": "skills/jev-scrum-master/references/planning.md",
-      "sha256": "dcfa2ff17407d862018095dada1b090ba24a4dce64ad1504ada9c32873a7aede",
+      "sha256": "bb127c9eb53df05f1a26f86491e0b86c5e9eb20e3dd0dd6bd426e0d928f8ebb7",
       "mode": "0644"
     },
     {
@@ -390,27 +390,27 @@
     },
     {
       "path": "skills/jev-scrum-master/references/runtime.md",
-      "sha256": "1336006467512f53d7cb5074313a64e69468453b30077ffba97adbea35e2b2ea",
+      "sha256": "735b2b8da332539320a2019ea49cd1906c7ff045cc12c6a489971ff227671427",
       "mode": "0644"
     },
     {
       "path": "skills/jev-scrum-master/references/setup.md",
-      "sha256": "bcd1b6a0f2ff2b5548f943c5ff44a162ee9d3d486afb575d677efd746f0fdd98",
+      "sha256": "4a42360763c018400774c78aa843e3fbe6148bf84a1a8e95440dd68ec4b1bfe6",
       "mode": "0644"
     },
     {
       "path": "skills/jev-scrum-master/references/verification.md",
-      "sha256": "43fde047f426e5c1c2b37b3012f30da594da6b0be5d92cbf626849e789401e4e",
+      "sha256": "b7ef02434646b51090c30bdc950a63fa25587d4bde688a512e4e1e155e33ca57",
       "mode": "0644"
     },
     {
-      "path": "skills/jev-scrum-master/runtime/jev_ai_scrum_master-0.1.0a3-py3-none-any.whl",
-      "sha256": "fa7a316051ad2afdec623e83b74090f2f72e92e14b4ff13b4f84a1415f1792c9",
+      "path": "skills/jev-scrum-master/runtime/jev_ai_scrum_master-0.1.0a7-py3-none-any.whl",
+      "sha256": "294e7345aac83f52aeee11e85fbedb1c1ad69807eaa1a71be98ece35f0b1188c",
       "mode": "0644"
     },
     {
       "path": "skills/jev-scrum-master/runtime/manifest.json",
-      "sha256": "20ff7d9935bb03b701486b669baf9d446097cf650cdb991bbb7e5fede3e441c0",
+      "sha256": "03491f2c0a2b4b755ce5ab025e62a229e1e3d0e05332bbc1a61905c5b05d1866",
       "mode": "0644"
     },
     {
@@ -420,7 +420,7 @@
     },
     {
       "path": "src/jev_sm/__init__.py",
-      "sha256": "edc3d70ae1c1cbf20ab2bae0b95ceb8ba2863d8d3929e0b00fe3f137b2c28905",
+      "sha256": "9fc7f65a0a11a5c7f6e811ad4b8d0ce2028e561cf8c43d3fb62e7f6db82f693e",
       "mode": "0644"
     },
     {
@@ -430,12 +430,12 @@
     },
     {
       "path": "src/jev_sm/approval.py",
-      "sha256": "e84a6085c066c153d6a6a18e07e535538ee390f3417d116f7ebb1d8ad7b3514e",
+      "sha256": "3d69db9a14f22458d9cf4fad17800ecd833263d85f4d4cc1e3f52272894ca714",
       "mode": "0644"
     },
     {
-      "path": "src/jev_sm/assets/skills/jev-scrum-master/SKILL.md",
-      "sha256": "5ec23694e0e8a1832c9f42e38c3e8a30fcbf24a1f6d5da6fc5787ec1dc06c042",
+      "path": "src/jev_sm/assets/skills/jev-scrum-master/SKILL.template.md",
+      "sha256": "6d0cd5ce2f50b2e998399acfa280cf3daf156d543fdca57dc3bae8dfb5f49adb",
       "mode": "0644"
     },
     {
@@ -460,7 +460,7 @@
     },
     {
       "path": "src/jev_sm/assets/skills/jev-scrum-master/references/cli.md",
-      "sha256": "bfcd99c3ca7f5cc264feb8e4032ee182fe1b7d3fcf5364ae17616e06b462d2c3",
+      "sha256": "99847c6f046c3f18b655e1577440e528783ef1e5baf0376667fbfbef177ad0dd",
       "mode": "0644"
     },
     {
@@ -475,7 +475,7 @@
     },
     {
       "path": "src/jev_sm/assets/skills/jev-scrum-master/references/planning.md",
-      "sha256": "dcfa2ff17407d862018095dada1b090ba24a4dce64ad1504ada9c32873a7aede",
+      "sha256": "bb127c9eb53df05f1a26f86491e0b86c5e9eb20e3dd0dd6bd426e0d928f8ebb7",
       "mode": "0644"
     },
     {
@@ -485,17 +485,17 @@
     },
     {
       "path": "src/jev_sm/assets/skills/jev-scrum-master/references/runtime.md",
-      "sha256": "1336006467512f53d7cb5074313a64e69468453b30077ffba97adbea35e2b2ea",
+      "sha256": "735b2b8da332539320a2019ea49cd1906c7ff045cc12c6a489971ff227671427",
       "mode": "0644"
     },
     {
       "path": "src/jev_sm/assets/skills/jev-scrum-master/references/setup.md",
-      "sha256": "bcd1b6a0f2ff2b5548f943c5ff44a162ee9d3d486afb575d677efd746f0fdd98",
+      "sha256": "4a42360763c018400774c78aa843e3fbe6148bf84a1a8e95440dd68ec4b1bfe6",
       "mode": "0644"
     },
     {
       "path": "src/jev_sm/assets/skills/jev-scrum-master/references/verification.md",
-      "sha256": "43fde047f426e5c1c2b37b3012f30da594da6b0be5d92cbf626849e789401e4e",
+      "sha256": "b7ef02434646b51090c30bdc950a63fa25587d4bde688a512e4e1e155e33ca57",
       "mode": "0644"
     },
     {
@@ -505,7 +505,7 @@
     },
     {
       "path": "src/jev_sm/cli.py",
-      "sha256": "56b67eea0e686fb98cf0e18ea25ba8fdbd732df3118b77c9540b1371431deb29",
+      "sha256": "5e3fc73696cace6075e93e0e0eb3c45d0255e2537935b07bb0e8dadc4e4b8f35",
       "mode": "0644"
     },
     {
@@ -515,7 +515,7 @@
     },
     {
       "path": "src/jev_sm/core.py",
-      "sha256": "9a8cb8e41645f55aece099890ed4c451aacdf3d500153812f4a5f0a0b81dc8b5",
+      "sha256": "f7fdf313d7e04018668852243a490306c08ebada28f6a6ab68aa7b59aba903f0",
       "mode": "0644"
     },
     {
@@ -545,17 +545,17 @@
     },
     {
       "path": "src/jev_sm/skill_install.py",
-      "sha256": "e4b642d6f317a6ffbb5998111c817b38f8f870bf9da12015c14428f8b8c09c6b",
+      "sha256": "03d74b66a9a140769fa55a9edfcafbec9b2e3ed120cb2322ed3237dd21ed610c",
       "mode": "0644"
     },
     {
       "path": "src/jev_sm/store.py",
-      "sha256": "95d14b698db7a61cedb5ed37a3380e69414005fc25842919cce0aafca2f83e2e",
+      "sha256": "e3de4693b37a1ab4110599e14b4c3a34a4be22f3f28ff3f3832597c8ea080448",
       "mode": "0644"
     },
     {
       "path": "src/jev_sm/workspace.py",
-      "sha256": "d33b6c6efcfb63c8a8f983cf92dba74d569d34e12e08109569261260eb626f6b",
+      "sha256": "2b2cf5cc51a88ec31c4ba038c3312be02775b16bcbbcbe0362aa70e7d86455e8",
       "mode": "0644"
     },
     {
@@ -565,12 +565,12 @@
     },
     {
       "path": "tests/test_core.py",
-      "sha256": "64403ea6126fadfc3963738dc37f80e38411ecde976f9cf11fe9c51c39aba562",
+      "sha256": "cb2cd3456ab4b976799eb45442869981d3af4efa7b0c27103823df6e70aa0a36",
       "mode": "0644"
     },
     {
       "path": "tests/test_interfaces.py",
-      "sha256": "82c1f3448a81a44ce6f3cd686f3458aa2f66aded0b89804cffffeff70addc7a3",
+      "sha256": "9fc0def2385f32283d401c1b1ce3c2b788aafa87adb234ab69ad0f5a6e78169c",
       "mode": "0644"
     },
     {
@@ -580,7 +580,7 @@
     },
     {
       "path": "tests/test_marketplace_runtime.py",
-      "sha256": "9bd565b21f3a147717343c0d3b052c77ace69a79dedac593edb5d8f90935b010",
+      "sha256": "e52f3fbdbc318c5183ad4a51cb1ce91c1fabb5eba5311a08bd076083f0bc6d51",
       "mode": "0644"
     },
     {
@@ -595,22 +595,57 @@
     },
     {
       "path": "tests/test_publication.py",
-      "sha256": "7d74461b2bdb58ee4e0e44b3bd524f3725abae7c916cc7e51347394a328d562f",
+      "sha256": "dcfea4d41e8c07a438082e9c11808057cdb40e3ab5e7084f2922166b6c63a1e0",
       "mode": "0644"
     },
     {
       "path": "tests/test_runner_security.py",
-      "sha256": "98fdc65d794b6d32262ff79364d8306681cc8afb0b7fa73ba053fe71b3eb223f",
+      "sha256": "bfc62b2f3fa0e0a088f05396ab6dcdc421cf7e673a570c426acc22783360ba96",
       "mode": "0644"
     },
     {
       "path": "tests/test_skill_first_cli.py",
-      "sha256": "c468babb85f8ad0f5247dac22455b36846da07a4a1e2b414c93c6e508238b57e",
+      "sha256": "9e4bcc683e21f4f46acfa996d6dc0beb71bc531654ee5de9ab7ec9ca7a508402",
       "mode": "0644"
     },
     {
       "path": "tests/test_skill_install.py",
-      "sha256": "ee69ff8876b153cdb3151b3621f290f8a5a3b737647d83c08ab7c776c43bcf30",
+      "sha256": "1dadbc1073931484a03987c94c76e9616f7fc618bc2049a988058132dd404df2",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_submodules.py",
+      "sha256": "2e8dd5bd43dfb06e89c1828e6d9bc817eb4247aab9c6fe9f72b02b275dcd1f65",
+      "mode": "0644"
+    },
+    {
+      "path": "scripts/check_public_content.py",
+      "sha256": "ff3230ec525968c68dce5fd7938eaaa5c80b05234dea3cee7058948350839455",
+      "mode": "0644"
+    },
+    {
+      "path": "scripts/check_public_docs.py",
+      "sha256": "79d7b2545bbdc95999e3e6b98a7cfda979a946daa908318fba18da894a984f0f",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_approval.py",
+      "sha256": "af6a8096a0c309b6c9cac473df4f7531b69cec760755343c478ee86254a1edc4",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_public_content.py",
+      "sha256": "c2bc62702107f21fd8cd4503551047b4ecdf9fc30d40da813cca16fff6914c37",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_public_docs.py",
+      "sha256": "04d118418f0d0e6a8c3dfe0784ff96786708049ace39da65ded6d6151cd63e2f",
+      "mode": "0644"
+    },
+    {
+      "path": "tests/test_state_access.py",
+      "sha256": "b4f21dcd3c12d0a5661741c698b9006bd3411e7bb53399ad8f8f08e7feb516f4",
       "mode": "0644"
     }
   ]

@@ -27,10 +27,12 @@ real persistence from a mocked call or stable UI. Zero tests, missing reports, r
 wrong case IDs, failed checks or stale snapshots cannot pass. Changes after tests require fresh
 verification, including uncommitted and relevant untracked inputs.
 
-When a required check cannot run because the host denies SDK cache, emulator or device access,
-inspect its diagnostic, restore access through the host and rerun the registered check on fresh
-inputs. Run other independent checks meanwhile. Keep the criterion unverified and the completion
-gate closed if access remains unavailable; report the exact missing runtime evidence.
+Before planning, run `doctor` and inspect its input compatibility diagnostic. Distinguish malformed
+or inaccessible input/environment errors from a genuine unapproved decision. Stop only the affected
+operation, continue independent approved checks, and keep the completion gate closed when required
+evidence is unavailable. If a required check cannot run because the host denies SDK cache, emulator
+or device access, record the exact command, exit code and observed error, restore access through the
+host, and rerun the same registered check on fresh inputs. Do not change its cache or evidence.
 
 The alpha has no automatic independent Codex/Claude reviewer. After passing checks, give a
 real person the report, source/assertions and required approval commands returned by gate.

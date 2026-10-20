@@ -2,6 +2,13 @@
 
 [English](CHANGELOG.md)
 
+## 0.1.0a7 — 2026-10-21
+
+- 初期化済み・未初期化・入れ子・変更中・欠落したGit submoduleを型付き入力として扱い、
+  snapshot、上限、承認の鮮度をfail-closedで維持しながらdoctorでは診断専用のエラーを返すようにしました。
+- input/environment診断と未承認判断を区別し、影響を受ける操作だけを停止して独立した確認を継続します。
+  同梱SkillとCLI wheelをa7へ更新しました。
+
 ## 0.1.0a6 — 2026-09-27
 
 - state rootにアクセスできない場合もdoctorとinit previewを利用可能にし、運用コマンドは

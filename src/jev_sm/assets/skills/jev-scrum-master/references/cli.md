@@ -1,4 +1,4 @@
-# CLI contract (0.1.0a4)
+# CLI contract (0.1.0a7)
 
 Global options precede the command: `jev-sm --repo /ABS/REPO --state-dir /ABS/STATE COMMAND`.
 Do not alternate state directories for the same task. The state parent must be outside the repo.

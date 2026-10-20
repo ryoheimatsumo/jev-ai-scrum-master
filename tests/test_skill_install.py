@@ -47,6 +47,11 @@ def test_repository_exposes_one_skill_manifest_name():
     assert (root / "src/jev_sm/assets/skills/jev-scrum-master/SKILL.template.md").is_file()
 
 
+def test_packaged_skill_template_is_installed_as_skill_md():
+    root = Path(__file__).resolve().parents[1] / "src/jev_sm/assets/skills/jev-scrum-master"
+    assert bundled_files()["SKILL.md"] == (root / "SKILL.template.md").read_bytes()
+
+
 @pytest.mark.parametrize("host,folder", [("codex", ".agents"), ("claude", ".claude")])
 def test_preview_then_install_preserves_user_instructions(core, host, folder):
     root = core.workspace.root

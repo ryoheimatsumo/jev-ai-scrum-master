@@ -2,6 +2,13 @@
 
 [日本語](CHANGELOG.ja.md)
 
+## 0.1.0a7 — 2026-10-21
+
+- Track initialized, uninitialized, nested, dirty, and missing Git submodules as typed inputs;
+  preserve fail-closed snapshots, limits, approval freshness, and diagnostic-only doctor errors.
+- Distinguish input/environment diagnostics from unapproved decisions and keep independent checks
+  running while affected operations remain blocked. Update the bundled Skill and CLI wheel to a7.
+
 ## 0.1.0a6 — 2026-09-27
 
 - Keep doctor and init preview usable when the selected state root is inaccessible, and fail
